@@ -80,6 +80,20 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
    # > gencode.v30.annotation.gtf: OK
    ```
 
+If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need install [anaconda](https://www.anaconda.com/) first.
+
+```bash
+conda create -n star-mapping \
+    -c conda-forge \
+    -c bioconda \
+    picard==2.20.2 \
+    samtools==1.9 \
+    star==2.7.1a \
+    qualimap==2.2.2c \
+    -y
+```
+
+
 Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 
 1. Prepare the STAR index file.
