@@ -200,7 +200,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 ## Todo
 
 - [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
-- [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind?
+- [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
 - [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
 - [x] Add `multiqc` to aggregate QC results.
 - [x] Pin `qualimap` version.
