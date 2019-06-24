@@ -90,6 +90,7 @@ conda create -n star-mapping \
     samtools==1.9 \
     star==2.7.1a \
     qualimap==2.2.2c \
+    multiqc==1.7 \
     -y
 ```
 
@@ -188,14 +189,21 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
    samtools index $INPUT_BAM
    md5sum $INPUT_BAM
    ```
+10. Run `multiqc` across the following files for all samples in the cohort:
+
+    * `fastqc`
+    * `STAR`
+    * `picard MarkDuplicates` and `picard ValidateSamFile`
+    * `qualimap bamqc` and `qualimap rnaseq`
+    * `samtools flagstat`
 
 ## Todo
 
 - [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
 - [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind?
 - [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
-- [ ] Add `multiqc` to aggregate QC results.
-- [ ] Pin `qualimap` version.
+- [x] Add `multiqc` to aggregate QC results.
+- [x] Pin `qualimap` version.
 - [ ] Update internal "STAR Best Practices" documentation.
 - [ ] Update internal "Genome Data Files and Configuration" documentation.
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
