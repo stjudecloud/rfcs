@@ -4,12 +4,12 @@
 - [Motivation](#Motivation)
 - [Proposed changes](#Proposed-changes)
   - [Tool additions updates](#Tool-additions-updates)
-  - [Update reference files.](#Update-reference-files)
+  - [Update reference files](#Update-reference-files)
   - [QC and quality of life improvements](#QC-and-quality-of-life-improvements)
   - [Various other changes](#Various-other-changes)
 - [Summary](#Summary)
   - [Items still in-progress](#Items-still-in-progress)
-  - [Outstanding Questions](#Outstanding-Questions)
+  - [Outstanding questions](#Outstanding-questions)
 
 # Introduction
 
@@ -33,7 +33,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
   * Updating the samtools version whenever possible is of particular interest to me, due to the perceived fragility of the samtools code (although it has seemed to get better over the last year or so here).
 * Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019)
 
-## Update reference files.
+## Update reference files
 
 * `GENCODE v28` to `GENCODE v30`. Routine updates to the gene model from ENCODE.
 * Previously, the we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
@@ -210,7 +210,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 
 
-## Outstanding Questions
+## Outstanding questions
 
 * Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
 * Any additional end-to-end tests we'd like to add to the pipeline? Some have been suggested in the area of making sure certain transcripts quantify out the other side for a particular diagnosis.
