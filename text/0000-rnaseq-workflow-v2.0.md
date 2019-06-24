@@ -194,6 +194,12 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
 - [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind?
 - [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
+- [ ] Add `multiqc` to aggregate QC results.
+- [ ] Pin `qualimap` version.
+- [ ] Update internal "STAR Best Practices" documentation.
+- [ ] Update internal "Genome Data Files and Configuration" documentation.
+- [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
+- [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 
 
 ## Outstanding Questions
@@ -202,3 +208,4 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 * Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
   * the `sha256sum` tool is sufficiently widespread enough, and
   * the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.
+* Should we include count quantification using `htseq-count` in the pipeline?
