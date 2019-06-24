@@ -8,7 +8,7 @@
   - [QC and quality of life improvements](#QC-and-quality-of-life-improvements)
   - [Various other changes](#Various-other-changes)
 - [Summary](#Summary)
-  - [Todo](#Todo)
+  - [Items still in-progress](#Items-still-in-progress)
   - [Outstanding Questions](#Outstanding-Questions)
 
 # Introduction
@@ -197,7 +197,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     * `qualimap bamqc` and `qualimap rnaseq`
     * `samtools flagstat`
 
-## Todo
+## Items still in-progress
 
 - [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
 - [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
