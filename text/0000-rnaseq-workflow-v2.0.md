@@ -45,7 +45,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 
 * Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard MarkDuplicates` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
   * `INVALID_PLATFORM_VALUE` is pretty annoying. It just complains if a read group doesn't contain a `PL` attribute. I'm not sure it's worth going back and fixing these.
-* For dependency management, I'd like to propose we move to using `conda` until we are decided on which workflow language we will support and until we get further down the road of building standard docker images. All packages should be available within the `conda`, `anaconda`, and `bioconda` repositories.
+* For dependency management, I'd like to propose we move to using `conda` until we are decided on which workflow language we will support and until we get further down the road of building standard docker images. All packages should be available within the `defaults`, `conda-forge`, and `bioconda` repositories.
 * Add a checksum algorithm and publish the results in the data browser. Currently, I'm proposing we generate the `md5sum` checksum. However, we should consider the use of a non-broken hashing algorithm (see [the related question below](#Outstanding-Questions)).
 
 ## Various other changes
