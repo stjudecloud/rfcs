@@ -7,9 +7,9 @@
   - [Update reference files](#Update-reference-files)
   - [QC and quality of life improvements](#QC-and-quality-of-life-improvements)
   - [Various other changes](#Various-other-changes)
-- [Summary](#Summary)
-  - [Items still in-progress](#Items-still-in-progress)
-  - [Outstanding questions](#Outstanding-questions)
+- [Workflow description](#Workflow-description)
+- [Items still in-progress](#Items-still-in-progress)
+- [Outstanding questions](#Outstanding-questions)
 
 # Introduction
 
@@ -54,7 +54,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 * I removed a section of custom code that checks for duplicate read groups. `picard ValidateSamFile` does this for you (see [the documentation](https://software.broadinstitute.org/gatk/documentation/article.php?id=7571) for this tool. Specifically, the `DUPLICATE_READ_GROUP_ID` error).
 
 
-# Summary
+# Workflow description
 
 The following reference files are used as the basis of the RNA-Seq Workflow v2.0:
 
@@ -197,7 +197,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     * `qualimap bamqc` and `qualimap rnaseq`
     * `samtools flagstat`
 
-## Items still in-progress
+# Items still in-progress
 
 - [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
 - [ ] Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
@@ -210,7 +210,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 
 
-## Outstanding questions
+# Outstanding questions
 
 * Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
 * Any additional end-to-end tests we'd like to add to the pipeline? Some have been suggested in the area of making sure certain transcripts quantify out the other side for a particular diagnosis.
