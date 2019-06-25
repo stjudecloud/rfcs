@@ -36,7 +36,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 ## Update reference files
 
 * `GENCODE v28` to `GENCODE v30`. Routine updates to the gene model from ENCODE.
-* Previously, the we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+* Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
   * The first sentence in section 2.2.2 of the [STAR 2.7.1.a manual](https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf): "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.
   * Here is what [the GENCODE FAQ](https://www.gencodegenes.org/pages/faq.html) has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the `Ensembl-genebuild` and manual curation of the `Ensembl-Havana` team, this level should be harmless in the event that levels 1 & 2 don't apply.
   * Last, the [GDC documentation](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters) does not currently describe any filtering of their GENCODE v22 GTF (see the section labeled "Step 1: Building the STAR index").
@@ -58,7 +58,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 
 The following reference files are used as the basis of the RNA-Seq Workflow v2.0:
 
-* Similarly to all analysis pipelines in St. Jude Cloud, we use the `GRCh38_no_alt` analysis set for our reference genome. You can get a copy of the file [here](ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz). Additionally, you can get the file by running the following commands:
+* Similarly to all analysis pipelines in St. Jude Cloud, we use the `GRCh38_no_alt` analysis set for our reference genome. You can get a copy of the file [here](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz). Additionally, you can get the file by running the following commands:
 
    ```bash
    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
@@ -69,7 +69,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
    # > GRCh38_no_alt.fa: OK
    ```
 
-* For the gene model, we use the GENCODE v30 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.annotation.gtf.gz). Additionally, you can get the file by running the following commands:
+* For the gene model, we use the GENCODE v30 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.annotation.gtf.gz). Additionally, you can get the file by running the following commands:
 
    ```bash
    wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.annotation.gtf.gz
@@ -80,7 +80,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
    # > gencode.v30.annotation.gtf: OK
    ```
 
-If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need install [anaconda](https://www.anaconda.com/) first.
+If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need to install [anaconda](https://www.anaconda.com/) first.
 
 ```bash
 conda create -n star-mapping \
