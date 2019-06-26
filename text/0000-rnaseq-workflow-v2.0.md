@@ -94,6 +94,11 @@ conda create -n star-mapping \
     -y
 ```
 
+Additionally, you will want to install our `fqlib` library to check that FastQ files are properly paired and have no duplicate read names. Installation of the [Rust](https://rustup.rs/) programming language is required.
+
+```bash
+cargo install --git https://github.com/stjude/fqlib.git
+```
 
 Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 
