@@ -148,7 +148,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
          --outFilterMatchNminOverLread 0.66 \      # 66% of the read must be perfectly matched to the reference sequence.
          --outFilterScoreMinOverLread 0.66 \       # Score must be greater than 66% of the read length. So for RL=100, the alignment must have a score > 66.
          --limitBAMsortRAM $RAM_LIMIT \            # Amount of RAM to use for sorting. Recommended value is [Max amount of RAM] - 5GB.
-         --outFileNamePrefix $OUT_FILE_PREFIX      # All output files will have this path prepended.
+         --outFileNamePrefix $OUT_FILE_PREFIX \    # All output files will have this path prepended.
          --twopassMode basic                       # Use STAR two-pass mapping technique (refer to manual).
     ```
 
