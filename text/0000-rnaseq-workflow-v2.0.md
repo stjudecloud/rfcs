@@ -33,7 +33,8 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 ## Tool additions updates
 
 * Add `fq v0.2.0` ([Released](https://github.com/stjude/fqlib/releases/tag/v0.2.0) November 28, 2018) to be used in validation of the `picard SamToFastq` step.
-* Add `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)) to use the `bamqc` and `rnaseq`tools. We've already been doing this in our QC pipeline, but I'd like to pull this out formally into the RNA-Seq workflow (mostly for documentation purposes).
+* Added `rseqc v3.0.0` ([Source](http://rseqc.sourceforge.net/#download-rseqc))  as we have started using `infer_experiment.py` and `junction_annotation.py`. We are currently considering the use of other tools in this package to do RNA-Seq QC.
+* Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)) to use the `bamqc` and `rnaseq` tools. We've already been doing this in our QC pipeline, but I'd like to pull this out formally into the RNA-Seq workflow (mostly for documentation purposes).
 * Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019).
 * Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018).
   * Updating the samtools version whenever possible is of particular interest to me, due to the perceived fragility of the samtools code (although it has seemed to get better over the last year or so here).
@@ -97,6 +98,7 @@ conda create -n star-mapping \
     star==2.7.1a \
     qualimap==2.2.2c \
     multiqc==1.7 \
+    rseqc==3.0.0 \
     -y
 ```
 
@@ -175,8 +177,19 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
    picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
                           IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
    ```
+8. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
+```bash
+infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 
-8. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC.
+# Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
+#   - If proportion of forward orientation evidence fraction is >= 0.8, assign "strand-specific-forward".
+#   - If proportion of reverse orientation evidence fraction is >= 0.8, assign "strand-specific-reverse".
+#   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
+#   - Else flag for manual triage.
+
+```
+
+9. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
 
     ```bash
     qualimap bamqc -bam $INPUT_BAM \     # Input BAM. 
@@ -188,19 +201,21 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     and
 
     ```bash
-    qualimap rnaseq -bam $INPUT_BAM \       # Input BAM.
-                    -gtf $GENCODE_GTF_V30 \ # GENCODE v30 gene model file, unmodified.
-                    -outdir $OUTPUT_DIR \   # Output directory.
-                    -pe                     # All RNA-Seq data in St. Jude Cloud is currently paired-end.
+    qualimap rnaseq -bam $INPUT_BAM \        # Input BAM.
+                    -gtf $GENCODE_GTF_V30 \  # GENCODE v30 gene model file, unmodified.
+                    -outdir $OUTPUT_DIR \    # Output directory.
+                    -oc qualimap_counts.txt \ # Counts as calculated by qualimap.
+                    -p $COMPUTED \           # Typically "strand-specific-reverse" for St. Jude Cloud data. 
+                    -pe                      # All RNA-Seq data in St. Jude Cloud is currently paired-end.
     ```
-9. Finally, generate the remaining files generally desired as output for the RNA-Seq Workflow.
+10. Finally, generate the remaining files generally desired as output for the RNA-Seq Workflow.
 
    ```bash
    samtools flagstat $INPUT_BAM
    samtools index $INPUT_BAM
    md5sum $INPUT_BAM
    ```
-10. Run `multiqc` across the following files for all samples in the cohort:
+11. Run `multiqc` across the following files for all samples in the cohort:
 
     * `fastqc`
     * `STAR`
