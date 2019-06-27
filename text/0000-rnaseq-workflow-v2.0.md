@@ -99,6 +99,7 @@ conda create -n star-mapping \
     qualimap==2.2.2c \
     multiqc==1.7 \
     rseqc==3.0.0 \
+    fastqc==0.11.8-1 \
     -y
 ```
 
@@ -186,7 +187,6 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 #   - If proportion of reverse orientation evidence fraction is >= 0.8, assign "strand-specific-reverse".
 #   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
 #   - Else flag for manual triage.
-
 ```
 
 9. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
@@ -214,6 +214,10 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
    samtools flagstat $INPUT_BAM
    samtools index $INPUT_BAM
    md5sum $INPUT_BAM
+   fastqc -f bam \     # Specify that we are working on a BAM file.
+          -o $OUTDIR \ # Specify an out directory.
+          -t $NCPU \   # Specify number of threads.
+          $INPUT_BAM   # Input BAM we are QC'ing.
    ```
 11. Run `multiqc` across the following files for all samples in the cohort:
 
