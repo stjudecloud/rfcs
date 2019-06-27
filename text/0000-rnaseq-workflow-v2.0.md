@@ -20,7 +20,13 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 * **Tool additions and updates.** The tools we use are woefully out of date (~2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the [section below](#Tool-additions-updates) for more details.
   * Note that all of the tools used in the RNA-Seq Workflow v1.0 were the latest available version.
 * **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, two major releases of the GENCODE gene model have transpired since v1.0 (we are now on [GENCODE v30](https://www.gencodegenes.org/human/release_30.html)).
-* **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release. One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
+* **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release: 
+  * A primary driver for the rewrite of the pipeline is the feedback we heard about the `ERCC SpikeIn` sequences. 
+    * Popular tools such as `GATK` and `picard` are generally unhappy if the sequence dictionaries don't match perfectly. 
+    * The inclusion of the `ERCC` genome in all of our RNA-Seq samples was violating that practice and causing problems for cross-target analyses.
+    * Last, many of our samples do not currently contain the `ERCC` sequences.
+    * After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.
+  * One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
 
 # Proposed changes
 
@@ -149,7 +155,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
          --outFilterScoreMinOverLread 0.66 \       # Score must be greater than 66% of the read length. So for RL=100, the alignment must have a score > 66.
          --limitBAMsortRAM $RAM_LIMIT \            # Amount of RAM to use for sorting. Recommended value is [Max amount of RAM] - 5GB.
          --outFileNamePrefix $OUT_FILE_PREFIX \    # All output files will have this path prepended.
-         --twopassMode basic                       # Use STAR two-pass mapping technique (refer to manual).
+         --twopassMode Basic                       # Use STAR two-pass mapping technique (refer to manual).
     ```
 
 6. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
