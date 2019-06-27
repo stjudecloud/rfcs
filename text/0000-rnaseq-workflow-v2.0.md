@@ -205,10 +205,21 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
                     -gtf $GENCODE_GTF_V30 \  # GENCODE v30 gene model file, unmodified.
                     -outdir $OUTPUT_DIR \    # Output directory.
                     -oc qualimap_counts.txt \ # Counts as calculated by qualimap.
-                    -p $COMPUTED \           # Typically "strand-specific-reverse" for St. Jude Cloud data. 
+                    -p $COMPUTED \           # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
                     -pe                      # All RNA-Seq data in St. Jude Cloud is currently paired-end.
     ```
-10. Finally, generate the remaining files generally desired as output for the RNA-Seq Workflow.
+10. Next, `htseq-count` is run for the final counts file to be delivered:
+```bash
+htseq-count -f bam \                   # Specify input file as BAM.
+  -r pos \                             # Specify the BAM is position sorted.
+  -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
+  -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+  -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
+  --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
+  --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
+  $INPUT_BAM                           # Input BAM file.
+```
+11. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
 
    ```bash
    samtools flagstat $INPUT_BAM
@@ -243,13 +254,13 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 
-
 # Outstanding questions
 
 * Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
-* Any additional end-to-end tests we'd like to add to the pipeline? Some have been suggested in the area of making sure certain transcripts quantify out the other side for a particular diagnosis.
-* Should we consider adding `qualimap counts` QC in some way?
-* Should we consider the includsion of `.bw` files?
+* There are several parameters during the `htseq-count` step that need input from experts on what a sane default would be for our pipeline.
+* I'd like to incorporate some manual end-to-end tests for our pipeline to evaluate results when we change parameters? Any ideas on this? The areas I have been thinking about are (a) gene expression quantification, (b) gene fusion detection, and (c) novel splice junction/isoform detection.
+* Should we consider adding `qualimap counts` to QC counts across a cohort?
+* Should we consider the generation and vending of `.bw` files by default?
 * Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
 * Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
   * the `sha256sum` tool is sufficiently widespread enough, and
