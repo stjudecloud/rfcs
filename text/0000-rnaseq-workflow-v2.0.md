@@ -229,10 +229,15 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 
 # Items still in-progress
 
-- [ ] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome.
+- [-] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome. 
+  - Description from below before I moved into "In progress": This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v30 is built against `GRCh38.p12`, but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)?
+  - You can follow my discussion with the author of STAR [here](https://github.com/alexdobin/STAR/issues/673).
 - [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
 - [x] Add `multiqc` to aggregate QC results.
 - [x] Pin `qualimap` version.
+- [x] Pin `fastqc` and add steps.
+- [x] Pin `rseqc` and add steps.
+- [ ] Pin `htseq-count` and add steps for read quantification.
 - [ ] Update internal "STAR Best Practices" documentation.
 - [ ] Update internal "Genome Data Files and Configuration" documentation.
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
@@ -243,9 +248,8 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 
 * Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
 * Any additional end-to-end tests we'd like to add to the pipeline? Some have been suggested in the area of making sure certain transcripts quantify out the other side for a particular diagnosis.
-* Should we include count quantification using `htseq-count` in the pipeline?
+* Should we consider the includsion of `.bw` files?
 * Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
-* This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v30 is built against `GRCh38.p12`, but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)?
 * Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
   * the `sha256sum` tool is sufficiently widespread enough, and
   * the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.
