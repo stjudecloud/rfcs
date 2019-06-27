@@ -248,6 +248,7 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 
 * Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
 * Any additional end-to-end tests we'd like to add to the pipeline? Some have been suggested in the area of making sure certain transcripts quantify out the other side for a particular diagnosis.
+* Should we consider adding `qualimap counts` QC in some way?
 * Should we consider the includsion of `.bw` files?
 * Is it a good idea/good investment of effort to remove absolute paths from the headers and leave just a relative path behind? For example, I think it would clean the header up significantly to change `/research/rgs01/project_space/zhanggrp/SJCloud/common/DataPreparation/RNA-Seq/PCGP-more-memory/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam` to `/XXX/data/SJAMLM7060_D/Output/SJAMLM7060_D.bam`.
 * Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
