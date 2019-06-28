@@ -50,16 +50,16 @@ Our current process to vet and screen data consists of the following tools:
 
 The end workflow (covering both our current process and the addition of the new tool) would be as following:
 
-| Command | Purpose |
-| - | - |
-| `samtools quickcheck $INPUT_BAM` | Validate BAM headers and EOF block existence |
-| `md5sum $INPUT_BAM > $INPUT_BAM.md5` | For comparison to md5 vended file property |
-| `picard ValidateSamFile I=$INPUT_BAM MODE=SUMMARY` | Ensure validity of file |
-| `samtools flagstat $INPUT_BAM > $INPUT_BAM.flagstat.txt` | Generate flag statistics |
-| `fastqc $INPUT_BAM -o $OUTDIR` | Screen for GC content and adapter contamination |
-| `qualimap bamqc -bam $INPUT_BAM  -outdir $OUTDIR` | Screen for mapping quality, coverage, and duplication rate |
-| `qualimap rnaseq -bam $INPUT_BAM -gtf $GTF_FILE -outdir $OUTDIR` | Screen for RNA-Seq bias and junction analysis |
-| `multiqc` | Report aggregation |
+| Command                  | Purpose                                                    |
+| -------------------------| ---------------------------------------------------------- |
+| `samtools quickcheck`    | Validate BAM headers and EOF block existence               |
+| `md5sum`                 | For comparison to md5 vended file property                 |
+| `picard ValidateSamFile` | Ensure validity of file                                    |
+| `samtools flagstat`      | Generate flag statistics                                   |
+| `fastqc`                 | Screen for GC content and adapter contamination            |
+| `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
+| `qualimap rnaseq`        | Screen for RNA-Seq bias and junction analysis              |
+| `multiqc`                | Report aggregation                                         |
 
 Note: Specific options such as memory size thresholds and thread count have been left out.
 
