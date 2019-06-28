@@ -38,10 +38,9 @@ Our current process to vet and screen data consists of the following tools:
 
 # Proposals
 
-- Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`], [`junction_annotation`], and [`junction_saturation`].
+- Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`], and [`junction_saturation`].
 
 [`infer_experiment`]: http://rseqc.sourceforge.net/#infer-experiment-py
-[`junction_annotation`]: http://rseqc.sourceforge.net/#junction-annotation-py
 [`junction_saturation`]: http://rseqc.sourceforge.net/#junction-saturation-py
 
 - Include md5 hash as an annotation property for vended files.
@@ -60,7 +59,6 @@ The end workflow (covering both our current process and the addition of the new 
 | `qualimap bamqc`            | Screen for mapping quality, coverage, and duplication rate |
 | `qualimap rnaseq`           | Screen for RNA-Seq bias and junction analysis              |
 | `rseqc infer_experiment`    | Determine RNA-SEQ strandedness and reads                   |
-| `rseqc junction_annotation` | Compare detected splice junctions to reference gene model  |
 | `rseqc junction_saturation` | Verify sequencing depth saturation                         |
 | `multiqc`                   | Report aggregation                                         |
 
