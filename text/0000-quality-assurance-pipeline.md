@@ -1,0 +1,69 @@
+# Table of Contents <!-- omit in toc -->
+
+- [Introduction](#Introduction)
+- [Motivation](#Motivation)
+- [Current Process](#Current-Process)
+- [Proposals](#Proposals)
+- [Workflow Description](#Workflow-Description)
+- [Outstanding Questions](#Outstanding-Questions)
+
+# Introduction
+
+This RFC seeks to establish an automated pipeline workflow around how genomic data on St. Jude Cloud is vetted, covering both existing data and new uploads to the platform. The end goal for this would be to publish results from various tools, but it hopes to draw discussion around what metrics and statistics are important to the community as a whole.
+
+# Motivation
+
+With the introduction of Real-Time Clinical Genomics, there exists a need for an automated quality assurance pipeline guaranteeing any uploaded data meets predefined standards. By guaranteeing the integrity of our data and the reproducibility of these results, it would allow St. Jude to publish statistics about the genomics data hosted on our platform that might be of interest to other scientists and researchers.
+
+# Current Process
+
+Because St. Jude Cloud currently provides three-platform whole-genome (WGS), whole-exome (WES), and transcriptome (RNA-Seq) sequencing data, it is important to differentiate how we currently run our current quality control workflow on each type of sequencing.
+
+Our current process to vet and screen data consists of the following tools:
+
+| Tool                     | Version   |
+| ------------------------ | --------- |
+| `samtools flagstat`      | [v1.9]    |
+| `fastqc`                 | [v0.11.8] |
+| `qualimap bamqc`         | [v2.2.2]  |
+| `qualimap rnaseq`        | [v2.2.2]  |
+| `picard ValidateSamFile` | [v2.20.2] |
+| `multiqc`                | [v1.7]    |
+
+[v1.9]: http://www.htslib.org/doc/samtools.html
+[v0.11.8]: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+[v2.2.2]: http://qualimap.bioinfo.cipf.es/doc_html/command_line.html
+[v2.20.2]: https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_ValidateSamFile.php
+[v1.7]: https://multiqc.info/
+
+# Proposals
+
+- Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`], [`junction_annotation`], and [`junction_saturation`].
+
+[`infer_experiment`]: http://rseqc.sourceforge.net/#infer-experiment-py
+[`junction_annotation`]: http://rseqc.sourceforge.net/#junction-annotation-py
+[`junction_saturation`]: http://rseqc.sourceforge.net/#junction-saturation-py
+
+- Include md5 hash as an annotation property for vended files.
+
+# Workflow Description
+
+The end workflow (covering both our current process and the addition of the new tool) would be as following:
+
+| Command | Purpose |
+| - | - |
+| `samtools quickcheck $INPUT_BAM` | Validate BAM headers and EOF block existence |
+| `md5sum $INPUT_BAM > $INPUT_BAM.md5` | For comparison to md5 vended file property |
+| `picard ValidateSamFile I=$INPUT_BAM MODE=SUMMARY` | Ensure validity of file |
+| `samtools flagstat $INPUT_BAM > $INPUT_BAM.flagstat.txt` | Generate flag statistics |
+| `fastqc $INPUT_BAM -o $OUTDIR` | Screen for GC content and adapter contamination |
+| `qualimap bamqc -bam $INPUT_BAM  -outdir $OUTDIR` | Screen for mapping quality, coverage, and duplication rate |
+| `qualimap rnaseq -bam $INPUT_BAM -gtf $GTF_FILE -outdir $OUTDIR` | Screen for RNA-Seq bias and junction analysis |
+| `multiqc` | Report aggregation |
+
+Note: Specific options such as memory size thresholds and thread count have been left out.
+
+# Outstanding Questions
+
+- What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
+- What other metrics or properties would be valuable?
