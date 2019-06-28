@@ -50,17 +50,19 @@ Our current process to vet and screen data consists of the following tools:
 
 The end workflow (covering both our current process and the addition of the new tool) would be as following:
 
-| Command                  | Purpose                                                    |
-| -------------------------| ---------------------------------------------------------- |
-| `samtools quickcheck`    | Validate BAM headers and EOF block existence               |
-| `md5sum`                 | For comparison to md5 vended file property                 |
-| `picard ValidateSamFile` | Ensure validity of file                                    |
-| `samtools flagstat`      | Generate flag statistics                                   |
-| `fastqc`                 | Screen for GC content and adapter contamination            |
-| `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
-| `qualimap rnaseq`        | Screen for RNA-Seq bias and junction analysis              |
-| `rseqc infer_experiment` | Determine RNA-SEQ strandedness and reads                   |
-| `multiqc`                | Report aggregation                                         |
+| Command                     | Purpose                                                    |
+| --------------------------- | ---------------------------------------------------------- |
+| `samtools quickcheck`       | Validate BAM headers and EOF block existence               |
+| `md5sum`                    | For comparison to md5 vended file property                 |
+| `picard ValidateSamFile`    | Ensure validity of file                                    |
+| `samtools flagstat`         | Generate flag statistics                                   |
+| `fastqc`                    | Screen for GC content and adapter contamination            |
+| `qualimap bamqc`            | Screen for mapping quality, coverage, and duplication rate |
+| `qualimap rnaseq`           | Screen for RNA-Seq bias and junction analysis              |
+| `rseqc infer_experiment`    | Determine RNA-SEQ strandedness and reads                   |
+| `rseqc junction_annotation` | Compare detected splice junctions to reference gene model  |
+| `rseqc junction_saturation` | Verify sequencing depth saturation                         |
+| `multiqc`                   | Report aggregation                                         |
 
 Note: Specific options such as memory size thresholds and thread count have been left out.
 
