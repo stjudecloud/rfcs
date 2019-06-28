@@ -59,6 +59,7 @@ The end workflow (covering both our current process and the addition of the new 
 | `fastqc`                 | Screen for GC content and adapter contamination            |
 | `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
 | `qualimap rnaseq`        | Screen for RNA-Seq bias and junction analysis              |
+| `rseqc infer_experiment` | Determine RNA-SEQ strandedness and reads                   |
 | `multiqc`                | Report aggregation                                         |
 
 Note: Specific options such as memory size thresholds and thread count have been left out.
