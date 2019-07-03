@@ -10,6 +10,7 @@
 - [Workflow description](#Workflow-description)
 - [Items still in-progress](#Items-still-in-progress)
 - [Outstanding questions](#Outstanding-questions)
+- [Appendix](#Appendix)
 
 # Introduction
 
@@ -17,9 +18,9 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 
 # Motivation
 
-* **Tool additions and updates.** The tools we use are woefully out of date (~2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the [section below](#Tool-additions-updates) for more details.
+* **Tool additions and updates.** The tools we use are woefully out of date (2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the [section below](#Tool-additions-updates) for more details.
   * Note that all of the tools used in the RNA-Seq Workflow v1.0 were the latest available version.
-* **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, two major releases of the GENCODE gene model have transpired since v1.0 (we are now on [GENCODE v30](https://www.gencodegenes.org/human/release_30.html)).
+* **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow ([GENCODE v31](https://www.gencodegenes.org/human/release_31.html) is now out).
 * **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release: 
   * A primary driver for the rewrite of the pipeline is the feedback we heard about the `ERCC SpikeIn` sequences. 
     * Popular tools such as `GATK` and `picard` are generally unhappy if the sequence dictionaries don't match perfectly. 
@@ -42,7 +43,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 
 ## Update reference files
 
-* `GENCODE v28` to `GENCODE v30`. Routine updates to the gene model from ENCODE.
+* `GENCODE v28` to `GENCODE v31`. Routine updates to the gene model from the Ensembl-Havana team.
 * Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
   * The first sentence in section 2.2.2 of the [STAR 2.7.1.a manual](https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf): "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.
   * Here is what [the GENCODE FAQ](https://www.gencodegenes.org/pages/faq.html) has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the `Ensembl-genebuild` and manual curation of the `Ensembl-Havana` team, this level should be harmless in the event that levels 1 & 2 don't apply.
@@ -76,15 +77,15 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
    # > GRCh38_no_alt.fa: OK
    ```
 
-* For the gene model, we use the GENCODE v30 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.annotation.gtf.gz). Additionally, you can get the file by running the following commands:
+* For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz). Additionally, you can get the file by running the following commands:
 
    ```bash
-   wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.annotation.gtf.gz
-   gunzip gencode.v30.annotation.gtf.gz
+   wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
+   gunzip gencode.v31.annotation.gtf.gz
 
-   echo "63770a3d2c6adb4d9d1bbc9ba3bd4adf  gencode.v30.annotation.gtf" > gencode.v30.annotation.gtf.md5
-   md5sum -c gencode.v30.annotation.gtf.md5
-   # > gencode.v30.annotation.gtf: OK
+   echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" > gencode.v31.annotation.gtf.md5
+   md5sum -c gencode.v31.annotation.gtf.md5
+   # > gencode.v31.annotation.gtf: OK
    ```
 
 If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need to install [anaconda](https://www.anaconda.com/) first.
@@ -118,7 +119,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
         --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
         --runThreadN $NCPU \                          # Number of threads to use to build genome database.
         --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-        --sjdbGTFfile $GENCODE_GTF_V30 \              # GENCODE v30 gene model file, unmodified.
+        --sjdbGTFfile $GENCODE_GTF_31 \              # GENCODE v31 gene model file, unmodified.
         --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
    ```
 
@@ -180,7 +181,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
    ```
 8. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
 ```bash
-infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
+infer_experiment.py -i $INPUT_BAM -r $GENCODE_V31
 
 # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
 #   - If proportion of forward orientation evidence fraction is >= 0.8, assign "strand-specific-forward".
@@ -202,7 +203,7 @@ infer_experiment.py -i $INPUT_BAM -r $GENCODE_V30
 
     ```bash
     qualimap rnaseq -bam $INPUT_BAM \        # Input BAM.
-                    -gtf $GENCODE_GTF_V30 \  # GENCODE v30 gene model file, unmodified.
+                    -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file, unmodified.
                     -outdir $OUTPUT_DIR \    # Output directory.
                     -oc qualimap_counts.txt \ # Counts as calculated by qualimap.
                     -p $COMPUTED \           # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
@@ -241,7 +242,7 @@ htseq-count -f bam \                   # Specify input file as BAM.
 # Items still in-progress
 
 - [-] Investigation of impact for using ENCODE annotations post `GRCh38.p0` with the no alt analysis set. To measure this, I will see how many genes in the GENCODE gene model overlap with regions that are impacted by patches to the `GRCh38` genome. 
-  - Description from below before I moved into "In progress": This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v30 is built against `GRCh38.p12`, but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)?
+  - Description from below before I moved into "In progress": This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v31 is built against `GRCh38.p12`, but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)?
   - You can follow my discussion with the author of STAR [here](https://github.com/alexdobin/STAR/issues/673).
 - [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
 - [x] Add `multiqc` to aggregate QC results.
@@ -265,3 +266,15 @@ htseq-count -f bam \                   # Specify input file as BAM.
 * Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
   * the `sha256sum` tool is sufficiently widespread enough, and
   * the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.
+
+# Appendix
+
+* The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.
+
+```bash
+gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print "Level " key ": " levels[key] " (" (levels[key]/total)*100 "%)" }; print "Total  : " total}' gencode.v31.annotation.gtf
+# Level 1: 186461 (6.4701%)
+# Level 2: 2450972 (85.0475%)
+# Level 3: 244453 (8.4824%)
+# Total  : 2881886
+```
