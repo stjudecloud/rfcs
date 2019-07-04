@@ -39,6 +39,40 @@ Our current process to vet and screen data consists of the following tools:
 [v2.20.2]: https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_ValidateSamFile.php
 [v1.7]: https://multiqc.info/
 
+# Important Metrics
+
+- Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
+
+The "Per Base Sequence Quality" module from FastQC will show the distribution of quality scores across all bases at each position in the reads. It will automatically determine the encoding method used, but this should be cross-referenced with the actual encoding method.
+
+- Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
+
+The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify any sort of contamination (vector, adapter sequences, etc.).
+
+- Reads Genomic Origin ([Qualimap](http://qualimap.bioinfo.cipf.es/))
+
+The "Reads Genomic Origin" from Qualimap is able to determine how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped to. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Any abnormal results could indicate issues such as DNA contamination.
+
+- rRNA Content (?)
+
+Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.
+
+- Transcript Coverage and 5’-3’ Bias ([Qualimap](http://qualimap.bioinfo.cipf.es/))
+
+Libraries prepared with polyA selection have the possibility to lead to high expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting material was of low RNA quality.
+
+- Junction Analysis ([Qualimap](http://qualimap.bioinfo.cipf.es/))
+
+Analysis of known, partly known, and novel junction positions in spliced alignments.
+
+- Strand Specificity ([RSeQC](http://rseqc.sourceforge.net/))
+
+Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol). 
+
+- GC Content Bias (?)
+
+GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
+
 # Proposals
 
 - Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`] and [`junction_annotation`].
