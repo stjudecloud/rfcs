@@ -2,7 +2,7 @@
 
 - [Introduction](#Introduction)
 - [Motivation](#Motivation)
-- [Propsed Changes and Discussion](#Propsed-Changes-and-Discussion)
+- [Discussion](#Discussion)
   - [Genomic tools](#Genomic-tools)
   - [Reference files](#Reference-files)
     - [GENCODE compatability](#GENCODE-compatability)
@@ -34,37 +34,44 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
     * After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.
   * One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
 
-# Propsed Changes and Discussion
+# Discussion
 
 ## Genomic tools
 
-* `fq v0.2.0` ([Released](https://github.com/stjude/fqlib/releases/tag/v0.2.0) November 28, 2018).
-  * This tool will be used to validate the output of `picard SamToFastq`. `picard SamToFastq` does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.
-* `rseqc v3.0.0` ([Source](http://rseqc.sourceforge.net/#download-rseqc)) will be added.
-  * We have started using `infer_experiment.py` to infer strandedness from the data and ensure that the data matches what information we get from the lab.
-* Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)).
-  * Although we have been using `qualimap` quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-Seq alignment workflow. The `bamqc` and `rnaseq` subcommands are both used.
-* Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019).
-  * Upgraded to receive the benefits of bug fixes and software optimizations.
-* Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018).
-  * Updating the samtools version whenever possible is of particular interest to me due to my perceived fragility of the samtools code (although it has seemed to get better over the last year or so here).
-* Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019).
-  * Upgraded to receive the benefits of bug fixes and software optimizations.
+As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
+
+* `fq v0.2.0` ([Released](https://github.com/stjude/fqlib/releases/tag/v0.2.0) November 28, 2018) will be added. This tool will be used to validate the output of `picard SamToFastq`. `picard SamToFastq` does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.
+* `rseqc v3.0.0` ([Source](http://rseqc.sourceforge.net/#download-rseqc)) will be added. We have started using `infer_experiment.py` to infer strandedness from the data and ensure that the data matches what information we get from the lab.
+* Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)). Although we have been using `qualimap` quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-Seq alignment workflow. The `bamqc` and `rnaseq` subcommands are both used.
+* Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
+* Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).
+* Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
 
 ## Reference files
 
 ### GENCODE compatability
 
-One of the major discussions for this new version of the RNA-Seq workflow was the compatability of the `GRCh38_no_alt` reference genome with the latest `GENCODE` gene set. It was posed as the following question when the RFC was started:
+One of the major discussions during this round of revisions was the compatability of the `GRCh38_no_alt` reference genome with the latest `GENCODE` gene set. It was posed as the following question:
 
-    This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v31 is built against `GRCh38.p12` (see the in the title on the [webpage](https://www.gencodegenes.org/human/release_31.html)), but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)
+> This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v31 is built against `GRCh38.p12` (see the in the title on the [webpage](https://www.gencodegenes.org/human/release_31.html)), but obviously the no alt analysis set is derived from `GRCh38.p0` (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)
     
-As is apparent in the question, the `GRCh38` reference genome is regularly patched with backwards compatable (with respect to coordinates) changes to the genome. Thus, gene models based on newer patches of `GRCh38` will not perfectly match the underlying nucleotide sequence in our reference genome wherever patches were applied.
+As is apparent in the question, the `GRCh38` reference genome is regularly patched with non-coordinate altering, backwards compatable changes (see more information [here](https://www.ncbi.nlm.nih.gov/grc/help/patches/)). On the other hand, each `GENCODE` gene model release is based on a particular patch of the reference genome. This may be problematic because most bioinformatics analyses use a reference genome based on the non-patched version of `GRCh38`. What follows is our discussion and investigation into the effect between mismatching nucleotide sequences in the reference genome and the gene model.
 
-As a first step, we researched what the best practices in the community are:
+First, we researched what some of the projects we respect in the community are doing:
 
-* The GDC are using GENCODE v22 against the GRCh38 no alt analysis set (sources for [gene model](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters) and [reference genome](https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files)). Although only separated by one patch, these two references appear to be discordant.
-* ENCODE is using GENCODE v24 against the GRCh38 no alt analysis set ([source](https://www.encodeproject.org/data-standards/reference-sequences/)).
+| Pipeline                                                        | Reference Genome                                                | Reference Genome Patch | Gene Model                 | Gene Model Patch |
+| --------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- | -------------------------- | ---------------- |
+| GDC's [mRNA-Seq pipeline][gdc-mrnaseq-pipeline]                 | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome] | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
+| ENCODE's [RNA-Seq pipeline][encode-rnaseq-pipeline]             | [`GRCh38_no_alt`-based w/ Spike-ins][encode-reference-genome]   | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
+| Broad Institute's [GTEx RNA-Seq pipeline][gtex-rnaseq-pipeline] | TODO                                                            | TODO                   | TODO                       | TODO             |
+
+[gdc-mrnaseq-pipeline]: https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
+[gdc-reference-genome]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files
+[encode-rnaseq-pipeline]: https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq
+[encode-reference-genome]: https://www.encodeproject.org/files/ENCFF742NER/
+[gtex-rnaseq-pipeline]: https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation
+[gencode-v22]: https://www.gencodegenes.org/human/release_22.html
+[gencode-v24]: https://www.gencodegenes.org/human/release_24.html
 
 I reached out to the author of STAR, Alex Dobin, to get his opinion. You can read my question and his reply [here](https://github.com/alexdobin/STAR/issues/673).
 
