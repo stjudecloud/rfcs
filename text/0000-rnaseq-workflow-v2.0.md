@@ -190,11 +190,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
    # > gencode.v31.annotation.knownloci.gtf: OK
    ```
 
-## Workflow
-
-Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
-
-1. Prepare the STAR index file.
+* Last, the following command is used to prepare the STAR index file:
 
    ```bash
    STAR --runMode genomeGenerate \                    # Use genome generation runMode.
@@ -204,9 +200,12 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
         --sjdbGTFfile $GENCODE_KNOWNLOCI_GTF_31 \     # GENCODE v31 gene model file including only level 1 and level 2 features (see generation steps above).
         --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
    ```
+## Workflow
 
-2. Run `samtools quickcheck` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
-3. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
+Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
+
+1. Run `samtools quickcheck` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+2. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
 
     ```bash
     samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
@@ -214,37 +213,37 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     ```
 
     If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.
-4. Run `fq lint` on each of the FastQ pairs that was generated from step 3 as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators)
+3. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
     ```bash
     fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
     ```
-5. Run the `STAR` alignment algorithm.
+4. Run the `STAR` alignment algorithm.
 
     ```bash
-    STAR --readFilesIn $ALL_READ1 $ALL_READ2 \     # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
-         --outSAMattrRGline $ALL_RG \              # Read group lines in the same order as `readFilesIn` (derived from earlier `samtools split` step).
-         --genomeDir $STARDB \                     # Directory containing the STAR genome
-         --runThreadN $NCPU \                      # Number of threads to use. You must request the correct amount from HPCF first!
-         --outSAMunmapped Within \                 # Keep unmapped reads in the final BAM file.
-         --outSAMstrandField intronMotif \         # Preserve compatibility with Cufflinks by including the XS attribute (strand derived from intron motif).
-         --outSAMtype BAM SortedByCoordinate \     # Output a BAM file that is coordinate sorted.
-         --outSAMattributes NH HI AS nM NM MD XS \ # Recommended SAM attributes to include for compatibility. Refer to manual for specifics.
-         --outFilterMultimapScoreRange 1 \         # Ensures that all multi-mapped reads will need to share the mapping score.
-         --outFilterMultimapNmax 20 \              # Max number of multi-mapped SAM entries for each read.
-         --outFilterMismatchNmax 10 \              # Max number of mismatches allowed from alignment.
-         --alignIntronMax 500000 \                 # Max intron size considered.
-         --alignMatesGapMax 1000000 \              # Max gap allowed between two mates.
-         --sjdbScore 2 \                           # Additional weight given to alignments that cross database junctions when scoring alignments.
-         --alignSJDBoverhangMin 1 \                # Minimum overhang required on each side of a splice junction. Here, we require only one base on each side.
-         --outFilterMatchNminOverLread 0.66 \      # 66% of the read must be perfectly matched to the reference sequence.
-         --outFilterScoreMinOverLread 0.66 \       # Score must be greater than 66% of the read length. So for RL=100, the alignment must have a score > 66.
-         --limitBAMsortRAM $RAM_LIMIT \            # Amount of RAM to use for sorting. Recommended value is [Max amount of RAM] - 5GB.
-         --outFileNamePrefix $OUT_FILE_PREFIX \    # All output files will have this path prepended.
-         --twopassMode Basic                       # Use STAR two-pass mapping technique (refer to manual).
+    STAR --readFilesIn $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
+         --outSAMattrRGline $ALL_RG \                   # Read group lines in the same order as `readFilesIn` (derived from earlier `samtools split` step).
+         --genomeDir $STARDB \                          # Directory containing the STAR genome
+         --runThreadN $NCPU \                           # Number of threads to use. You must request the correct amount from HPCF first!
+         --outSAMunmapped Within \                      # Keep unmapped reads in the final BAM file.
+         --outSAMstrandField intronMotif \              # Preserve compatibility with Cufflinks by including the XS attribute (strand derived from intron motif).
+         --outSAMtype BAM SortedByCoordinate \          # Output a BAM file that is coordinate sorted.
+         --outSAMattributes NH HI AS nM NM MD XS \      # Recommended SAM attributes to include for compatibility. Refer to manual for specifics.
+         --outFilterMultimapScoreRange 1 \              # Ensures that all multi-mapped reads will need to share the mapping score.
+         --outFilterMultimapNmax 20 \                   # Max number of multi-mapped SAM entries for each read.
+         --outFilterMismatchNmax 10 \                   # Max number of mismatches allowed from alignment.
+         --alignIntronMax 500000 \                      # Max intron size considered.
+         --alignMatesGapMax 1000000 \                   # Max gap allowed between two mates.
+         --sjdbScore 2 \                                # Additional weight given to alignments that cross database junctions when scoring alignments.
+         --alignSJDBoverhangMin 1 \                     # Minimum overhang required on each side of a splice junction. Here, we require only one base on each side.
+         --outFilterMatchNminOverLread 0.66 \           # 66% of the read must be perfectly matched to the reference sequence.
+         --outFilterScoreMinOverLread 0.66 \            # Score must be greater than 66% of the read length. So for RL=100, the alignment must have a score > 66.
+         --limitBAMsortRAM $RAM_LIMIT \                 # Amount of RAM to use for sorting. Recommended value is [Max amount of RAM] - 5GB.
+         --outFileNamePrefix $OUT_FILE_PREFIX \         # All output files will have this path prepended.
+         --twopassMode Basic                            # Use STAR two-pass mapping technique (refer to manual).
     ```
 
-6. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
+5. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
    
    ```bash
    picard MarkDuplicates I=$STAR_BAM \                  # Input BAM.
@@ -255,12 +254,19 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                          COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
                          METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
    ```
-7. Run `picard ValidateSamFile` on the aligned and marked BAM file.
+6. Run `picard ValidateSamFile` on the aligned and marked BAM file.
    
    ```bash
    picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
                           IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
    ```
+7. Run `fastqc` on the data for convenience of end users.
+    ```bash
+    fastqc -f bam \     # Specify that we are working on a BAM file.
+           -o $OUTDIR \ # Specify an out directory.
+           -t $NCPU \   # Specify number of threads.
+           $INPUT_BAM   # Input BAM we are QC'ing.
+    ```
 8. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
     ```bash
     infer_experiment.py -i $INPUT_BAM -r $GENCODE_KNOWNLOCI_GTF_V31
@@ -271,7 +277,6 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     #   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
     #   - Else flag for manual triage.
     ```
-
 9. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
 
     ```bash
@@ -293,31 +298,27 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     ```
 10. Next, `htseq-count` is run for the final counts file to be delivered:
     ```bash
-    htseq-count -f bam \                   # Specify input file as BAM.
-      -r pos \                             # Specify the BAM is position sorted.
-      -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
-      -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
-      -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
-      --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
-      --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
-      $INPUT_BAM                           # Input BAM file.
+    htseq-count -f bam \                            # Specify input file as BAM.
+               -r pos \                             # Specify the BAM is position sorted.
+               -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
+               -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+               -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
+               --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
+               --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
+               $INPUT_BAM                           # Input BAM file.
     ```
 11. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
     ```bash
     samtools flagstat $INPUT_BAM
     samtools index $INPUT_BAM
     md5sum $INPUT_BAM
-    fastqc -f bam \     # Specify that we are working on a BAM file.
-           -o $OUTDIR \ # Specify an out directory.
-           -t $NCPU \   # Specify number of threads.
-           $INPUT_BAM   # Input BAM we are QC'ing.
     ```
 12. Run `multiqc` across the following files for all samples in the cohort:
 
-    * `fastqc`
     * `STAR`
     * `picard MarkDuplicates` and `picard ValidateSamFile`
     * `qualimap bamqc` and `qualimap rnaseq`
+    * `fastqc`
     * `samtools flagstat`
 
 # Items still in-progress
