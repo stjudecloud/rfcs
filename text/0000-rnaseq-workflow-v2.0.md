@@ -17,6 +17,7 @@
 - [Outstanding questions](#Outstanding-questions)
 - [Appendix](#Appendix)
     - [Reference genome comparison](#Reference-genome-comparison)
+    - [ENCODE GTF generation](#ENCODE-GTF-generation)
     - [GENCODE feature comparisons](#GENCODE-feature-comparisons)
 
 # Introduction
@@ -98,13 +99,20 @@ Given that there was no perfect option, we decided to stick with option #3.
 
 Originally, I had posed this question to the group:
 
-  * Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
-    * The first sentence in section 2.2.2 of the [STAR 2.7.1.a manual](https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf): "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.
-    * Here is what [the GENCODE FAQ](https://www.gencodegenes.org/pages/faq.html) has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the `Ensembl-genebuild` and manual curation of the `Ensembl-Havana` team, this level should be harmless in the event that levels 1 & 2 don't apply.
-    * Last, the [GDC documentation](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters) does not currently describe any filtering of their GENCODE v22 GTF (see the section labeled "Step 1: Building the STAR index").
+> * Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+>   * The first sentence in section 2.2.2 of the [STAR 2.7.1.a manual](https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf): "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.
+>   * Here is what [the GENCODE FAQ](https://www.gencodegenes.org/pages/faq.html) has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the `Ensembl-genebuild` and manual curation of the `Ensembl-Havana` team, this level should be harmless in the event that levels 1 & 2 don't apply.
+>   * Last, the various other pipelines in the community don't tend to remove these features:
+>     * The [GDC documentation](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters) does not currently describe any filtering of their GENCODE v22 GTF (see the section labeled "Step 1: Building the STAR index").
+>     * ENCODE is not filtering any features, they are just changing some of the contig names from [GENCODE v24][gencode-v24] (see the analysis [in the appendix](#ENCODE-GTF-generation)).
+>     * The TOPMed pipeline [does outline some postprocessing](https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation) they are doing to the GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.
 
-After discussion internally, we decided to continue removing `level 3` annotations by default. `level 3` features were considered too experimental to apply in the majority of use cases our end users explore. The small number of situations were one would want to include these in the counts weighed against the risk of false-positive discoveries in unverified genes + miscounted evidence that could have been counted towards verified features made it undesirable to include. 
-   * For any users interested in these `level 3` features, you should rerun the alignment and quantification with these features included in your GTF. 
+After discussion internally, we decided to continue removing `level 3` annotations by default:
+* `level 3` features were considered too experimental to apply in the majority of use cases our end users explore. 
+* Additionally, moving forward with this filtering made us feel more comfortable with the decisions we made about [GENCODE compatability](#GENCODE-compatability). 
+* Last, the small number of situations were one would want to include these in the counts weighed against the risk of false-positive discoveries in unverified genes + miscounted evidence that couldhave been counted towards verified features made it undesirable to include. 
+
+For any users interested in these `level 3` features, you should rerun the alignment and quantification with these features included in your GTF. 
 
 ## Quality control inclusion
 
@@ -325,6 +333,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 - [ ] Add details about analysis done to choose v31 of the ENCODE gene model over v21.
+- [ ] Add to docs that one must rerun the files with `level 3` features included if they want to look for evidence in these features.
 
 # Outstanding questions
 
@@ -378,6 +387,24 @@ If you are interested in seeing the *full* comparison table or in regenerating t
 | chrY          | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | True       |
 | chrM          | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | True       |
 | chrEBV        | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | True       |
+
+### ENCODE GTF generation
+
+A small investigation was done to see how ENCODE's GENCODE v24 GTF was being produced (the md5sum between the original GENCODE v24 primary assembly file and ENCODE's version of the file weren't matching up). In short, they just changed the names of some of the contigs. You can verify this yourself by doing an `md5sum` without the sequence name column of the GTF (or manually download and inspect the differences like I did :)).
+
+```bash
+curl -sL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_24/gencode.v24.primary_assembly.annotation.gtf.gz | \
+         gunzip -c | \
+         cut -f2- -d$'\t' | \
+         md5sum
+# 5227fac91c8d32b3fa3a8f78c4bf0e5c  -
+
+curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annotation/@@download/gencode.v24.primary_assembly.annotation.gtf.gz | \
+         gunzip -c | \
+         cut -f2- -d$'\t' | \
+         md5sum
+# 5227fac91c8d32b3fa3a8f78c4bf0e5c  -
+```
 
 ### GENCODE feature comparisons
 
