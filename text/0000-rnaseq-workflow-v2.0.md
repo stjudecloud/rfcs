@@ -3,19 +3,21 @@
 - [Introduction](#Introduction)
 - [Motivation](#Motivation)
 - [Discussion](#Discussion)
-  - [Genomic tools](#Genomic-tools)
-  - [Reference files](#Reference-files)
-    - [GENCODE compatability](#GENCODE-compatability)
-    - [Continued exclusion of automatically annotated features](#Continued-exclusion-of-automatically-annotated-features)
-  - [QC and quality of life improvements](#QC-and-quality-of-life-improvements)
+  - [Tool additions and upgrades](#Tool-additions-and-upgrades)
+  - [GENCODE compatability](#GENCODE-compatability)
+  - [Gene model post-processing](#Gene-model-post-processing)
+  - [Quality control inclusion](#Quality-control-inclusion)
+  - [Quality of life improvements](#Quality-of-life-improvements)
   - [Various other changes](#Various-other-changes)
-- [Workflow description](#Workflow-description)
+- [Specification](#Specification)
   - [Dependencies](#Dependencies)
-  - [Reference files](#Reference-files-1)
+  - [Reference files](#Reference-files)
   - [Workflow](#Workflow)
 - [Items still in-progress](#Items-still-in-progress)
 - [Outstanding questions](#Outstanding-questions)
 - [Appendix](#Appendix)
+    - [Reference genome comparison](#Reference-genome-comparison)
+    - [GENCODE feature comparisons](#GENCODE-feature-comparisons)
 
 # Introduction
 
@@ -36,7 +38,7 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 
 # Discussion
 
-## Genomic tools
+## Tool additions and upgrades
 
 As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
 
@@ -47,9 +49,7 @@ As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
 * Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).
 * Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
 
-## Reference files
-
-### GENCODE compatability
+## GENCODE compatability
 
 One of the major discussions during this round of revisions was the compatability of the `GRCh38_no_alt` reference genome with the latest `GENCODE` gene set. It was posed as the following question:
 
@@ -59,32 +59,42 @@ As is apparent in the question, the `GRCh38` reference genome is regularly patch
 
 First, we researched what some of the projects we respect in the community are doing:
 
-| Pipeline                                                        | Reference Genome                                                | Reference Genome Patch | Gene Model                 | Gene Model Patch |
-| --------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------- | -------------------------- | ---------------- |
-| GDC's [mRNA-Seq pipeline][gdc-mrnaseq-pipeline]                 | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome] | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
-| ENCODE's [RNA-Seq pipeline][encode-rnaseq-pipeline]             | [`GRCh38_no_alt`-based w/ Spike-ins][encode-reference-genome]   | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
-| Broad Institute's [GTEx RNA-Seq pipeline][gtex-rnaseq-pipeline] | TODO                                                            | TODO                   | TODO                       | TODO             |
+| Pipeline                                                                 | Reference Genome                                                     | Reference Genome Patch | Gene Model                 | Gene Model Patch |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------- | -------------------------- | ---------------- |
+| GDC's [mRNA-Seq pipeline][gdc-mrnaseq-pipeline]                          | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome]      | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
+| ENCODE's [RNA-Seq pipeline][encode-rnaseq-pipeline]                      | [`GRCh38_no_alt`-based w/ SpikeIns][encode-reference-genome]         | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
+| Broad Institute's [GTEx + TOPMed RNA-Seq pipeline][gtex-rnaseq-pipeline] | [Broad's `GRCh38` w/ ERCC SpikeIn][broad-institute-reference-genome] | `GRCh38.p0`            | [GENCODE v26][gencode-v26] | `GRCh38.p10`     |
 
 [gdc-mrnaseq-pipeline]: https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
 [gdc-reference-genome]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files
 [encode-rnaseq-pipeline]: https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq
 [encode-reference-genome]: https://www.encodeproject.org/files/ENCFF742NER/
 [gtex-rnaseq-pipeline]: https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation
+[broad-institute-reference-genome]: https://software.broadinstitute.org/gatk/download/bundle
 [gencode-v22]: https://www.gencodegenes.org/human/release_22.html
 [gencode-v24]: https://www.gencodegenes.org/human/release_24.html
+[gencode-v26]: https://www.gencodegenes.org/human/release_26.html
 
-I reached out to the author of STAR, Alex Dobin, to get his opinion. You can read my question and his reply [here](https://github.com/alexdobin/STAR/issues/673).
+**Note:** You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on `GRCh38_no_alt` takes a little bit more elbow grease: if you're interested, you can check out the comparison table [in the appendix](#reference-genome-comparison). If you are *really* interested, you can recapitulate those results by running [the associated Jupyter notebook](../resources/0000-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
 
-Based on internal discussions and Dr. Dobin's reply, we considered three possible options:
+Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply [here](https://github.com/alexdobin/STAR/issues/673). In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.
 
-1. We could try using the reference FASTA supplied with the respective GENCODE release as suggested by Dr. Dobin.
-   * This was the most undesirable approach for a few reasons. The most prominent reason was that this reference genome did not immediately mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline, which was a major motiviation for this RFC. It would require a large amount of postprocessing of the GENCODE reference genome to convert to apply all of the no alt analysis set changes (e.g. converting to UCSC names, masking regions of the genome, inserting the EBV chromosome). This could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason they don't apply patches to the no alt analysis set).
-2. We could downgrade the GENCODE gene model to be consistent with the no alt analysis patch ([v21](https://www.gencodegenes.org/human/release_21.html] would the correct version to use in this case).
+Given the landscape of the community and the author's response, we considered three possible options for moving ahead:
+
+1. We could try using the reference FASTA supplied with the respective GENCODE release as suggested by Dr. Dobin. This was the most undesirable approach from our groups perspective:
+   * The main reason was that this reference genome did not mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline out of the box. As outlined in [the motivation section](#Motivation) of this document, this incongruency was a major driving factor for the creation of this RFC. 
+   * We agreed it would require too large an amount of postprocessing of the GENCODE reference genome to convert to apply all of the no alt analysis set changes (e.g. converting to UCSC names, masking regions of the genome, inserting the EBV chromosome).
+   * Additionally, this could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason no one applies the patches to their no alt analysis set :)).
+2. We could downgrade the GENCODE gene model to the latest release that was still based on `GRCh38.p0` ([GENCODE v21](https://www.gencodegenes.org/human/release_21.html) would the correct version to use in this case).
    * The concordance of the reference sequences obviously made this choice an attractive option. However, `GENCODE v21` was released over 5 years ago (06.2014) and there were many valuable updates over that time. In particular, a quick look showed that there were many more transcripts and that the number of lncRNAs more than doubled (see appendix). We did not want to lose all of this forward progress if we could avoid it.
-3. We could use the latest GENCODE release despite the mismatches between patches.
-   * Given that there was no perfect option, this is the route we decided to take. The general consensus was that, after filtering the gene model for only known features (`level 1` and `level 2`), the effect of this discordance would be small enough to tolerate so that we could gain all of the knowledge accumulated since the older release. To quantify this, we measured the differences in gene expression (as measured by the `R^2` value between `GENCODE v21` and `GENCODE v31`) and splice junction detection (as measured by the number of splice junctions detected and the relative proportions of novel/partially novel/known junctions). In the current version of this RFC, I have not outlined the results, but I plan to in the future (see TODOs).
+   * To see what we looked at, you can see [the relevant section in the appendix](#GENCODE-feature-comparisons).
+3. We could use the latest GENCODE release despite the mismatches outlined above as it appears most other projects have done.
+   * The general consensus was that, after filtering the gene model for only known features (`level 1` and `level 2`), the effect of this discordance would be small enough to tolerate so that we could gain all of the knowledge accumulated since the older release.
+   * To quantify this, we measured the differences in gene expression (as measured by the `R^2` value between `GENCODE v21` and `GENCODE v31`) and splice junction detection (as measured by the number of splice junctions detected and the relative proportions of novel/partially novel/known junctions). In the current version of this RFC, I have not outlined the results, but I plan to in the future (see TODOs).
 
-### Continued exclusion of automatically annotated features
+Given that there was no perfect option, we decided to stick with option #3. 
+
+## Gene model post-processing
 
 Originally, I had posed this question to the group:
 
@@ -96,7 +106,11 @@ Originally, I had posed this question to the group:
 After discussion internally, we decided to continue removing `level 3` annotations by default. `level 3` features were considered too experimental to apply in the majority of use cases our end users explore. The small number of situations were one would want to include these in the counts weighed against the risk of false-positive discoveries in unverified genes + miscounted evidence that could have been counted towards verified features made it undesirable to include. 
    * For any users interested in these `level 3` features, you should rerun the alignment and quantification with these features included in your GTF. 
 
-## QC and quality of life improvements
+## Quality control inclusion
+
+Previously, our QC pipeline was broken out into a separate workflow. Moving forward, we will include the parts of our pipeline which pertain to QC within this specification. There are really no notworthy changes to the QC pipeline for this release other than updating the command line tools we use there to the latest versions.
+
+## Quality of life improvements
 
 * Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard MarkDuplicates` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
   * `INVALID_PLATFORM_VALUE` is pretty annoying. It just complains if a read group doesn't contain a `PL` attribute. I'm not sure it's worth going back and fixing these.
@@ -108,7 +122,7 @@ After discussion internally, we decided to continue removing `level 3` annotatio
 * Removed a section of the pipeline that reformatted the header of the BAM to be cleaner. `STAR` outputs a header that is formatted fine already, and I found this code to just be an area where an error could be introduced for little benefit.
 * I removed a section of custom code that checks for duplicate read groups. `picard ValidateSamFile` does this for you (see [the documentation](https://software.broadinstitute.org/gatk/documentation/article.php?id=7571) for this tool. Specifically, the `DUPLICATE_READ_GROUP_ID` error).
 
-# Workflow description
+# Specification
 
 ## Dependencies 
 
@@ -124,7 +138,7 @@ conda create -n star-mapping \
     qualimap==2.2.2c \
     multiqc==1.7 \
     rseqc==3.0.0 \
-    fastqc==0.11.8-1 \
+    fastqc==0.11.8 \
     -y
 ```
 
@@ -324,6 +338,50 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
   * the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.
 
 # Appendix
+
+### Reference genome comparison
+
+Below are the results of an analysis of each pipeline's `GRCh38`-based reference genome. The steps are essentially:
+
+1. Research what reference genome each project is using and where to find it.
+2. Download it.
+3. Use `picard CreateSequenceDictionary` to get the md5sums for each sequence in the dictionary.
+4. Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).
+
+If you are interested in seeing the *full* comparison table or in regenerating these results, you can see [the associated Jupyter notebook](../resources/0000-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
+
+| Sequence Name | NCBI (baseline)                    | ENCODE                             | GDC                                | TOPMed                             | Concordant |
+| ------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------- |
+| chr1          | `6aef897c3d6ff0c78aff06ac189178dd` | `6aef897c3d6ff0c78aff06ac189178dd` | `6aef897c3d6ff0c78aff06ac189178dd` | `6aef897c3d6ff0c78aff06ac189178dd` | True       |
+| chr2          | `f98db672eb0993dcfdabafe2a882905c` | `f98db672eb0993dcfdabafe2a882905c` | `f98db672eb0993dcfdabafe2a882905c` | `f98db672eb0993dcfdabafe2a882905c` | True       |
+| chr3          | `76635a41ea913a405ded820447d067b0` | `76635a41ea913a405ded820447d067b0` | `76635a41ea913a405ded820447d067b0` | `76635a41ea913a405ded820447d067b0` | True       |
+| chr4          | `3210fecf1eb92d5489da4346b3fddc6e` | `3210fecf1eb92d5489da4346b3fddc6e` | `3210fecf1eb92d5489da4346b3fddc6e` | `3210fecf1eb92d5489da4346b3fddc6e` | True       |
+| chr5          | `a811b3dc9fe66af729dc0dddf7fa4f13` | `a811b3dc9fe66af729dc0dddf7fa4f13` | `a811b3dc9fe66af729dc0dddf7fa4f13` | `a811b3dc9fe66af729dc0dddf7fa4f13` | True       |
+| chr6          | `5691468a67c7e7a7b5f2a3a683792c29` | `5691468a67c7e7a7b5f2a3a683792c29` | `5691468a67c7e7a7b5f2a3a683792c29` | `5691468a67c7e7a7b5f2a3a683792c29` | True       |
+| chr7          | `cc044cc2256a1141212660fb07b6171e` | `cc044cc2256a1141212660fb07b6171e` | `cc044cc2256a1141212660fb07b6171e` | `cc044cc2256a1141212660fb07b6171e` | True       |
+| chr8          | `c67955b5f7815a9a1edfaa15893d3616` | `c67955b5f7815a9a1edfaa15893d3616` | `c67955b5f7815a9a1edfaa15893d3616` | `c67955b5f7815a9a1edfaa15893d3616` | True       |
+| chr9          | `6c198acf68b5af7b9d676dfdd531b5de` | `6c198acf68b5af7b9d676dfdd531b5de` | `6c198acf68b5af7b9d676dfdd531b5de` | `6c198acf68b5af7b9d676dfdd531b5de` | True       |
+| chr10         | `c0eeee7acfdaf31b770a509bdaa6e51a` | `c0eeee7acfdaf31b770a509bdaa6e51a` | `c0eeee7acfdaf31b770a509bdaa6e51a` | `c0eeee7acfdaf31b770a509bdaa6e51a` | True       |
+| chr11         | `1511375dc2dd1b633af8cf439ae90cec` | `1511375dc2dd1b633af8cf439ae90cec` | `1511375dc2dd1b633af8cf439ae90cec` | `1511375dc2dd1b633af8cf439ae90cec` | True       |
+| chr12         | `96e414eace405d8c27a6d35ba19df56f` | `96e414eace405d8c27a6d35ba19df56f` | `96e414eace405d8c27a6d35ba19df56f` | `96e414eace405d8c27a6d35ba19df56f` | True       |
+| chr13         | `a5437debe2ef9c9ef8f3ea2874ae1d82` | `a5437debe2ef9c9ef8f3ea2874ae1d82` | `a5437debe2ef9c9ef8f3ea2874ae1d82` | `a5437debe2ef9c9ef8f3ea2874ae1d82` | True       |
+| chr14         | `e0f0eecc3bcab6178c62b6211565c807` | `e0f0eecc3bcab6178c62b6211565c807` | `e0f0eecc3bcab6178c62b6211565c807` | `e0f0eecc3bcab6178c62b6211565c807` | True       |
+| chr15         | `f036bd11158407596ca6bf3581454706` | `f036bd11158407596ca6bf3581454706` | `f036bd11158407596ca6bf3581454706` | `f036bd11158407596ca6bf3581454706` | True       |
+| chr16         | `db2d37c8b7d019caaf2dd64ba3a6f33a` | `db2d37c8b7d019caaf2dd64ba3a6f33a` | `db2d37c8b7d019caaf2dd64ba3a6f33a` | `db2d37c8b7d019caaf2dd64ba3a6f33a` | True       |
+| chr17         | `f9a0fb01553adb183568e3eb9d8626db` | `f9a0fb01553adb183568e3eb9d8626db` | `f9a0fb01553adb183568e3eb9d8626db` | `f9a0fb01553adb183568e3eb9d8626db` | True       |
+| chr18         | `11eeaa801f6b0e2e36a1138616b8ee9a` | `11eeaa801f6b0e2e36a1138616b8ee9a` | `11eeaa801f6b0e2e36a1138616b8ee9a` | `11eeaa801f6b0e2e36a1138616b8ee9a` | True       |
+| chr19         | `85f9f4fc152c58cb7913c06d6b98573a` | `85f9f4fc152c58cb7913c06d6b98573a` | `85f9f4fc152c58cb7913c06d6b98573a` | `85f9f4fc152c58cb7913c06d6b98573a` | True       |
+| chr20         | `b18e6c531b0bd70e949a7fc20859cb01` | `b18e6c531b0bd70e949a7fc20859cb01` | `b18e6c531b0bd70e949a7fc20859cb01` | `b18e6c531b0bd70e949a7fc20859cb01` | True       |
+| chr21         | `974dc7aec0b755b19f031418fdedf293` | `974dc7aec0b755b19f031418fdedf293` | `974dc7aec0b755b19f031418fdedf293` | `974dc7aec0b755b19f031418fdedf293` | True       |
+| chr22         | `ac37ec46683600f808cdd41eac1d55cd` | `ac37ec46683600f808cdd41eac1d55cd` | `ac37ec46683600f808cdd41eac1d55cd` | `ac37ec46683600f808cdd41eac1d55cd` | True       |
+| chrX          | `2b3a55ff7f58eb308420c8a9b11cac50` | `2b3a55ff7f58eb308420c8a9b11cac50` | `2b3a55ff7f58eb308420c8a9b11cac50` | `2b3a55ff7f58eb308420c8a9b11cac50` | True       |
+| chrY          | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | `ce3e31103314a704255f3cd90369ecce` | True       |
+| chrM          | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | `c68f52674c9fb33aef52dcf399755519` | True       |
+| chrEBV        | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | `6743bd63b3ff2b5b8985d8933c53290a` | True       |
+
+### GENCODE feature comparisons
+
+Below are a few commands used to quickly evaluate how much the GENCODE geneset has changed over time. This was useful in our discussion about how much value would be lost if we just used `GENCODE v21` (which was based on `GRCh38.p0`). See [the discussion on the GENCODE compatibility](#GENCODE-compatability) for more information.
 
 * Commands that were used in the comparison of feature types between `GENCODE v21` and `GENCODE v31`:
 
