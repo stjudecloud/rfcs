@@ -32,8 +32,8 @@ This RFC lays out some thoughts I've been collecting about how to improve the RN
 * **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release: 
   * A primary driver for the rewrite of the pipeline is the feedback we heard about the `ERCC SpikeIn` sequences. 
     * Popular tools such as `GATK` and `picard` are generally unhappy if the sequence dictionaries don't match perfectly. 
-    * The inclusion of the `ERCC` genome in all of our RNA-Seq samples was violating that practice and causing problems for cross-target analyses.
-    * Last, many of our samples do not currently contain the `ERCC` sequences.
+    * The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-Seq mapping was hence causing issues when using mapped RNA-Seq BAM files in conjunction with other non-RNA-Seq BAM files in downstream analysis using these tools.
+    * Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences.
     * After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.
   * One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
 
@@ -147,6 +147,7 @@ conda create -n star-mapping \
     multiqc==1.7 \
     rseqc==3.0.0 \
     fastqc==0.11.8 \
+    htseq==0.11.2 \
     -y
 ```
 
@@ -282,8 +283,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     ```bash
     qualimap bamqc -bam $INPUT_BAM \     # Input BAM. 
                    -outdir $OUTPUT_DIR \ # Output directory.
-                   -nt $NCPUS \          # Number of CPUs to use.
-                   -pe                   # All RNA-Seq data in St. Jude Cloud is currently paired end.
+                   -nt $NCPUS            # Number of CPUs to use.
     ```
 
     and
@@ -423,7 +423,7 @@ Below are a few commands used to quickly evaluate how much the GENCODE geneset h
     # Feature Selenocysteine: 114 (0.00447657%)
     # Feature stop_codon: 73993 (2.90557%)
     # Feature transcript: 196327 (7.7094%)
-    # Total: 25465949
+    # Total: 2546594
   
     gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v31.annotation.gtf 
     # Feature exon: 1363843 (47.3247%)
