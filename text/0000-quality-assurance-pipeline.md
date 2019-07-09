@@ -43,7 +43,7 @@ Our current process to vet and screen data consists of the following tools:
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
-The "Per Base Sequence Quality" module from FastQC will show the distribution of quality scores across all bases at each position in the reads. It will automatically determine the encoding method used, but this should be cross-referenced with the actual encoding method.
+The "Per Base Sequence Quality" module from FastQC will show the distribution of quality scores across all bases at each position in the reads. In our case, this is just for informational purposes to our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
 
 - Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
