@@ -214,12 +214,16 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     ```
 
     If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.
-3. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
+3. Run Picard `SamToFastq` on each of the bams generated in the previous step.
+   ```bash
+      picard SamToFastq INPUT=$INPUT_BAM FASTQ=$FASTQ_R1 SECOND_END_FASTQ=$FASTQ_R2 RE_REVERSE=true
+   ```
+4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
     ```bash
     fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
     ```
-4. Run the `STAR` alignment algorithm.
+5. Run the `STAR` alignment algorithm.
 
     ```bash
     STAR --readFilesIn $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
@@ -244,7 +248,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
          --twopassMode Basic                            # Use STAR two-pass mapping technique (refer to manual).
     ```
 
-5. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
+6. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
    
    ```bash
    picard MarkDuplicates I=$STAR_BAM \                  # Input BAM.
@@ -255,20 +259,20 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                          COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
                          METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
    ```
-6. Run `picard ValidateSamFile` on the aligned and marked BAM file.
+7. Run `picard ValidateSamFile` on the aligned and marked BAM file.
    
    ```bash
    picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
                           IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
    ```
-7. Run `fastqc` on the data for convenience of end users.
+8. Run `fastqc` on the data for convenience of end users.
     ```bash
     fastqc -f bam \     # Specify that we are working on a BAM file.
            -o $OUTDIR \ # Specify an out directory.
            -t $NCPU \   # Specify number of threads.
            $INPUT_BAM   # Input BAM we are QC'ing.
     ```
-8. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
+9. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
     ```bash
     infer_experiment.py -i $INPUT_BAM -r $GENCODE_KNOWNLOCI_GTF_V31
     
@@ -278,7 +282,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     #   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
     #   - Else flag for manual triage.
     ```
-9. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
+10. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
 
     ```bash
     qualimap bamqc -bam $INPUT_BAM \     # Input BAM. 
@@ -296,7 +300,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                     -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
                     -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
     ```
-10. Next, `htseq-count` is run for the final counts file to be delivered:
+11. Next, `htseq-count` is run for the final counts file to be delivered:
     ```bash
     htseq-count -f bam \                            # Specify input file as BAM.
                -r pos \                             # Specify the BAM is position sorted.
@@ -307,13 +311,13 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
                $INPUT_BAM                           # Input BAM file.
     ```
-11. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
+12. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
     ```bash
     samtools flagstat $INPUT_BAM
     samtools index $INPUT_BAM
     md5sum $INPUT_BAM
     ```
-12. Run `multiqc` across the following files for all samples in the cohort:
+13. Run `multiqc` across the following files for all samples in the cohort:
 
     * `STAR`
     * `picard MarkDuplicates` and `picard ValidateSamFile`
