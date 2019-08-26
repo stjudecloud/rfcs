@@ -35,7 +35,7 @@ python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
 
-### Questions
+## Questions
 
 With any quetions, please [contact us][contact].
 
