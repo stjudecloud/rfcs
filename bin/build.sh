@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-
 set -e
 
 [[ ! -d src ]] && mkdir src
-echo "[Introduction](introduction.md)\n" > src/SUMMARY.md
+printf "# Summary\n\n[Introduction](introduction.md)\n" > src/SUMMARY.md
 
 for f in $(ls text/* | sort)
 do
