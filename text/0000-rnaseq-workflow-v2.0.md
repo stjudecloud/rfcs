@@ -107,12 +107,7 @@ Originally, I had posed this question to the group:
 >     * ENCODE is not filtering any features, they are just changing some of the contig names in the [GENCODE v24][gencode-v24] GTF (see the analysis [in the appendix](#ENCODE-GTF-generation)).
 >     * The TOPMed pipeline [does outline some postprocessing](https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation) they are doing to the [GENCODE v26][gencode-v26] GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.
 
-After discussion internally, we decided to continue removing `level 3` annotations by default:
-* `level 3` features were considered too experimental to apply in the majority of use cases our end users explore. 
-* Additionally, moving forward with this filtering made us feel more comfortable with the decisions we made about [GENCODE compatability](#GENCODE-compatability). 
-* Last, the small number of situations were one would want to include these in the counts weighed against the risk of false-positive discoveries in unverified genes + miscounted evidence that couldhave been counted towards verified features made it undesirable to include. 
-
-For any users interested in these `level 3` features, you should rerun the alignment and quantification with these features included in your GTF. 
+After discussion internally, we decided to discontinue removing `level 3` annotations by default.
 
 ## Quality control inclusion
 
@@ -122,7 +117,7 @@ Previously, our QC pipeline was broken out into a separate workflow. Moving forw
 
 * Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard MarkDuplicates` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
   * `INVALID_PLATFORM_VALUE` is pretty annoying. It just complains if a read group doesn't contain a `PL` attribute. I'm not sure it's worth going back and fixing these.
-* For dependency management, I'd like to propose we move to using `conda` until we are decided on which workflow language we will support and until we get further down the road of building standard docker images. All packages should be available within the `defaults`, `conda-forge`, and `bioconda` repositories.
+* For dependency management, we have moved to using `conda` within standard docker images. All packages should be available within the `defaults`, `conda-forge`, and `bioconda` repositories.
 * Add a checksum algorithm and publish the results in the data browser. Currently, I'm proposing we generate the `md5sum` checksum. However, we should consider the use of a non-broken hashing algorithm (see [the related question below](#Outstanding-Questions)).
 
 ## Various other changes
@@ -154,7 +149,7 @@ conda create -n star-mapping \
 Additionally, you will want to install our `fqlib` library to check that FastQ files are properly paired and have no duplicate read names. Installation of the [Rust](https://rustup.rs/) programming language is required.
 
 ```bash
-cargo install --git https://github.com/stjude/fqlib.git
+cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 ```
 
 ## Reference files
@@ -332,13 +327,12 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [x] Pin `qualimap` version.
 - [x] Pin `fastqc` and add steps.
 - [x] Pin `rseqc` and add steps.
-- [ ] Pin `htseq-count` and add steps for read quantification.
+- [x] Pin `htseq-count` and add steps for read quantification.
 - [ ] Update internal "STAR Best Practices" documentation.
 - [ ] Update internal "Genome Data Files and Configuration" documentation.
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 - [ ] Add details about analysis done to choose v31 of the ENCODE gene model over v21.
-- [ ] Add to docs that one must rerun the files with `level 3` features included if they want to look for evidence in these features.
 
 # Outstanding questions
 
