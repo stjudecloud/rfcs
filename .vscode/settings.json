@@ -1,0 +1,11 @@
+{
+    "markdown.extension.toc.githubCompatibility": true,
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.wordBasedSuggestions": false,
+    "[markdown]": {
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 80,
+    },
+}
