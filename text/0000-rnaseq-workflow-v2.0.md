@@ -1,28 +1,28 @@
 # Table of Contents <!-- omit in toc -->
 
-- [Introduction](#Introduction)
-- [Motivation](#Motivation)
-- [Discussion](#Discussion)
-  - [Tool additions and upgrades](#Tool-additions-and-upgrades)
-  - [GENCODE compatability](#GENCODE-compatability)
-  - [Gene model post-processing](#Gene-model-post-processing)
-  - [Quality control inclusion](#Quality-control-inclusion)
-  - [Quality of life improvements](#Quality-of-life-improvements)
-  - [Various other changes](#Various-other-changes)
-- [Specification](#Specification)
-  - [Dependencies](#Dependencies)
-  - [Reference files](#Reference-files)
-  - [Workflow](#Workflow)
-- [Items still in-progress](#Items-still-in-progress)
-- [Outstanding questions](#Outstanding-questions)
-- [Appendix](#Appendix)
-    - [Reference genome comparison](#Reference-genome-comparison)
-    - [ENCODE GTF generation](#ENCODE-GTF-generation)
-    - [GENCODE feature comparisons](#GENCODE-feature-comparisons)
+- [Introduction](#introduction)
+- [Motivation](#motivation)
+- [Discussion](#discussion)
+  - [Tool additions and upgrades](#tool-additions-and-upgrades)
+  - [GENCODE compatability](#gencode-compatability)
+  - [Gene model post-processing](#gene-model-post-processing)
+  - [Quality control inclusion](#quality-control-inclusion)
+  - [Quality of life improvements](#quality-of-life-improvements)
+  - [Various other changes](#various-other-changes)
+- [Specification](#specification)
+  - [Dependencies](#dependencies)
+  - [Reference files](#reference-files)
+  - [Workflow](#workflow)
+- [Items still in-progress](#items-still-in-progress)
+- [Outstanding questions](#outstanding-questions)
+- [Appendix](#appendix)
+    - [Reference genome comparison](#reference-genome-comparison)
+    - [ENCODE GTF generation](#encode-gtf-generation)
+    - [GENCODE feature comparisons](#gencode-feature-comparisons)
 
 # Introduction
 
-This RFC lays out some thoughts I've been collecting about how to improve the RNA-Seq mapping pipeline based on (a) new version of tools/reference files and (b) feedback from the community.
+This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/1).
 
 # Motivation
 
