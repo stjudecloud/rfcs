@@ -1,5 +1,7 @@
 # Request for Comments
 
+[![Build Status](https://travis-ci.org/stjudecloud/rfcs.svg?branch=master)](https://travis-ci.org/stjudecloud/rfcs)
+
 This repository contains all Request for Comment documents (or [rfcs][rfcs]) for the St. Jude Cloud project. Currently, the scope for what warrants an RFC on the St. Jude Cloud project is primarily focused on changes to the genomic analysis workflows. However, we may expand this scope to other areas over time as we work towards being as transparent as possible.
 
 ## Contributing
@@ -28,8 +30,7 @@ The process for RFCs is relatively immature at the current time and is subject t
 To build the repo and see the rendered copy of all RFCs, you can follow these steps:
 
 ```bash
-chmod +x ./scripts/generate.sh
-./scripts/generate.sh
+bash bin/generate.sh
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
@@ -37,7 +38,6 @@ python3 -m http.server -d book
 ### Questions
 
 With any quetions, please [contact us][contact].
-
 
 [rfcs]: https://en.wikipedia.org/wiki/Request_for_Comments
 [contact]: mailto:support@stjude.cloud
