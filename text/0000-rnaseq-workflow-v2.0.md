@@ -107,7 +107,7 @@ Originally, I had posed this question to the group:
 >     * ENCODE is not filtering any features, they are just changing some of the contig names in the [GENCODE v24][gencode-v24] GTF (see the analysis [in the appendix](#ENCODE-GTF-generation)).
 >     * The TOPMed pipeline [does outline some postprocessing](https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation) they are doing to the [GENCODE v26][gencode-v26] GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.
 
-After discussion internally, we decided to discontinue removing `level 3` annotations by default.
+After discussion internally, we decided to discontinue removing `level 3` annotations by default. This is more consistent with what is being done in the community and it was decided that this was the most straightforward method with little associated risk. Therefore we are no longer performing any post-processing of the gene model.
 
 ## Quality control inclusion
 
@@ -333,6 +333,9 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 - [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
 - [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
 - [ ] Add details about analysis done to choose v31 of the ENCODE gene model over v21.
+- [ ] Investigate `limitSjdbInsertNsj` and `limitOutSJcollapsed` parameters to STAR to determine suitable defaults.
+- [ ] Add sha256 checksum
+- [ ] Determine any differences from including level 3 genes
 
 # Outstanding questions
 
