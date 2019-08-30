@@ -2,15 +2,38 @@
 
 [![Build Status](https://travis-ci.org/stjudecloud/rfcs.svg?branch=master)](https://travis-ci.org/stjudecloud/rfcs) [![Join the chat at https://gitter.im/stjudecloud/rfcs](https://badges.gitter.im/stjudecloud/rfcs.svg)](https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This repository contains all Request for Comment documents (or [rfcs][rfcs]) for the St. Jude Cloud project. Currently, the scope for what warrants an RFC on the St. Jude Cloud project is primarily focused on changes to the genomic analysis workflows. However, we may expand this scope to other areas over time as we work towards being as transparent as possible.
+This repository contains all Request for Comments (or [rfcs][rfcs]) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.
 
-## Contributing
+## Process and Evaluation
 
-First, we should note that the initiator of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you have an idea you would like us to consider (or if you would like to propose your own RFC, please [contact us][contact] before investing a large amount of time in your proposal).
+First, the initiation of an RFC for for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please [contact us][contact] before investing a large amount of time in your proposal.
 
-The process for RFCs is relatively immature at the current time and is subject to change. The current lifecycle of an RFC on this project is as follows:
+### Overview
 
-1. Proposal of the RFC using a pull request on this repo.
+All RFCs go through a three-stage process from draft to adoption:
+
+1. An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
+   * Titles of pull requests in this phase are typical prefixed with `[WIP]` and should not be considered mature enough to accept comments from the community. 
+   * The amount of time the RFC spends in this state is variable depending on the scope of the proposal.
+2. The RFC opens for discussion from users and stakeholders within the St. Jude community. 
+   * The beginning of this phase will be indicated by a comment on the pull request from the author.
+   * The RFC will remain in this phase for **1 week**.
+3. The RFC opens for discussion from the broader community.
+   * The beginning of this phase will be indicated by a comment on the pull request from the author.
+   * The RFC will remain in this phase for **2 weeks**.
+
+Each phase of the process brings about further fleshing out of details and hardening of the proposal.
+
+### Evaluation and acceptance
+
+RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of making these discussions is mostly geared towards gaining feedback from the community. 
+
+We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. 
+
+
+### Creating a proposal
+
+1. Create an initial draft of the RFC by creating a pull request on this repo.
    * Create a branch on this repo with the form `<username>/<featurename>`.
    * On that branch, copy the `0000-template.md` file to the `text/` folder and replace "template" with an appropriate feature name (e.g. `text/rnaseq-workflow-v2`).
    * If necessary, you can create a folder at `resources/<filename.md>/` to hold any images or supporting materials (e.g. `resources/0000-rnaseq-workflow-v2.0/`) 
@@ -25,7 +48,7 @@ The process for RFCs is relatively immature at the current time and is subject t
    * Ensure all of your links still work in your rendered copy.
    * Merge in the PR and delete the branch.
 
-## Build process
+## Building
 
 To build the repo and see the rendered copy of all RFCs, you can follow these steps:
 
