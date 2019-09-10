@@ -6,7 +6,7 @@ This repository contains all Request for Comments (or [rfcs][rfcs]) for the St. 
 
 ## Process and Evaluation
 
-First, the initiation of an RFC for for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please [contact us][contact] before investing a large amount of time in your proposal.
+Initiation of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please [contact us][contact] before investing a large amount of time in your proposal.
 
 ### Overview
 
@@ -22,11 +22,11 @@ All RFCs go through a three-stage process from draft to adoption:
    * The beginning of this phase will be indicated by a comment on the pull request from the author.
    * The RFC will remain in this phase for **2 weeks**.
 
-Each phase of the process brings about further fleshing out of details and hardening of the proposal.
+Each phase of the process brings about further refinement of details and hardening of the proposal.
 
 ### Evaluation and acceptance
 
-RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of making these discussions is mostly geared towards gaining feedback from the community. 
+RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. 
 
 We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. 
 
