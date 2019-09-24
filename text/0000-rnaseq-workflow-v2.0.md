@@ -49,7 +49,7 @@ As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
 * Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
 * Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).
 * Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
-
+* Added `deeptools 3.3.1` ([Released](https://github.com/deeptools/deepTools/releases/tag/3.3.1) September 10, 2019). Using `bamCoverage` to generate bigwig coverage information.
 ## GENCODE compatability
 
 One of the major discussions during this round of revisions was the compatability of the `GRCh38_no_alt` reference genome with the latest `GENCODE` gene set. It was posed as the following question:
@@ -143,6 +143,7 @@ conda create -n star-mapping \
     rseqc==3.0.0 \
     fastqc==0.11.8 \
     htseq==0.11.2 \
+    deeptools==3.3.1 \
     -y
 ```
 
@@ -312,7 +313,14 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     samtools index $INPUT_BAM
     md5sum $INPUT_BAM
     ```
-13. Run `multiqc` across the following files for all samples in the cohort:
+13. Run `bamCoverage` to generate bigwig file.
+    ```bash
+    bamCoverage --bam ${bam} \                     # Input BAM file
+                --outFileName ${prefix}.bw \       # Output bigwig filename
+                --outFileFormat bigwig \           # Set output format to bigwig
+                --numberOfProcessors "max"         # Utilize all available processors
+    ```
+14. Run `multiqc` across the following files for all samples in the cohort:
 
     * `STAR`
     * `picard MarkDuplicates` and `picard ValidateSamFile`

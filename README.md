@@ -30,7 +30,7 @@ The process for RFCs is relatively immature at the current time and is subject t
 To build the repo and see the rendered copy of all RFCs, you can follow these steps:
 
 ```bash
-bash bin/generate.sh
+bash bin/build.sh
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
