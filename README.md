@@ -53,7 +53,7 @@ We welcome all ideas and concerns as we seek to understand how the needs of the 
 To build the repo and see the rendered copy of all RFCs, you can follow these steps:
 
 ```bash
-bash bin/generate.sh
+bash bin/build.sh
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
