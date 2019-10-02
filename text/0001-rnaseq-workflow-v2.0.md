@@ -330,31 +330,11 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 
 # Items still in-progress
 
-- [ ] Any read groups with `N/A` in the read group ID will cause `samtools split` to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any `N/A` string in a read group tag to `NA`.
 - [x] Add `multiqc` to aggregate QC results.
 - [x] Pin `qualimap` version.
 - [x] Pin `fastqc` and add steps.
 - [x] Pin `rseqc` and add steps.
 - [x] Pin `htseq-count` and add steps for read quantification.
-- [ ] Update internal "STAR Best Practices" documentation.
-- [ ] Update internal "Genome Data Files and Configuration" documentation.
-- [ ] Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.
-- [ ] Index files internally in TARTAn for `GRCh38_no_alt`.
-- [ ] Add details about analysis done to choose v31 of the ENCODE gene model over v21.
-- [ ] Investigate `limitSjdbInsertNsj` and `limitOutSJcollapsed` parameters to STAR to determine suitable defaults.
-- [ ] Add sha256 checksum
-- [ ] Determine any differences from including level 3 genes
-
-# Outstanding questions
-
-* Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.
-* There are several parameters during the `htseq-count` step that need input from experts on what a sane default would be for our pipeline.
-* I'd like to incorporate some manual end-to-end tests for our pipeline to evaluate results when we change parameters? Any ideas on this? The areas I have been thinking about are (a) gene expression quantification, (b) gene fusion detection, and (c) novel splice junction/isoform detection.
-* Should we consider adding `qualimap counts` to QC counts across a cohort?
-* Should we consider the generation and vending of `.bw` files by default?
-* Should we be using `sha256` instead of `md5`? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
-  * the `sha256sum` tool is sufficiently widespread enough, and
-  * the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.
 
 # Appendix
 
