@@ -553,8 +553,6 @@ md5sum $INPUT_BAM
 </ol>
 <h1><a class="header" href="#items-still-in-progress" id="items-still-in-progress">Items still in-progress</a></h1>
 <ul>
-<li><input disabled="" type="checkbox"/>
-Any read groups with <code>N/A</code> in the read group ID will cause <code>samtools split</code> to error out and try to create a file within a subdirectory. I'm considering functionality that will automatically replace any <code>N/A</code> string in a read group tag to <code>NA</code>.</li>
 <li><input disabled="" type="checkbox" checked=""/>
 Add <code>multiqc</code> to aggregate QC results.</li>
 <li><input disabled="" type="checkbox" checked=""/>
@@ -565,36 +563,6 @@ Pin <code>fastqc</code> and add steps.</li>
 Pin <code>rseqc</code> and add steps.</li>
 <li><input disabled="" type="checkbox" checked=""/>
 Pin <code>htseq-count</code> and add steps for read quantification.</li>
-<li><input disabled="" type="checkbox"/>
-Update internal &quot;STAR Best Practices&quot; documentation.</li>
-<li><input disabled="" type="checkbox"/>
-Update internal &quot;Genome Data Files and Configuration&quot; documentation.</li>
-<li><input disabled="" type="checkbox"/>
-Update external documentation for RNA-Seq pipeline. Potentially break out the DNA-Seq and RNA-Seq workflows into their own file.</li>
-<li><input disabled="" type="checkbox"/>
-Index files internally in TARTAn for <code>GRCh38_no_alt</code>.</li>
-<li><input disabled="" type="checkbox"/>
-Add details about analysis done to choose v31 of the ENCODE gene model over v21.</li>
-<li><input disabled="" type="checkbox"/>
-Investigate <code>limitSjdbInsertNsj</code> and <code>limitOutSJcollapsed</code> parameters to STAR to determine suitable defaults.</li>
-<li><input disabled="" type="checkbox"/>
-Add sha256 checksum</li>
-<li><input disabled="" type="checkbox"/>
-Determine any differences from including level 3 genes</li>
-</ul>
-<h1><a class="header" href="#outstanding-questions" id="outstanding-questions">Outstanding questions</a></h1>
-<ul>
-<li>Any parameters we want to change during the STAR alignment step? I don't expect any, but we should explicitly discuss.</li>
-<li>There are several parameters during the <code>htseq-count</code> step that need input from experts on what a sane default would be for our pipeline.</li>
-<li>I'd like to incorporate some manual end-to-end tests for our pipeline to evaluate results when we change parameters? Any ideas on this? The areas I have been thinking about are (a) gene expression quantification, (b) gene fusion detection, and (c) novel splice junction/isoform detection.</li>
-<li>Should we consider adding <code>qualimap counts</code> to QC counts across a cohort?</li>
-<li>Should we consider the generation and vending of <code>.bw</code> files by default?</li>
-<li>Should we be using <code>sha256</code> instead of <code>md5</code>? Just seems like using a non-broken hash algorithm would make sense. However, I'm not sure whether 
-<ul>
-<li>the <code>sha256sum</code> tool is sufficiently widespread enough, and</li>
-<li>the benefit is worth the cost of breaking from the current community norm. However, this could also be a good thing for us to be forward thinking.</li>
-</ul>
-</li>
 </ul>
 <h1><a class="header" href="#appendix" id="appendix">Appendix</a></h1>
 <h3><a class="header" href="#reference-genome-comparison" id="reference-genome-comparison">Reference genome comparison</a></h3>
