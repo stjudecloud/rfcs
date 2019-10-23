@@ -16,7 +16,7 @@ This RFC documents an automated pipeline workflow for vetting St. Jude Cloud gen
 
 Since introducing Real-Time Clinical Genomics, there is a need for an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing the data integrity and the reproducibility of these results allows St. Jude to publish statistics that are of interest to scientists and researchers.
 
-The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make visible the quality of data offered to researchers and scientists. We hope this RFC becomes a forum for open community discussion of the quality properties/attributes are helpful and practical.
+The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make the quality of data offered to researchers and scientists accessible. We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
 
 # Current Process
 
@@ -47,11 +47,11 @@ The "Per Base Sequence Quality" module from FastQC shows the distribution of qua
 
 - Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
-The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify any sort of contamination (vector, adapter sequences, etc.).
+The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).
 
 - Reads Genomic Origin ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-The "Reads Genomic Origin" from Qualimap is able to determine how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped to. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination.
+The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination.
 
 - rRNA Content (?)
 
@@ -59,7 +59,7 @@ Verify that excess ribosomal content is filtered/normalized across samples to en
 
 - Transcript Coverage and 5’-3’ Bias ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-Libraries prepared with polyA selection have the possibility to lead to high expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting material was of low RNA quality.
+Libraries prepared with polyA selection may have higher biased expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting material was of low RNA quality.
 
 - Junction Analysis ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
@@ -101,10 +101,12 @@ Note: Specific options such as memory size thresholds and thread count have been
 
 # Items Still In-Progress
 
-- [ ] Analysis tools for other types of sequencing
+- [ ] Analysis tools for other types of sequencing (ChIP seq)
 - [ ] Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)
 
 # Outstanding Questions
 
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
+- What is best way to define and handle outliers?
+- What is the best way to examine cohort intergrity, meaning category based tests of samples to find  experiemtal ouliers tha  may be of sufficent quality if examined alone? 
