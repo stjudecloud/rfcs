@@ -2,10 +2,12 @@
 
 - [Introduction](#introduction)
 - [Motivation](#motivation)
-- [Current Process](#current-process)
-- [Important Metrics](#important-metrics)
-- [Proposals](#proposals)
-- [Workflow Description](#workflow-description)
+- [Discussion](#discussion)
+  - [Current Process](#current-process)
+  - [Important Metrics](#important-metrics)
+  - [Proposals](#proposals)
+- [Specification](#specification)
+  - [Workflow Description](#workflow-description)
 - [Items Still In-Progress](#items-still-in-progress)
 - [Outstanding Questions](#outstanding-questions)
 
@@ -19,7 +21,9 @@ Since introducing Real-Time Clinical Genomics, there is a need for an automated 
 
 The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make the quality of data offered to researchers and scientists accessible. We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
 
-# Current Process
+# Discussion
+
+## Current Process
 
 Currently, St. Jude Cloud provides three sequencing data types: whole-genome (WGS), whole-exome (WES), and transcriptome (RNA-Seq) data.  It is important to differentiate our quality control workflows for each type of sequencing.
 
@@ -40,7 +44,7 @@ Our current process to vet and screen data consists of the following tools:
 [v2.20.2]: https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_ValidateSamFile.php
 [v1.7]: https://multiqc.info/
 
-# Important Metrics
+## Important Metrics
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
@@ -74,7 +78,7 @@ Verification/sanity check of how reads were stranded for the RNA sequencing (str
 
 GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
 
-# Proposals
+## Proposals
 
 - Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`].
 
@@ -82,7 +86,9 @@ GC profiles are typically remarkably stable. Even small/minor deviations could i
 
 - Include md5 hash as an annotation property for vended files.
 
-# Workflow Description
+# Specification
+
+## Workflow Description
 
 The end workflow (covering both our current process and the addition of the new tool) would be as following:
 
