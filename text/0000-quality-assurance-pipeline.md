@@ -10,17 +10,17 @@
 
 # Introduction
 
-This RFC seeks to establish an automated pipeline workflow around how genomic data on St. Jude Cloud is vetted, covering both existing data and new uploads to the platform. The end goal for this would be to publish results from various tools, but it hopes to draw discussion around what metrics and statistics are important to the community as a whole.
+This RFC documents an automated pipeline workflow for vetting St. Jude Cloud genomic data, covering both existing data and new data uploads to the platform. The end goal is to publish results from various tools, but currently we hope to discuss which quality metrics and statistics are important to the community as a whole.
 
 # Motivation
 
-With the introduction of Real-Time Clinical Genomics, there exists a need for an automated quality assurance pipeline guaranteeing any uploaded data meets predefined standards. By guaranteeing the integrity of our data and the reproducibility of these results, it would allow St. Jude to publish statistics about the genomics data hosted on our platform that might be of interest to other scientists and researchers.
+Since introducing Real-Time Clinical Genomics, there is a need for an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing the data integrity and the reproducibility of these results allows St. Jude to publish statistics that are of interest to scientists and researchers.
 
-The ultimate goal is to be able to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) separated by dataset and sequencing type (and ideally, also on a sample level). This would aid in visibility into the quality and type of data hosted to researchers and scientist. This RFC hopes to present a form for open discussion to the community regarding what type of other properties/attributes would be helpful and practical.
+The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make visible the quality of data offered to researchers and scientists. We hope this RFC becomes a forum for open community discussion of the quality properties/attributes are helpful and practical.
 
 # Current Process
 
-Because St. Jude Cloud currently provides three-platform whole-genome (WGS), whole-exome (WES), and transcriptome (RNA-Seq) sequencing data, it is important to differentiate how we currently run our current quality control workflow on each type of sequencing.
+Currently, St. Jude Cloud provides three sequencing data types: whole-genome (WGS), whole-exome (WES), and transcriptome (RNA-Seq) data.  It is important to differentiate our quality control workflows for each type of sequencing.
 
 Our current process to vet and screen data consists of the following tools:
 
@@ -43,7 +43,7 @@ Our current process to vet and screen data consists of the following tools:
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
-The "Per Base Sequence Quality" module from FastQC will show the distribution of quality scores across all bases at each position in the reads. In our case, this is just for informational purposes to our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
+The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just for informational purposes to our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
 
 - Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
@@ -51,7 +51,7 @@ The "Overrepresented Sequences" module from FastQC displays sequences (at least 
 
 - Reads Genomic Origin ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-The "Reads Genomic Origin" from Qualimap is able to determine how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped to. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Any abnormal results could indicate issues such as DNA contamination.
+The "Reads Genomic Origin" from Qualimap is able to determine how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped to. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination.
 
 - rRNA Content (?)
 
