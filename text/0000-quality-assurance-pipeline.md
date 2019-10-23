@@ -1,12 +1,13 @@
 # Table of Contents <!-- omit in toc -->
 
-- [Introduction](#Introduction)
-- [Motivation](#Motivation)
-- [Current Process](#Current-Process)
-- [Proposals](#Proposals)
-- [Workflow Description](#Workflow-Description)
-- [Items Still In-Progress](#Items-Still-In-Progress)
-- [Outstanding Questions](#Outstanding-Questions)
+- [Introduction](#introduction)
+- [Motivation](#motivation)
+- [Current Process](#current-process)
+- [Important Metrics](#important-metrics)
+- [Proposals](#proposals)
+- [Workflow Description](#workflow-description)
+- [Items Still In-Progress](#items-still-in-progress)
+- [Outstanding Questions](#outstanding-questions)
 
 # Introduction
 
@@ -43,7 +44,7 @@ Our current process to vet and screen data consists of the following tools:
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
-The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just for informational purposes to our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
+The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
 
 - Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
@@ -59,7 +60,7 @@ Verify that excess ribosomal content is filtered/normalized across samples to en
 
 - Transcript Coverage and 5’-3’ Bias ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-Libraries prepared with polyA selection may have higher biased expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting material was of low RNA quality.
+Libraries prepared with polyA selection may have higher biased expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.
 
 - Junction Analysis ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
@@ -85,17 +86,17 @@ GC profiles are typically remarkably stable. Even small/minor deviations could i
 
 The end workflow (covering both our current process and the addition of the new tool) would be as following:
 
-| Command                     | Purpose                                                    |
-| --------------------------- | ---------------------------------------------------------- |
-| `samtools quickcheck`       | Validate BAM headers and EOF block existence               |
-| `md5sum`                    | For comparison to md5 vended file property                 |
-| `picard ValidateSamFile`    | Ensure validity of file                                    |
-| `samtools flagstat`         | Generate flag statistics                                   |
-| `fastqc`                    | Screen for GC content and adapter contamination            |
-| `qualimap bamqc`            | Screen for mapping quality, coverage, and duplication rate |
-| `qualimap rnaseq`           | Screen for RNA-Seq bias and junction analysis              |
-| `rseqc infer_experiment`    | Determine RNA-SEQ strandedness and reads                   |
-| `multiqc`                   | Report aggregation                                         |
+| Command                  | Purpose                                                    |
+| ------------------------ | ---------------------------------------------------------- |
+| `samtools quickcheck`    | Validate BAM headers and EOF block existence               |
+| `md5sum`                 | For comparison to md5 vended file property                 |
+| `picard ValidateSamFile` | Ensure validity of file                                    |
+| `samtools flagstat`      | Generate flag statistics                                   |
+| `fastqc`                 | Screen for GC content and adapter contamination            |
+| `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
+| `qualimap rnaseq`        | Screen for RNA-Seq bias and junction analysis              |
+| `rseqc infer_experiment` | Determine RNA-SEQ strandedness and reads                   |
+| `multiqc`                | Report aggregation                                         |
 
 Note: Specific options such as memory size thresholds and thread count have been left out.
 
@@ -109,4 +110,4 @@ Note: Specific options such as memory size thresholds and thread count have been
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
 - What is best way to define and handle outliers?
-- What is the best way to examine cohort intergrity, meaning category based tests of samples to find  experiemtal ouliers tha  may be of sufficent quality if examined alone? 
+- What is the best way to examine cohort intergrity, meaning category based tests of samples to find experimental outliers that are of sufficent quality if examined alone? 
