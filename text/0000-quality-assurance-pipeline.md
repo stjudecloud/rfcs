@@ -23,6 +23,8 @@ The ultimate goal is to present a comprehensive report much like the [example Mu
 
 # Discussion
 
+The quality metrics discussed here are sequence and mapping quality metrics.   Other metrics related to nucleic acid integrity or library quality are not part of the current process.  
+
 ## Current Process
 
 Currently, St. Jude Cloud provides three sequencing data types: whole-genome (WGS), whole-exome (WES), and transcriptome (RNA-Seq) data.  It is important to differentiate our quality control workflows for each type of sequencing.
@@ -116,4 +118,4 @@ Note: Specific options such as memory size thresholds and thread count have been
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
 - What is best way to define and handle outliers?
-- What is the best way to examine cohort intergrity, meaning category based tests of samples to find experimental outliers that are of sufficent quality if examined alone? 
+- What is the best way to examine cohort integrity, meaning category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone? 
