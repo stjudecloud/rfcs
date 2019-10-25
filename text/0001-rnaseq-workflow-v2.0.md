@@ -98,7 +98,7 @@ After discussion internally, we decided to discontinue removing `level 3` annota
 
 ## Quality control inclusion
 
-Previously, our QC pipeline was broken out into a separate workflow. Moving forward, we will include the parts of our pipeline which pertain to QC within this specification. There are really no notworthy changes to the QC pipeline for this release other than updating the command line tools we use there to the latest versions.
+Previously, our QC pipeline was broken out into a separate workflow. Moving forward, we will include the parts of our pipeline which pertain to QC within this specification. There are really no noteworthy changes to the QC pipeline for this release other than updating the command line tools we use there to the latest versions.
 
 ## Quality of life improvements
 
