@@ -5,6 +5,9 @@
 - [Discussion](#discussion)
   - [Current Process](#current-process)
   - [Important Metrics](#important-metrics)
+  - [Metrics for WGS](#metrics-for-wgs)
+  - [Metrics for WES](#metrics-for-wes)
+  - [Metrics for RNAseq](#metrics-for-rnaseq)
   - [Proposals](#proposals)
 - [Specification](#specification)
   - [Workflow Description](#workflow-description)
@@ -48,6 +51,8 @@ Our current process to vet and screen data consists of the following tools:
 
 ## Important Metrics
 
+- Mapping Percentage
+
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
 The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
@@ -79,6 +84,18 @@ Verification/sanity check of how reads were stranded for the RNA sequencing (str
 - GC Content Bias (?)
 
 GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
+
+## Metrics for WGS
+    
+The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  
+
+## Metrics for WES
+
+The quality metrics of special concern for WES include depth of coverage in exomic regional coverage. Mapping quality is also critical.
+
+## Metrics for RNAseq
+
+The quality metrics of special concern for RNAseq include depth of mapping percentage and exomic regional coverage. Mapping quality is also critical.
 
 ## Proposals
 
@@ -118,4 +135,4 @@ Note: Specific options such as memory size thresholds and thread count have been
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
 - What is best way to define and handle outliers?
-- What is the best way to examine cohort integrity, meaning category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone? 
+- What is the best way to examine cohort integrit? This means category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone. 
