@@ -63,7 +63,7 @@ First, we researched what some of the projects we respect in the community are d
 [gencode-v24]: https://www.gencodegenes.org/human/release_24.html
 [gencode-v26]: https://www.gencodegenes.org/human/release_26.html
 
-**Note:** You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on `GRCh38_no_alt` takes a little bit more elbow grease: if you're interested, you can check out the comparison table [in the appendix](#reference-genome-comparison). If you are _really_ interested, you can recapitulate those results by running [the associated Jupyter notebook](../resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
+**Note:** You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on `GRCh38_no_alt` takes a little bit more elbow grease: if you're interested, you can check out the comparison table [in the appendix](#reference-genome-comparison). If you are _really_ interested, you can recapitulate those results by running [the associated Jupyter notebook](https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
 
 Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply [here](https://github.com/alexdobin/STAR/issues/673). In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.
 
