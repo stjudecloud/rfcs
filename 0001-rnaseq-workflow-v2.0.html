@@ -167,7 +167,6 @@
 </ul>
 </li>
 <li><a href="#items-still-in-progress">Items still in-progress</a></li>
-<li><a href="#outstanding-questions">Outstanding questions</a></li>
 <li><a href="#appendix">Appendix</a>
 <ul>
 <li><a href="#reference-genome-comparison">Reference genome comparison</a></li>
@@ -186,11 +185,11 @@
 </ul>
 </li>
 <li><strong>Updated reference files.</strong> No changes have really been made to the <code>GRCh38_no_alt</code> analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow (<a href="https://www.gencodegenes.org/human/release_31.html">GENCODE v31</a> is now out).</li>
-<li><strong>QC and quality of life improvements based on feedback from the community.</strong> Many interactions with the community have impacted the thoughts in this release: 
+<li><strong>QC and quality of life improvements based on feedback from the community.</strong> Many interactions with the community have impacted the thoughts in this release:
 <ul>
-<li>A primary driver for the rewrite of the pipeline is the feedback we heard about the <code>ERCC SpikeIn</code> sequences. 
+<li>A primary driver for the rewrite of the pipeline is the feedback we heard about the <code>ERCC SpikeIn</code> sequences.
 <ul>
-<li>Popular tools such as <code>GATK</code> and <code>picard</code> are generally unhappy if the sequence dictionaries don't match perfectly. </li>
+<li>Popular tools such as <code>GATK</code> and <code>picard</code> are generally unhappy if the sequence dictionaries don't match perfectly.</li>
 <li>The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-Seq mapping was hence causing issues when using mapped RNA-Seq BAM files in conjunction with other non-RNA-Seq BAM files in downstream analysis using these tools.</li>
 <li>Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences.</li>
 <li>After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.</li>
@@ -230,7 +229,7 @@
 <ol>
 <li>We could try using the reference FASTA supplied with the respective GENCODE release as suggested by Dr. Dobin. This was the most undesirable approach from our groups perspective:
 <ul>
-<li>The main reason was that this reference genome did not mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline out of the box. As outlined in <a href="#Motivation">the motivation section</a> of this document, this incongruency was a major driving factor for the creation of this RFC. </li>
+<li>The main reason was that this reference genome did not mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline out of the box. As outlined in <a href="#Motivation">the motivation section</a> of this document, this incongruency was a major driving factor for the creation of this RFC.</li>
 <li>We agreed it would require too large an amount of postprocessing of the GENCODE reference genome to convert to apply all of the no alt analysis set changes (e.g. converting to UCSC names, masking regions of the genome, inserting the EBV chromosome).</li>
 <li>Additionally, this could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason no one applies the patches to their no alt analysis set :)).</li>
 </ul>
@@ -248,7 +247,7 @@
 </ul>
 </li>
 </ol>
-<p>Given that there was no perfect option, we decided to stick with option #3. </p>
+<p>Given that there was no perfect option, we decided to stick with option #3.</p>
 <h2><a class="header" href="#gene-model-post-processing" id="gene-model-post-processing">Gene model post-processing</a></h2>
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
@@ -433,7 +432,7 @@ md5sum -c gencode.v31.annotation.knownloci.gtf.md5
 </li>
 <li>
 <p>Run <code>qualimap bamqc</code> and <code>qualimap rnaseq</code> QC for assistance in post-processing QC. Note that for the <code>rnaseq</code> tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the <code>infer_experiment.py</code> step above.</p>
-<pre><code class="language-bash">qualimap bamqc -bam $INPUT_BAM \     # Input BAM. 
+<pre><code class="language-bash">qualimap bamqc -bam $INPUT_BAM \     # Input BAM.
                -outdir $OUTPUT_DIR \ # Output directory.
                -nt $NCPUS            # Number of CPUs to use.
 </code></pre>
@@ -506,7 +505,7 @@ Pin <code>htseq-count</code> and add steps for read quantification.</li>
 <li>Use <code>picard CreateSequenceDictionary</code> to get the md5sums for each sequence in the dictionary.</li>
 <li>Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).</li>
 </ol>
-<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="../resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
 <tr><td>chr1</td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td>True</td></tr>
 <tr><td>chr2</td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td>True</td></tr>
@@ -554,7 +553,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 <ul>
 <li>
 <p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf 
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
 # Feature exon: 1162114 (45.6341%)
 # Feature CDS: 696929 (27.3671%)
 # Feature UTR: 275100 (10.8027%)
@@ -565,7 +564,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 # Feature transcript: 196327 (7.7094%)
 # Total: 2546594
 
-gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf 
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
 # Feature exon: 1363843 (47.3247%)
 # Feature CDS: 755320 (26.2092%)
 # Feature UTR: 308315 (10.6984%)
