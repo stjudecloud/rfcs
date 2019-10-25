@@ -3,21 +3,9 @@
 - [Introduction](#introduction)
 - [Motivation](#motivation)
 - [Discussion](#discussion)
-  - [Tool additions and upgrades](#tool-additions-and-upgrades)
-  - [GENCODE compatability](#gencode-compatability)
-  - [Gene model post-processing](#gene-model-post-processing)
-  - [Quality control inclusion](#quality-control-inclusion)
-  - [Quality of life improvements](#quality-of-life-improvements)
-  - [Various other changes](#various-other-changes)
 - [Specification](#specification)
-  - [Dependencies](#dependencies)
-  - [Reference files](#reference-files)
-  - [Workflow](#workflow)
 - [Items still in-progress](#items-still-in-progress)
 - [Appendix](#appendix)
-    - [Reference genome comparison](#reference-genome-comparison)
-    - [ENCODE GTF generation](#encode-gtf-generation)
-    - [GENCODE feature comparisons](#gencode-feature-comparisons)
 
 # Introduction
 
