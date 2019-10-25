@@ -4,7 +4,6 @@
 - [Motivation](#motivation)
 - [Discussion](#discussion)
 - [Specification](#specification)
-- [Items still in-progress](#items-still-in-progress)
 - [Appendix](#appendix)
 
 # Introduction
@@ -323,14 +322,6 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
     - `qualimap bamqc` and `qualimap rnaseq`
     - `fastqc`
     - `samtools flagstat`
-
-# Items still in-progress
-
-- [x] Add `multiqc` to aggregate QC results.
-- [x] Pin `qualimap` version.
-- [x] Pin `fastqc` and add steps.
-- [x] Pin `rseqc` and add steps.
-- [x] Pin `htseq-count` and add steps for read quantification.
 
 # Appendix
 
