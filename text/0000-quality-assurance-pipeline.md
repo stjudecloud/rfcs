@@ -95,7 +95,7 @@ The quality metrics of special concern for WES include depth of coverage in exom
 
 ## Metrics for RNAseq
 
-The quality metrics of special concern for RNAseq include mapping percentage, and exomic regional coverage. Mapping quality is also critical.
+The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage.  Mapping quality is also critical.
 
 ## Proposals
 
@@ -135,4 +135,4 @@ Note: Specific options such as memory size thresholds and thread count have been
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
 - What is best way to define and handle outliers?
-- What is the best way to examine cohort integrit? This means category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone. 
+- What is the best way to examine cohort integrity? This means category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone. 
