@@ -87,15 +87,15 @@ GC profiles are typically remarkably stable. Even small/minor deviations could i
 
 ## Metrics for WGS
     
-The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  
+The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.
 
 ## Metrics for WES
 
-The quality metrics of special concern for WES include depth of coverage in exomic regional coverage. Mapping quality is also critical.
+The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.
 
 ## Metrics for RNAseq
 
-The quality metrics of special concern for RNAseq include depth of mapping percentage and exomic regional coverage. Mapping quality is also critical.
+The quality metrics of special concern for RNAseq include mapping percentage, and exomic regional coverage. Mapping quality is also critical.
 
 ## Proposals
 
