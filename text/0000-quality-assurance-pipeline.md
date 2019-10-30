@@ -51,7 +51,9 @@ Our current process to vet and screen data consists of the following tools:
 
 ## Important Metrics
 
-- Mapping Percentage
+- Percent Aligned  
+
+Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consisitent with sample purity.
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
