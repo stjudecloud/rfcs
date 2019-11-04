@@ -16,11 +16,11 @@
 
 # Introduction
 
-This RFC documents an automated pipeline workflow for vetting St. Jude Cloud genomic data, covering both existing data and new data uploads to the platform. The end goal is to publish results from various tools, but currently we hope to discuss which quality metrics and statistics are important to the community as a whole.
+This RFC documents an automated pipeline workflow for vetting St. Jude Cloud genomic data, covering both existing data and new data uploads to the platform. The end goal is to publish results from various tools. But currently, we hope to discuss which quality metrics and statistics are important to the bioinformatics community.  Further, we invite the community to comment on the best methods for selecting thresholds for quality metrics. 
 
 # Motivation
 
-Since introducing Real-Time Clinical Genomics, there is a need for an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing the data integrity and the reproducibility of these results allows St. Jude to publish statistics that are of interest to scientists and researchers.
+Since introducing Real-Time Clinical Genomics, we need an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing the data integrity and the reproducibility of these results allows St. Jude to publish statistics that are of interest to scientists and researchers.
 
 The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make the quality of data offered to researchers and scientists accessible. We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
 
@@ -137,4 +137,4 @@ Note: Specific options such as memory size thresholds and thread count have been
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
 - What is best way to define and handle outliers?
-- What is the best way to examine cohort integrity? This means category-based tests of samples to find experimental outliers that are of sufficient quality if examined alone. 
+- What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone.  Outliers in this case may indicate classification errors or rare biological conditions.  Which metrics are best tested here?
