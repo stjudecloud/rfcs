@@ -58,7 +58,7 @@ Also known as mapping percentage, this indicator of quality, when high, verifies
 
 - Per Base Sequence Quality ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
-The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream, so there is no changing it at this point.
+The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads.  In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream.  So, there is no changing it at this point.
 
 - Overrepresented Sequences ([FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/2%20Per%20Base%20Sequence%20Quality.html))
 
@@ -66,7 +66,7 @@ The "Overrepresented Sequences" module from FastQC displays sequences (at least 
 
 - Reads Genomic Origin ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination.
+The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions.  Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped.  It should be verified that the mapping to intronic regions and exons are within acceptable ranges.  Abnormal results could indicate issues such as DNA contamination.
 
 - rRNA Content (?)
 
@@ -74,7 +74,7 @@ Verify that excess ribosomal content is filtered/normalized across samples to en
 
 - Transcript Coverage and 5’-3’ Bias ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
-Libraries prepared with polyA selection may have higher biased expression in 3’ region. If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.
+Libraries prepared with polyA selection may have higher biased expression in 3’ region.  If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.
 
 - Junction Analysis ([Qualimap](http://qualimap.bioinfo.cipf.es/))
 
@@ -86,7 +86,7 @@ Verification/sanity check of how reads were stranded for the RNA sequencing (str
 
 - GC Content Bias (?)
 
-GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
+GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
 
 ## Metrics for WGS
     
