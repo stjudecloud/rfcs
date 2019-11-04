@@ -16,17 +16,18 @@
 
 # Introduction
 
-This RFC documents an automated pipeline workflow for vetting St. Jude Cloud genomic data, covering both existing data and new data uploads to the platform. The end goal is to publish results from various tools. But currently, we hope to discuss which quality metrics and statistics are important to the bioinformatics community.  Further, we invite the community to comment on the best methods for selecting thresholds for quality metrics. 
+This RFC documents an automated pipeline workflow for vetting St. Jude Cloud genomic data, covering both existing and new data uploads to the platform. The end goal is to publish the quality control results from various tools. But currently, we hope to discuss which quality metrics and statistics are important to the bioinformatics community.  Further, we invite the community to comment on the best methods for selecting thresholds for quality metrics. 
 
 # Motivation
 
-Since introducing Real-Time Clinical Genomics, we need an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing the data integrity and the reproducibility of these results allows St. Jude to publish statistics that are of interest to scientists and researchers.
+Since introducing Real-Time Clinical Genomics, we need an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.  Guaranteeing data integrity and the reproducibility of these results allows St. Jude to assure scientists and researchers that the data we provide is useful.
 
 The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level). This would make the quality of data offered to researchers and scientists accessible. We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
 
 # Discussion
 
-The quality metrics discussed here are sequence and mapping quality metrics.   Other metrics related to nucleic acid integrity or library quality are not part of the current process.  
+The quality metrics discussed here are sequence and mapping quality metrics.   Other metrics related to nucleic acid integrity or library quality are not part of the current process.  Pre-sequencing quality metrics, however, are clearly important and part of our long term interests.  Thus, we invite comments on those metrics as well.
+
 
 ## Current Process
 
