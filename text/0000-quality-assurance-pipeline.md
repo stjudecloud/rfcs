@@ -5,12 +5,24 @@
 - [Discussion](#discussion)
   - [Current Process](#current-process)
   - [Important Metrics](#important-metrics)
-  - [Metrics for WGS](#metrics-for-wgs)
-  - [Metrics for WES](#metrics-for-wes)
-  - [Metrics for RNAseq](#metrics-for-rnaseq)
-  - [Proposals](#proposals)
+  - [Thresholds and Metrics for Specific Applications](#thresholds-and-metrics-for-specific-applications)
+    - [Metrics for WES](#metrics-for-wes)
+    - [Metrics for RNAseq](#metrics-for-rnaseq)
+    - [Proposals](#proposals)
 - [Specification](#specification)
   - [Workflow Description](#workflow-description)
+- [The St Jude Genomics QC Process](#the-st-jude-genomics-qc-process)
+  - [Installation](#installation)
+      - [Anaconda Environment](#anaconda-environment)
+    - [Samtools Quickcheck](#samtools-quickcheck)
+    - [Picard ValidateSamFile](#picard-validatesamfile)
+    - [Sambamba Flagstat](#sambamba-flagstat)
+    - [FASTQC](#fastqc)
+    - [Qualimap Bam QC](#qualimap-bam-qc)
+    - [Qualimap RNA seq QC](#qualimap-rna-seq-qc)
+    - [md5sum](#md5sum)
+    - [RseQC infer_experiment.py](#rseqc-infer_experimentpy)
+    - [Report Aggregation](#report-aggregation)
 - [Items Still In-Progress](#items-still-in-progress)
 - [Outstanding Questions](#outstanding-questions)
 
@@ -22,7 +34,7 @@ This RFC documents an automated pipeline workflow for vetting St. Jude Cloud gen
 
 Since introducing Real-Time Clinical Genomics, we need an automated quality assurance pipeline that guarantees uploaded data meets predefined standards.   Guaranteeing data integrity and the reproducibility of these results allows St. Jude to assure scientists and researchers that the data we provide is useful.
 
-The ultimate goal is to present a comprehensive report much like the [example MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level).  This would make the quality of data offered to researchers and scientists accessible.  We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
+The ultimate goal is to present a comprehensive report much like the example [ MultiQC report](https://multiqc.info/examples/rna-seq/multiqc_report.html) for each dataset and sequencing type (and ideally, also on a sample level).  This would make the quality of data offered to researchers and scientists accessible.  We hope this RFC becomes a forum for open community discussion of quality properties and attributes that are helpful and practical.
 
 # Discussion
 
@@ -88,24 +100,22 @@ Verification/sanity check of how reads were stranded for the RNA sequencing (str
 
 GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).
 
-## Metrics for WGS
+## Thresholds and Metrics for Specific Applications 
+
+ To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.## Metrics for WGS
     
 The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.
 
-## Metrics for WES
+### Metrics for WES
 
 The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.
 
-## Metrics for RNAseq
+### Metrics for RNAseq
 
 The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage.  Mapping quality is also critical.
 
 
-## Thresholds 
-
- To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.
-
-## Proposals
+### Proposals
 
 - Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`].
 
@@ -125,13 +135,137 @@ The end workflow (covering both our current process and the addition of the new 
 | `md5sum`                 | For comparison to md5 vended file property                 |
 | `picard ValidateSamFile` | Ensure validity of file                                    |
 | `samtools flagstat`      | Generate flag statistics                                   |
+| `sambamba flagstat`      | Generate flag statistics using a samtools alternative      |
 | `fastqc`                 | Screen for GC content and adapter contamination            |
 | `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
 | `qualimap rnaseq`        | Screen for RNA-Seq bias and junction analysis              |
 | `rseqc infer_experiment` | Determine RNA-SEQ strandedness and reads                   |
 | `multiqc`                | Report aggregation                                         |
 
-Note: Specific options such as memory size thresholds and thread count have been left out.
+Note: Specific options such as memory size thresholds and thread count are below.
+
+# The St Jude Genomics QC Process
+
+These are generic instructions for running each of the tools in our pipeline.  We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere.  Instead we've supplied examples of the commands used to each package.  Our default memory is 80G and we employ 4 threads for these processes.
+
+## Installation
+
+We presume anaconda is available and installed. If not please follow the link to [anaconda](https://www.anaconda.com/) first.
+
+#### Anaconda Environment
+
+
+```bash
+conda create --name bio-qc \
+    --channel bioconda \
+    fastqc==0.11.8 \
+    picard==2.20.2  \
+    qualimap==2.2.2c \
+    rseqc==3.0.0  \
+    sambamba==0.6.6 \
+    samtools==1.9  \
+    -y
+
+conda activate bio-qc
+```
+### Samtools Quickcheck
+
+Very basic BAM file validation:
+
+```bash
+# Should not be relied on for file integrity, only checks for header and EOF
+samtools quickcheck -v *.bam > bad_bams.txt && echo "all ok" || echo "some files failed check, see bad_bams.txt"
+```
+### Picard ValidateSamFile
+
+BAM file validation:
+
+```bash
+# This method is used to assess file integrity
+
+"picard ValidateSamFile \
+    I=$BAM \                                        # specify bam file
+    MODE=SUMMARY\                                   # concise output
+    INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
+    OUTPUT=$OUTDIR/$BAM_BN.validate.txt"            # output directory and file
+```
+
+### Sambamba Flagstat
+
+Very basic BAM file validation:
+
+```bash
+# Sambamba includes faster reliable implementation of samtools commands  
+
+"sambamba flagstat -t $NUM_THREADS $BAM \ # number of threads and bam filename
+         > $OUTDIR/$BAM_BN.flagstat.txt"  # output directory and file
+```
+
+### FASTQC
+
+Standard sequence quality check:
+
+```bash
+
+"fastqc $BAM \ #  bam filename
+     -o $OUTDIR "  # output directory
+        
+```
+ 
+### Qualimap Bam QC
+
+Comprehensive QC statistics includes read stats, coverage, mapping quality, insert size, mismatches etc.
+
+```bash
+
+"qualimap bamqc -bam $BAM \         # bam filename
+    --java-mem-size=$MEM_SIZE \     # memory 
+    -nt $NUM_THREADS \              # threads requested
+    -nw 400 \                       # number of windows
+    -outdir $QBAMQC_OUT"            # output directory
+```
+### Qualimap RNA seq QC
+
+Comprehensive QC statistics tailored for RNA seq files.
+
+```bash
+
+"qualimap rnaseq -bam $BAM \        # bam filename
+    -gtf $GTF_REF                   # transcript definition file
+    --java-mem-size=$MEM_SIZE \     # memory 
+    -pe                             # specify paired end
+    -outdir $QBAMQC_OUT"            # output directory
+```
+
+### md5sum
+
+Check size and integrity of files.
+
+```bash
+
+"md5sum $BAM \                      # bam filename
+    > $OUTDIR/$BAM.md5"             # output directory
+           
+```
+
+### RseQC infer_experiment.py
+
+Python script that tests for strandedness.
+
+```bash
+
+"infer_experiment.py -i $BAM \      # bam filename
+                -r $BED_REF \       # reference in bed format
+                > $OUTDIR/$BAM_BN.infer_experiment.txt" # output directory and filename
+           
+```
+
+### Report Aggregation
+
+```bash
+multiqc /path/to/outdir
+```
+
 
 # Items Still In-Progress
 
