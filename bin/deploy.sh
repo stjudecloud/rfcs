@@ -28,7 +28,7 @@ cd $OUT_DIR
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 
 # Clear out old gh-pages content.
-rm -rf $OUT_DIR/**/*
+rm -rf $OUT_DIR/*
 cp -R $BUILD_DIR/* $OUT_DIR/
 
 export GIT_AUTHOR_NAME="St. Jude Cloud"

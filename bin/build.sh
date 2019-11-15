@@ -12,3 +12,7 @@ done
 
 cp README.md src/introduction.md
 mdbook build
+
+# Copy resources directory
+
+cp -R resources book/
