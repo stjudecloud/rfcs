@@ -364,7 +364,7 @@ md5sum -c GRCh38_no_alt.fa.md5
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions and modify the file to include only &quot;level 1&quot; and &quot;level 2&quot; features (see discussion on why in the rationale below). You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
 echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
@@ -374,11 +374,6 @@ gunzip gencode.v31.annotation.gtf.gz
 echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
-
-awk '/level 1/ || /level 2/' gencode.v31.annotation.gtf &gt; gencode.v31.annotation.knownloci.gtf
-echo &quot;8e5745b5b9b372936fb68858e89a0495  gencode.v31.annotation.knownloci.gtf&quot; &gt; gencode.v31.annotation.knownloci.gtf.md5
-md5sum -c gencode.v31.annotation.knownloci.gtf.md5
-# &gt; gencode.v31.annotation.knownloci.gtf: OK
 </code></pre>
 </li>
 <li>
@@ -387,7 +382,7 @@ md5sum -c gencode.v31.annotation.knownloci.gtf.md5
      --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
      --runThreadN $NCPU \                          # Number of threads to use to build genome database.
      --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-     --sjdbGTFfile $GENCODE_KNOWNLOCI_GTF_31 \     # GENCODE v31 gene model file including only level 1 and level 2 features (see generation steps above).
+     --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
      --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
 </code></pre>
 </li>
@@ -466,7 +461,7 @@ md5sum -c gencode.v31.annotation.knownloci.gtf.md5
 </li>
 <li>
 <p>Run <code>rseqc</code>'s <code>infer_experiment.py</code> to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.</p>
-<pre><code class="language-bash">infer_experiment.py -i $INPUT_BAM -r $GENCODE_KNOWNLOCI_GTF_V31
+<pre><code class="language-bash">infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
 
 # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
 #   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-forward&quot;.
@@ -483,7 +478,7 @@ md5sum -c gencode.v31.annotation.knownloci.gtf.md5
 </code></pre>
 <p>and</p>
 <pre><code class="language-bash">qualimap rnaseq -bam $INPUT_BAM \                  # Input BAM.
-                -gtf $GENCODE_KNOWNLOCI_GTF_V31 \  # GENCODE v31 gene model file including only level 1 and level 2 features (see generation steps above).
+                -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
                 -outdir $OUTPUT_DIR \              # Output directory.
                 -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
                 -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;strand-specific-reverse&quot; for St. Jude Cloud data.
