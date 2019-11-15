@@ -155,7 +155,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
   # > GRCh38_no_alt.fa: OK
   ```
 
-- For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions and modify the file to include only "level 1" and "level 2" features (see discussion on why in the rationale below). You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz). For the exact steps to generate the gene model we use, you can run the following commands:
+- For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz). For the exact steps to generate the gene model we use, you can run the following commands:
 
   ```bash
   wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
@@ -167,11 +167,6 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
   echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" > gencode.v31.annotation.gtf.md5
   md5sum -c gencode.v31.annotation.gtf.md5
   # > gencode.v31.annotation.gtf: OK
-
-  awk '/level 1/ || /level 2/' gencode.v31.annotation.gtf > gencode.v31.annotation.knownloci.gtf
-  echo "8e5745b5b9b372936fb68858e89a0495  gencode.v31.annotation.knownloci.gtf" > gencode.v31.annotation.knownloci.gtf.md5
-  md5sum -c gencode.v31.annotation.knownloci.gtf.md5
-  # > gencode.v31.annotation.knownloci.gtf: OK
   ```
 
 - Last, the following command is used to prepare the STAR index file:
@@ -181,7 +176,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
        --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
        --runThreadN $NCPU \                          # Number of threads to use to build genome database.
        --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-       --sjdbGTFfile $GENCODE_KNOWNLOCI_GTF_31 \     # GENCODE v31 gene model file including only level 1 and level 2 features (see generation steps above).
+       --sjdbGTFfile $GENCODE_GTF_31 \     # GENCODE v31 gene model file.
        --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
   ```
 
@@ -284,7 +279,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 
     ```bash
     qualimap rnaseq -bam $INPUT_BAM \                  # Input BAM.
-                    -gtf $GENCODE_KNOWNLOCI_GTF_V31 \  # GENCODE v31 gene model file including only level 1 and level 2 features (see generation steps above).
+                    -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
                     -outdir $OUTPUT_DIR \              # Output directory.
                     -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
                     -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
