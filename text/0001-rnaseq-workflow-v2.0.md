@@ -258,7 +258,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 9. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
 
    ```bash
-   infer_experiment.py -i $INPUT_BAM -r $GENCODE_KNOWNLOCI_GTF_V31
+   infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
 
    # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
    #   - If proportion of forward orientation evidence fraction is >= 0.8, assign "strand-specific-forward".
