@@ -176,7 +176,7 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
        --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
        --runThreadN $NCPU \                          # Number of threads to use to build genome database.
        --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-       --sjdbGTFfile $GENCODE_GTF_31 \     # GENCODE v31 gene model file. 
+       --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
        --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
   ```
 
