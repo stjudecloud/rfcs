@@ -183,11 +183,11 @@ BAM file validation:
 ```bash
 # This method is used to assess file integrity
 
-"picard ValidateSamFile \
+picard ValidateSamFile \
     I=$BAM \                                        # specify bam file
     MODE=SUMMARY\                                   # concise output
     INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-    OUTPUT=$OUTDIR/$BAM_BN.validate.txt"            # output directory and file
+    OUTPUT=$OUTDIR/$BAM_BN.validate.txt             # output directory and file
 ```
 
 ### Sambamba Flagstat
@@ -197,8 +197,8 @@ Very basic BAM file validation:
 ```bash
 # Sambamba includes faster reliable implementation of samtools commands  
 
-"sambamba flagstat -t $NUM_THREADS $BAM \ # number of threads and bam filename
-         > $OUTDIR/$BAM_BN.flagstat.txt"  # output directory and file
+sambamba flagstat -t $NUM_THREADS $BAM \ # number of threads and bam filename
+         > $OUTDIR/$BAM_BN.flagstat.txt  # output directory and file
 ```
 
 ### FASTQC
@@ -207,8 +207,8 @@ Standard sequence quality check:
 
 ```bash
 
-"fastqc $BAM \ #  bam filename
-     -o $OUTDIR "  # output directory
+fastqc $BAM \ #  bam filename
+     -o $OUTDIR   # output directory
         
 ```
  
@@ -218,11 +218,11 @@ Comprehensive QC statistics includes read stats, coverage, mapping quality, inse
 
 ```bash
 
-"qualimap bamqc -bam $BAM \         # bam filename
+qualimap bamqc -bam $BAM \          # bam filename
     --java-mem-size=$MEM_SIZE \     # memory 
     -nt $NUM_THREADS \              # threads requested
     -nw 400 \                       # number of windows
-    -outdir $QBAMQC_OUT"            # output directory
+    -outdir $QBAMQC_OUT             # output directory
 ```
 ### Qualimap RNA seq QC
 
@@ -230,11 +230,11 @@ Comprehensive QC statistics tailored for RNA seq files.
 
 ```bash
 
-"qualimap rnaseq -bam $BAM \        # bam filename
+qualimap rnaseq -bam $BAM \         # bam filename
     -gtf $GTF_REF                   # transcript definition file
     --java-mem-size=$MEM_SIZE \     # memory 
     -pe                             # specify paired end
-    -outdir $QBAMQC_OUT"            # output directory
+    -outdir $QBAMQC_OUT             # output directory
 ```
 
 ### md5sum
@@ -243,8 +243,8 @@ Check size and integrity of files.
 
 ```bash
 
-"md5sum $BAM \                      # bam filename
-    > $OUTDIR/$BAM.md5"             # output directory
+md5sum $BAM \                       # bam filename
+    > $OUTDIR/$BAM.md5              # output directory
            
 ```
 
@@ -254,9 +254,9 @@ Python script that tests for strandedness.
 
 ```bash
 
-"infer_experiment.py -i $BAM \      # bam filename
+infer_experiment.py -i $BAM \       # bam filename
                 -r $BED_REF \       # reference in bed format
-                > $OUTDIR/$BAM_BN.infer_experiment.txt" # output directory and filename
+                > $OUTDIR/$BAM_BN.infer_experiment.txt # output directory and filename
            
 ```
 
