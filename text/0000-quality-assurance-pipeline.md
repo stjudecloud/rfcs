@@ -192,7 +192,7 @@ picard ValidateSamFile \
 
 ### Sambamba Flagstat
 
-Very basic BAM file validation:
+Summary statistics of read counts and mapping status
 
 ```bash
 # Sambamba includes faster reliable implementation of samtools commands  
@@ -261,6 +261,8 @@ infer_experiment.py -i $BAM \       # bam filename
 ```
 
 ### Report Aggregation
+
+Package combines output from other QC tools in easily reviewed html format.
 
 ```bash
 multiqc /path/to/outdir
