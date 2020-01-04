@@ -1,8 +1,16 @@
-# Request for Comments
+<p align="center">
+  <a href=""><img src="./docs/rfcs-banner-blueprint.svg" width="850" title="St. Jude Cloud Workflows"></a>
+  <a href="https://travis-ci.org/stjudecloud/rfcs" target="_blank">
+    <img alt="Build Status: Master" src="https://travis-ci.org/stjudecloud/rfcs.svg?branch=master" />
+  </a>
+  <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
+    <img alt="Gitter: RFCs" src="https://badges.gitter.im/stjudecloud/rfcs.svg" />
+  </a>
+</p>
 
-[![Build Status](https://travis-ci.org/stjudecloud/rfcs.svg?branch=master)](https://travis-ci.org/stjudecloud/rfcs) [![Join the chat at https://gitter.im/stjudecloud/rfcs](https://badges.gitter.im/stjudecloud/rfcs.svg)](https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+> This repository contains all Request for Comments (or [rfcs][rfcs]) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.
 
-This repository contains all Request for Comments (or [rfcs][rfcs]) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.
+### 🏠 [Homepage](https://stjudecloud.github.io/rfcs/)
 
 ## Process and Evaluation
 
@@ -48,15 +56,37 @@ We welcome all ideas and concerns as we seek to understand how the needs of the 
    * Ensure all of your links still work in your rendered copy.
    * Merge in the PR and delete the branch.
 
-## Building
+## Install
 
-To build the repo and see the rendered copy of all RFCs, you can follow these steps:
+```sh
+cargo install mdbook
+```
 
-```bash
+## Usage
+
+```sh
 bash bin/build.sh
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
+
+## Author
+
+👤 **St. Jude Cloud Team**
+
+* Website: https://stjude.cloud
+* Github: [@stjudecloud](https://github.com/stjudecloud)
+* Twitter: [@StJudeResearch](https://twitter.com/StJudeResearch)
+
+## Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/stjudecloud/rfcs/issues). You can also take a look at the [contributing guide](https://github.com/stjudecloud/rfcs/blob/master/CONTRIBUTING.md).
+
+
+## 📝 License
+
+Copyright © 2020 [St. Jude Cloud Team](https://github.com/stjudecloud).<br />
+This project is [MIT](https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md) licensed.
 
 ## Questions
 
@@ -64,3 +94,4 @@ With any quetions, please [contact us][contact].
 
 [rfcs]: https://en.wikipedia.org/wiki/Request_for_Comments
 [contact]: mailto:support@stjude.cloud
+
