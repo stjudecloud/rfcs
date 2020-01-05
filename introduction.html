@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -32,11 +32,11 @@
 
         
     </head>
-    <body class="light">
+    <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -60,8 +60,11 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -77,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix"><a href="introduction.html" class="active">Introduction</a></li><li><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li></ol>
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,9 +148,19 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#request-for-comments" id="request-for-comments">Request for Comments</a></h1>
-<p><a href="https://travis-ci.org/stjudecloud/rfcs"><img src="https://travis-ci.org/stjudecloud/rfcs.svg?branch=master" alt="Build Status" /></a> <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/stjudecloud/rfcs.svg" alt="Join the chat at https://gitter.im/stjudecloud/rfcs" /></a></p>
+                        <p align="center">
+  <a href=""><img src="./docs/rfcs-banner-blueprint.svg" width="850" title="St. Jude Cloud Workflows"></a>
+  <a href="https://travis-ci.org/stjudecloud/rfcs" target="_blank">
+    <img alt="Build Status: Master" src="https://travis-ci.org/stjudecloud/rfcs.svg?branch=master" />
+  </a>
+  <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
+    <img alt="Gitter: RFCs" src="https://badges.gitter.im/stjudecloud/rfcs.svg" />
+  </a>
+</p>
+<blockquote>
 <p>This repository contains all Request for Comments (or <a href="https://en.wikipedia.org/wiki/Request_for_Comments">rfcs</a>) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.</p>
+</blockquote>
+<h3><a class="header" href="#-a-hrefhttpsstjudecloudgithubiorfcshomepagea" id="-a-hrefhttpsstjudecloudgithubiorfcshomepagea">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
 <h2><a class="header" href="#process-and-evaluation" id="process-and-evaluation">Process and Evaluation</a></h2>
 <p>Initiation of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please <a href="mailto:support@stjude.cloud">contact us</a> before investing a large amount of time in your proposal.</p>
 <h3><a class="header" href="#overview" id="overview">Overview</a></h3>
@@ -202,12 +215,26 @@
 </ul>
 </li>
 </ol>
-<h2><a class="header" href="#building" id="building">Building</a></h2>
-<p>To build the repo and see the rendered copy of all RFCs, you can follow these steps:</p>
-<pre><code class="language-bash">bash bin/build.sh
+<h2><a class="header" href="#install" id="install">Install</a></h2>
+<pre><code class="language-sh">cargo install mdbook
+</code></pre>
+<h2><a class="header" href="#usage" id="usage">Usage</a></h2>
+<pre><code class="language-sh">bash bin/build.sh
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 </code></pre>
+<h2><a class="header" href="#author" id="author">Author</a></h2>
+<p>👤 <strong>St. Jude Cloud Team</strong></p>
+<ul>
+<li>Website: https://stjude.cloud</li>
+<li>Github: <a href="https://github.com/stjudecloud">@stjudecloud</a></li>
+<li>Twitter: <a href="https://twitter.com/StJudeResearch">@StJudeResearch</a></li>
+</ul>
+<h2><a class="header" href="#contributing" id="contributing">Contributing</a></h2>
+<p>Contributions, issues and feature requests are welcome!<br />Feel free to check <a href="https://github.com/stjudecloud/rfcs/issues">issues page</a>. You can also take a look at the <a href="https://github.com/stjudecloud/rfcs/blob/master/CONTRIBUTING.md">contributing guide</a>.</p>
+<h2><a class="header" href="#-license" id="-license">📝 License</a></h2>
+<p>Copyright © 2020 <a href="https://github.com/stjudecloud">St. Jude Cloud Team</a>.<br />
+This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md">MIT</a> licensed.</p>
 <h2><a class="header" href="#questions" id="questions">Questions</a></h2>
 <p>With any quetions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
 
@@ -242,6 +269,14 @@ python3 -m http.server -d book
 
         
 
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
         
 
         
