@@ -71,7 +71,7 @@ Where we currently have manually curated SV results from our internal pipeline, 
 
 ## New process for structural variation results
 
-For all data sets, we propose to produce a set of structural variants using publicly available algorithm(s). As there is sufficient evidence to suggest that Illumina's Manta caller is the best currently available option and widely used across similar projects, this process should include Manta at the core. Additionally, Manta supports WGS, WES, and RNA-seq inputs for SV calling so we can utilize it across all of our sample types. Of the tested categories, Manta ranked outside of the top ten algorithms only in large duplication events. In addition to Manta, we propose to run our internal SV callers: CONSERTING, CREST, and CICERO, once they have been updated to handle hg38.  
+For all data sets, we propose to produce a set of structural variants using publicly available algorithm(s). As there is sufficient evidence to suggest that Illumina's Manta caller is the best currently available option and has been used in similar projects, this process should include Manta at the core. Additionally, Manta supports WGS, WES, and RNA-seq inputs for SV calling so we can utilize it across all of our sample types. Of the tested categories, Manta ranked outside of the top ten algorithms only in large duplication events. In addition to Manta, we propose to run our internal SV callers: CONSERTING, CREST, and CICERO, once they have been updated to handle hg38.  
 
 # Open questions
 
