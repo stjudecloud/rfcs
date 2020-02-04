@@ -11,13 +11,13 @@ This RFC lays out the specification for the Structural Variation (SV) pipeline. 
 
 # Motivation
 
-SJC currently provides short variant [files in gVCF format](https://www.stjude.cloud/docs/guides/data/about-our-data/#gvcf-files) produced through Microsoft Genomics Service using GATK's haplotype caller. Additionally for a subset of datasets, SJC provides [somatic VCF files](https://www.stjude.cloud/docs/guides/data/about-our-data/#somatic-vcf-files) where the SNV/Indel variants were produced by the St. Jude somatic variant analysis pipeline using Bambino. Unlike the gVCF files, these variants have been post-processed and manually curated. The variants were then lifted over to HG38.  
+St. Jude Cloud currently provides short variant [files in gVCF format](https://www.stjude.cloud/docs/guides/data/about-our-data/#gvcf-files) produced through Microsoft Genomics Service using GATK's haplotype caller. Additionally for a subset of datasets, St. Jude Cloud provides [somatic VCF files](https://www.stjude.cloud/docs/guides/data/about-our-data/#somatic-vcf-files) where the SNV/Indel variants were produced by the St. Jude somatic variant analysis pipeline using Bambino. Unlike the gVCF files, these variants have been post-processed and manually curated. The variants were then lifted over to HG38.  
 
 # Discussion
 
 ## Current Process
 
-Currently there are three main algorithms applied to detect SV events: CONSERTING [WGS], CREST [WGS], and CICERO [RNA-Seq]. Note that data from all three sources is not available for all samples available on SJC. For those samples where these algorithms were run, the original runs utilize GRCh37-lite and the SJC samples are aligned to GRCh38. CREST and CICERO currently do not support GRCh38. Each of these three algorithms requires significant post processing and manual quality control. Given these factors, utilizing these for SV calling will require significant development, computational time, and evaluation and quality control. Before continuing with these methods alone, it is prudent to review the current state of affairs as it regards the discovery of SVs in genomic samples.
+Currently there are three main algorithms applied to detect SV events: CONSERTING [WGS], CREST [WGS], and CICERO [RNA-Seq]. Note that data from all three sources is not available for all samples available on St. Jude Cloud. For those samples where these algorithms were run, the original runs utilize GRCh37-lite and the St. Jude Cloud samples are aligned to GRCh38. CREST and CICERO currently do not support GRCh38. Each of these three algorithms requires significant post processing and manual quality control. Given these factors, utilizing these for SV calling will require significant development, computational time, and evaluation and quality control. Before continuing with these methods alone, it is prudent to review the current state of affairs as it regards the discovery of SVs in genomic samples.
 
 ## Comparison to other large-scale genomic projects
 
@@ -67,7 +67,7 @@ Internal evaluation from Steve Rice and Eric Davis indicates that Manta is the b
 
 ## Process for existing structural variation results
 
-Where we currently have manually curated SV results from our internal pipeline, we propose performing liftover to hg38 coordinates and making the results available in SJC. This will match the process used for somatic SNV/Indels that have been manually curated after being produced by internal SJ pipelines. In addition, we propose to make variant calls available from our new process alongside the prior results.  
+Where we currently have manually curated SV results from our internal pipeline, we propose performing liftover to hg38 coordinates and making the results available in St. Jude Cloud. This will match the process used for somatic SNV/Indels that have been manually curated after being produced by internal SJ pipelines. In addition, we propose to make variant calls available from our new process alongside the prior results.  
 
 ## New process for structural variation results
 
