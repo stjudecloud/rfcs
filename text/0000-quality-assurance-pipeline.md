@@ -32,28 +32,20 @@ The quality metrics discussed here are sequence and mapping quality metrics.
 Other metrics related to nucleic acid integrity or library quality are typically
 done upstream in the genomics lab contributing the data. Pre-sequencing quality metrics, however, are clearly important and part of our long term interests.
 
-## Current Process
+## Tool additions and upgrades
 
-Currently, St. Jude Cloud provides three sequencing data types: whole-genome
-(WGS), whole-exome (WES), and transcriptome (RNA-seq) data.  It is important to
-differentiate our quality control workflows for each type of sequencing. At the
-time that the RFC was authored, we use the following tools to _manually_ vet
-data.
+* `ngsderive v1.0.1` will be added for RNA-seq strandedness derivation, read
+  length derivation, and instrument derivation.
+* `fastqc v0.11.8` will be upgraded to `fastqc v0.11.9`. Upgraded to receive the
+  benefits of bug fixes and software optimizations.
+* `picard v2.20.2` will be upgraded to `picard v2.21.8`. Upgraded to receive the
+  benefits of bug fixes and software optimizations.
+* `qualimap v2.2.2c` will be upgraded to `qualimap v2.2.2d`. Upgraded to receive
+  the benefits of bug fixes and software optimizations.
+* `samtools v1.9` will be upgraded to `samtools v1.10.2`. Upgraded to receive
+  the benefits of bug fixes and software optimizations.
 
-> Note that one of the goals of this RFC is to constantly update these
-versions, so they are likely not what will be used in the pipeline.
-
-| Tool                     | Version | Website          |
-| ------------------------ | ------- | ---------------- |
-| `samtools flagstat`      | v1.9    | [link](samtools) |
-| `fastqc`                 | v0.11.8 | [link](fastqc)   |
-| `qualimap bamqc`         | v2.2.2  | [link](qualimap) |
-| `qualimap rnaseq`        | v2.2.2  | [link](qualimap) |
-| `picard ValidateSamFile` | v2.20.2 | [link](picard)   |
-| `multiqc`                | v1.7    | [link](multiqc)  |
-
-
-## Important Metrics
+## Automated metrics comparison
 
 | Name                               | Produced By          | Description                                                                                                                                                                                                                                                                                                                                                                                                  |
 | ---------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -64,7 +56,7 @@ versions, so they are likely not what will be used in the pipeline.
 | rRNA Content                       | ?                    | Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.                                                                                                                                                                                                                                                |
 | Transcript Coverage and 5’-3’ Bias | [Qualimap][qualimap] | Libraries prepared with polyA selection may have higher biased expression in 3’ region.  If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.                                                                                                                                                                  |
 | Junction Analysis                  | [Qualimap][qualimap] | Analysis of known, partly known, and novel junction positions in spliced alignments.                                                                                                                                                                                                                                                                                                                         |
-| Strand Specificity                 | RSeQC                | Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).                                                                                                                                                                                                                                                                                               |
+| Strand Specificity                 | ngsderive            | Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).                                                                                                                                                                                                                                                                                               |
 | GC Content Bias                    | ?                    | GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).                                                                                                                                                                                                                                                       |
 
 ## Thresholds and Metrics for Specific Applications 
@@ -81,15 +73,6 @@ The quality metrics of special concern for WES include depth of coverage in exom
 
 The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage.  Mapping quality is also critical.
 
-
-### Proposals
-
-- Add [`RSeQC v3.0.0`](http://rseqc.sourceforge.net), specifically [`infer_experiment`].
-
-[`infer_experiment`]: http://rseqc.sourceforge.net/#infer-experiment-py
-
-- Include md5 hash as an annotation property for vended files.
-
 # Specification
 
 These are generic instructions for running each of the tools in our pipeline.
@@ -105,12 +88,11 @@ We presume anaconda is available and installed. If not please follow the link to
 ```bash
 conda create --name bio-qc \
     --channel bioconda \
-    fastqc==0.11.8 \
-    picard==2.20.2  \
-    qualimap==2.2.2c \
-    rseqc==3.0.0  \
-    sambamba==0.6.6 \
-    samtools==1.9  \
+    --channel conda-forge \
+    fastqc==0.11.9 \
+    picard==2.21.8  \
+    qualimap==2.2.2d \
+    samtools==1.10.2  \
     -y
 
 conda activate bio-qc
@@ -118,22 +100,10 @@ conda activate bio-qc
 
 ## Workflow
 
-The end workflow (covering both our current process and the addition of the new tool) would be as following:
-
-| Command                  | Purpose                                                    |
-| ------------------------ | ---------------------------------------------------------- |
-| `samtools quickcheck`    | Validate BAM headers and EOF block existence               |
-| `md5sum`                 | For comparison to md5 vended file property                 |
-| `picard ValidateSamFile` | Ensure validity of file                                    |
-| `samtools flagstat`      | Generate flag statistics                                   |
-| `sambamba flagstat`      | Generate flag statistics using a samtools alternative      |
-| `fastqc`                 | Screen for GC content and adapter contamination            |
-| `qualimap bamqc`         | Screen for mapping quality, coverage, and duplication rate |
-| `qualimap rnaseq`        | Screen for RNA-seq bias and junction analysis              |
-| `rseqc infer_experiment` | Determine RNA-SEQ strandedness and reads                   |
-| `multiqc`                | Report aggregation                                         |
-
-Note: Specific options such as memory size thresholds and thread count are below.
+The workflow specification is as follows. Note that some arguments that are not
+integral to the command (such as output directories) or arguments that can vary
+between compute environements (such as memory thresholds or number of threads)
+are not included.
 
 1. Run `samtools quickcheck` to ensure that input BAMs are relatively
    well-formed (for instance, to ensure a header and EOF marker exist).
