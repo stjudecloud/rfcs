@@ -1,0 +1,641 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0001-rnaseq-workflow-v2.0 - St. Jude Cloud RFCs</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0000-quality-assurance-pipeline.html"><strong aria-hidden="true">1.</strong> 0000-quality-assurance-pipeline</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html" class="active"><strong aria-hidden="true">2.</strong> 0001-rnaseq-workflow-v2.0</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+<li><a href="#appendix">Appendix</a></li>
+</ul>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the RNA-seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/1">associated pull request</a>.</p>
+<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<ul>
+<li><strong>Tool additions and updates.</strong> The tools we use are woefully out of date (2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the <a href="#Tool-additions-updates">section below</a> for more details.
+<ul>
+<li>Note that all of the tools used in the RNA-seq Workflow v1.0 were the latest available version.</li>
+</ul>
+</li>
+<li><strong>Updated reference files.</strong> No changes have really been made to the <code>GRCh38_no_alt</code> analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-seq workflow (<a href="https://www.gencodegenes.org/human/release_31.html">GENCODE v31</a> is now out).</li>
+<li><strong>QC and quality of life improvements based on feedback from the community.</strong> Many interactions with the community have impacted the thoughts in this release:
+<ul>
+<li>A primary driver for the rewrite of the pipeline is the feedback we heard about the <code>ERCC SpikeIn</code> sequences.
+<ul>
+<li>Popular tools such as <code>GATK</code> and <code>picard</code> are generally unhappy if the sequence dictionaries don't match perfectly.</li>
+<li>The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-seq mapping was hence causing issues when using mapped RNA-seq BAM files in conjunction with other non-RNA-seq BAM files in downstream analysis using these tools.</li>
+<li>Last, many of our RNA-seq samples were not generated using 'ERCC' spike-in control sequences.</li>
+<li>After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.</li>
+</ul>
+</li>
+<li>One of the most important themes in the RNA-seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. <code>fq lint</code>, generation and publication of md5sums).</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
+<h2><a class="header" href="#tool-additions-and-upgrades" id="tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
+<p>As part of the RNA-seq workflow v2, multiple tools will be added and upgraded:</p>
+<ul>
+<li><code>fq v0.2.0</code> (<a href="https://github.com/stjude/fqlib/releases/tag/v0.2.0">Released</a> November 28, 2018) will be added. This tool will be used to validate the output of <code>picard SamToFastq</code>. <code>picard SamToFastq</code> does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.</li>
+<li><code>rseqc v3.0.0</code> (<a href="http://rseqc.sourceforge.net/#download-rseqc">Source</a>) will be added. We have started using <code>infer_experiment.py</code> to infer strandedness from the data and ensure that the data matches what information we get from the lab.</li>
+<li>Added <code>qualimap v.2.2.2</code> (<a href="https://bitbucket.org/kokonech/qualimap/">Source</a>). Although we have been using <code>qualimap</code> quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-seq alignment workflow. The <code>bamqc</code> and <code>rnaseq</code> subcommands are both used.</li>
+<li>Update <code>STAR 2.5.3a</code> (<a href="https://github.com/alexdobin/STAR/releases/tag/2.5.3a">Released</a> March 17, 2017) to <code>STAR 2.7.1a</code> (<a href="https://github.com/alexdobin/STAR/releases/tag/2.7.1a">Released</a> May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.</li>
+<li>Update <code>samtools 1.4.0</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.4">Released</a> March 13, 2017) to <code>samtools 1.9</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.9">Released</a> July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).</li>
+<li>Update <code>picard 2.9.4</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.9.4">Released</a> June 15, 2017) to <code>picard 2.20.2</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.20.2">Released</a> May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.</li>
+<li>Added <code>deeptools 3.3.1</code> (<a href="https://github.com/deeptools/deepTools/releases/tag/3.3.1">Released</a> September 10, 2019). Using <code>bamCoverage</code> to generate bigwig coverage information.</li>
+</ul>
+<h2><a class="header" href="#gencode-compatability" id="gencode-compatability">GENCODE compatability</a></h2>
+<p>One of the major discussions during this round of revisions was the compatability of the <code>GRCh38_no_alt</code> reference genome with the latest <code>GENCODE</code> gene set. It was posed as the following question:</p>
+<blockquote>
+<p>This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v31 is built against <code>GRCh38.p12</code> (see the in the title on the <a href="https://www.gencodegenes.org/human/release_31.html">webpage</a>), but obviously the no alt analysis set is derived from <code>GRCh38.p0</code> (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)</p>
+</blockquote>
+<p>As is apparent in the question, the <code>GRCh38</code> reference genome is regularly patched with non-coordinate altering, backwards compatable changes (see more information <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/">here</a>). On the other hand, each <code>GENCODE</code> gene model release is based on a particular patch of the reference genome. This may be problematic because most bioinformatics analyses use a reference genome based on the non-patched version of <code>GRCh38</code>. What follows is our discussion and investigation into the effect between mismatching nucleotide sequences in the reference genome and the gene model.</p>
+<p>First, we researched what some of the projects we respect in the community are doing:</p>
+<table><thead><tr><th>Pipeline</th><th>Reference Genome</th><th>Reference Genome Patch</th><th>Gene Model</th><th>Gene Model Patch</th></tr></thead><tbody>
+<tr><td>GDC's <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">mRNA-seq pipeline</a></td><td><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files"><code>GRCh38_no_alt</code>-based w/ decoys + viral</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a></td><td><code>GRCh38.p2</code></td></tr>
+<tr><td>ENCODE's <a href="https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq">RNA-seq pipeline</a></td><td><a href="https://www.encodeproject.org/files/ENCFF742NER/"><code>GRCh38_no_alt</code>-based w/ SpikeIns</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a></td><td><code>GRCh38.p5</code></td></tr>
+<tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
+</tbody></table>
+<p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p>Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply <a href="https://github.com/alexdobin/STAR/issues/673">here</a>. In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.</p>
+<p>Given the landscape of the community and the author's response, we considered three possible options for moving ahead:</p>
+<ol>
+<li>We could try using the reference FASTA supplied with the respective GENCODE release as suggested by Dr. Dobin. This was the most undesirable approach from our groups perspective:
+<ul>
+<li>The main reason was that this reference genome did not mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline out of the box. As outlined in <a href="#Motivation">the motivation section</a> of this document, this incongruency was a major driving factor for the creation of this RFC.</li>
+<li>We agreed it would require too large an amount of postprocessing of the GENCODE reference genome to convert to apply all of the no alt analysis set changes (e.g. converting to UCSC names, masking regions of the genome, inserting the EBV chromosome).</li>
+<li>Additionally, this could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason no one applies the patches to their no alt analysis set :)).</li>
+</ul>
+</li>
+<li>We could downgrade the GENCODE gene model to the latest release that was still based on <code>GRCh38.p0</code> (<a href="https://www.gencodegenes.org/human/release_21.html">GENCODE v21</a> would the correct version to use in this case).
+<ul>
+<li>The concordance of the reference sequences obviously made this choice an attractive option. However, <code>GENCODE v21</code> was released over 5 years ago (06.2014) and there were many valuable updates over that time. In particular, a quick look showed that there were many more transcripts and that the number of lncRNAs more than doubled (see appendix). We did not want to lose all of this forward progress if we could avoid it.</li>
+<li>To see what we looked at, you can see <a href="#GENCODE-feature-comparisons">the relevant section in the appendix</a>.</li>
+</ul>
+</li>
+<li>We could use the latest GENCODE release despite the mismatches outlined above as it appears most other projects have done.
+<ul>
+<li>The general consensus was that, after filtering the gene model for only known features (<code>level 1</code> and <code>level 2</code>), the effect of this discordance would be small enough to tolerate so that we could gain all of the knowledge accumulated since the older release.</li>
+<li>To quantify this, we measured the differences in gene expression (as measured by the <code>R^2</code> value between <code>GENCODE v21</code> and <code>GENCODE v31</code>) and splice junction detection (as measured by the number of splice junctions detected and the relative proportions of novel/partially novel/known junctions). In the current version of this RFC, I have not outlined the results, but I plan to in the future (see TODOs).</li>
+</ul>
+</li>
+</ol>
+<p>Given that there was no perfect option, we decided to stick with option #3.</p>
+<h2><a class="header" href="#gene-model-post-processing" id="gene-model-post-processing">Gene model post-processing</a></h2>
+<p>Originally, I had posed this question to the group:</p>
+<blockquote>
+<ul>
+<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<ul>
+<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
+<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
+<li>Last, the various other pipelines in the community don't tend to remove these features:
+<ul>
+<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled &quot;Step 1: Building the STAR index&quot;).</li>
+<li>ENCODE is not filtering any features, they are just changing some of the contig names in the <a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a> GTF (see the analysis <a href="#ENCODE-GTF-generation">in the appendix</a>).</li>
+<li>The TOPMed pipeline <a href="https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation">does outline some postprocessing</a> they are doing to the <a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a> GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>After discussion internally, we decided to discontinue removing <code>level 3</code> annotations by default. This is more consistent with what is being done in the community and it was decided that this was the most straightforward method with little associated risk. Therefore we are no longer performing any post-processing of the gene model.</p>
+<h2><a class="header" href="#quality-control-inclusion" id="quality-control-inclusion">Quality control inclusion</a></h2>
+<p>Previously, our QC pipeline was broken out into a separate workflow. Moving forward, we will include the parts of our pipeline which pertain to QC within this specification. There are really no noteworthy changes to the QC pipeline for this release other than updating the command line tools we use there to the latest versions.</p>
+<h2><a class="header" href="#quality-of-life-improvements" id="quality-of-life-improvements">Quality of life improvements</a></h2>
+<ul>
+<li>Add <code>picard ValidateSamFile</code> to the checks after the <code>STAR</code> alignment and <code>picard MarkDuplicates</code> steps. The criticism internally is that <code>ValidateSamFile</code> is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
+<ul>
+<li><code>INVALID_PLATFORM_VALUE</code> is pretty annoying. It just complains if a read group doesn't contain a <code>PL</code> attribute. I'm not sure it's worth going back and fixing these.</li>
+</ul>
+</li>
+<li>For dependency management, we have moved to using <code>conda</code> within standard docker images. All packages should be available within the <code>defaults</code>, <code>conda-forge</code>, and <code>bioconda</code> repositories.</li>
+<li>Add a checksum algorithm and publish the results in the data browser. Currently, I'm proposing we generate the <code>md5sum</code> checksum. However, we should consider the use of a non-broken hashing algorithm (see <a href="#Outstanding-Questions">the related question below</a>).</li>
+</ul>
+<h2><a class="header" href="#various-other-changes" id="various-other-changes">Various other changes</a></h2>
+<ul>
+<li>Removed a section of the pipeline that reformatted the header of the BAM to be cleaner. <code>STAR</code> outputs a header that is formatted fine already, and I found this code to just be an area where an error could be introduced for little benefit.</li>
+<li>I removed a section of custom code that checks for duplicate read groups. <code>picard ValidateSamFile</code> does this for you (see <a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=7571">the documentation</a> for this tool. Specifically, the <code>DUPLICATE_READ_GROUP_ID</code> error).</li>
+</ul>
+<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
+<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
+<p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
+<pre><code class="language-bash">conda create -n star-mapping \
+    -c conda-forge \
+    -c bioconda \
+    picard==2.20.2 \
+    samtools==1.9 \
+    star==2.7.1a \
+    qualimap==2.2.2c \
+    multiqc==1.7 \
+    rseqc==3.0.0 \
+    fastqc==0.11.8 \
+    htseq==0.11.2 \
+    deeptools==3.3.1 \
+    -y
+</code></pre>
+<p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
+<pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
+</code></pre>
+<h2><a class="header" href="#reference-files" id="reference-files">Reference files</a></h2>
+<p>The following reference files are used as the basis of the RNA-seq Workflow v2.0:</p>
+<ul>
+<li>
+<p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
+<pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
+gunzip GRCh38_no_alt.fa.gz
+
+echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+md5sum -c GRCh38_no_alt.fa.md5
+# &gt; GRCh38_no_alt.fa: OK
+</code></pre>
+</li>
+<li>
+<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
+echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+md5sum -c gencode.v31.annotation.gtf.gz.md5
+# &gt; gencode.v31.annotation.gtf.gz: OK
+
+gunzip gencode.v31.annotation.gtf.gz
+echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+md5sum -c gencode.v31.annotation.gtf.md5
+# &gt; gencode.v31.annotation.gtf: OK
+</code></pre>
+</li>
+<li>
+<p>Last, the following command is used to prepare the STAR index file:</p>
+<pre><code class="language-bash">STAR --runMode genomeGenerate \                    # Use genome generation runMode.
+     --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
+     --runThreadN $NCPU \                          # Number of threads to use to build genome database.
+     --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
+     --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
+     --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-seq read-1).
+</code></pre>
+</li>
+</ul>
+<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<p>Here are the resulting steps in the RNA-seq Workflow v2.0 pipeline.</p>
+<ol>
+<li>
+<p>Run <code>samtools quickcheck</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.</p>
+</li>
+<li>
+<p>Split BAM file into multiple BAMs on the different read groups using <code>samtools split</code>. See <a href="http://www.htslib.org/doc/samtools.html">the samtools documentation</a> for more information.</p>
+<pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
+               -f '%*_%!.%.'              # Format of output BAM file names.
+</code></pre>
+<p>If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.</p>
+</li>
+<li>
+<p>Run Picard <code>SamToFastq</code> on each of the bams generated in the previous step.</p>
+<pre><code class="language-bash">   picard SamToFastq INPUT=$INPUT_BAM FASTQ=$FASTQ_R1 SECOND_END_FASTQ=$FASTQ_R2 RE_REVERSE=true
+</code></pre>
+</li>
+<li>
+<p>Run <code>fq lint</code> on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
+<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
+</code></pre>
+</li>
+<li>
+<p>Run the <code>STAR</code> alignment algorithm.</p>
+<pre><code class="language-bash">STAR --readFilesIn $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
+     --outSAMattrRGline $ALL_RG \                   # Read group lines in the same order as `readFilesIn` (derived from earlier `samtools split` step).
+     --genomeDir $STARDB \                          # Directory containing the STAR genome
+     --runThreadN $NCPU \                           # Number of threads to use. You must request the correct amount from HPCF first!
+     --outSAMunmapped Within \                      # Keep unmapped reads in the final BAM file.
+     --outSAMstrandField intronMotif \              # Preserve compatibility with Cufflinks by including the XS attribute (strand derived from intron motif).
+     --outSAMtype BAM SortedByCoordinate \          # Output a BAM file that is coordinate sorted.
+     --outSAMattributes NH HI AS nM NM MD XS \      # Recommended SAM attributes to include for compatibility. Refer to manual for specifics.
+     --outFilterMultimapScoreRange 1 \              # Ensures that all multi-mapped reads will need to share the mapping score.
+     --outFilterMultimapNmax 20 \                   # Max number of multi-mapped SAM entries for each read.
+     --outFilterMismatchNmax 10 \                   # Max number of mismatches allowed from alignment.
+     --alignIntronMax 500000 \                      # Max intron size considered.
+     --alignMatesGapMax 1000000 \                   # Max gap allowed between two mates.
+     --sjdbScore 2 \                                # Additional weight given to alignments that cross database junctions when scoring alignments.
+     --alignSJDBoverhangMin 1 \                     # Minimum overhang required on each side of a splice junction. Here, we require only one base on each side.
+     --outFilterMatchNminOverLread 0.66 \           # 66% of the read must be perfectly matched to the reference sequence.
+     --outFilterScoreMinOverLread 0.66 \            # Score must be greater than 66% of the read length. So for RL=100, the alignment must have a score &gt; 66.
+     --limitBAMsortRAM $RAM_LIMIT \                 # Amount of RAM to use for sorting. Recommended value is [Max amount of RAM] - 5GB.
+     --outFileNamePrefix $OUT_FILE_PREFIX \         # All output files will have this path prepended.
+     --twopassMode Basic                            # Use STAR two-pass mapping technique (refer to manual).
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard MarkDuplicates</code> on the <code>STAR</code>-aligned BAM file.</p>
+<pre><code class="language-bash">picard MarkDuplicates I=$STAR_BAM \                  # Input BAM.
+                      O=$MARKED_BAM \                # Duplicate-marked output BAM.
+                      VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
+                      CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+                      CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+                      COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+                      METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard ValidateSamFile</code> on the aligned and marked BAM file.</p>
+<pre><code class="language-bash">picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
+                       IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
+</code></pre>
+</li>
+<li>
+<p>Run <code>fastqc</code> on the data for convenience of end users.</p>
+<pre><code class="language-bash">fastqc -f bam \     # Specify that we are working on a BAM file.
+       -o $OUTDIR \ # Specify an out directory.
+       -t $NCPU \   # Specify number of threads.
+       $INPUT_BAM   # Input BAM we are QC'ing.
+</code></pre>
+</li>
+<li>
+<p>Run <code>rseqc</code>'s <code>infer_experiment.py</code> to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.</p>
+<pre><code class="language-bash">infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
+
+# Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
+#   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-forward&quot;.
+#   - If proportion of reverse orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-reverse&quot;.
+#   - If both proportions are between 0.6 and 0.4, assign &quot;non-strand-specific&quot;.
+#   - Else flag for manual triage.
+</code></pre>
+</li>
+<li>
+<p>Run <code>qualimap bamqc</code> and <code>qualimap rnaseq</code> QC for assistance in post-processing QC. Note that for the <code>rnaseq</code> tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the <code>infer_experiment.py</code> step above.</p>
+<pre><code class="language-bash">qualimap bamqc -bam $INPUT_BAM \     # Input BAM.
+               -outdir $OUTPUT_DIR \ # Output directory.
+               -nt $NCPUS            # Number of CPUs to use.
+</code></pre>
+<p>and</p>
+<pre><code class="language-bash">qualimap rnaseq -bam $INPUT_BAM \                  # Input BAM.
+                -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
+                -outdir $OUTPUT_DIR \              # Output directory.
+                -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
+                -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;strand-specific-reverse&quot; for St. Jude Cloud data.
+                -pe                                # All RNA-seq data in St. Jude Cloud is currently paired-end.
+</code></pre>
+</li>
+<li>
+<p>Next, <code>htseq-count</code> is run for the final counts file to be delivered:</p>
+<pre><code class="language-bash">htseq-count -f bam \                            # Specify input file as BAM.
+           -r pos \                             # Specify the BAM is position sorted.
+           -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;reverse&quot; for St. Jude Cloud data.
+           -m union \                           # For reference, GDC uses &quot;intersection-nonempty&quot;. Needs input from reviewers.
+           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses &quot;gene_id&quot; here. Needs input from reviewers.
+           --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
+           --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
+           $INPUT_BAM                           # Input BAM file.
+</code></pre>
+</li>
+<li>
+<p>Generate the remaining files generally desired as output for the RNA-seq Workflow.</p>
+<pre><code class="language-bash">samtools flagstat $INPUT_BAM
+samtools index $INPUT_BAM
+md5sum $INPUT_BAM
+</code></pre>
+</li>
+<li>
+<p>Run <code>bamCoverage</code> to generate bigwig file.</p>
+<pre><code class="language-bash">bamCoverage --bam ${bam} \                     # Input BAM file
+            --outFileName ${prefix}.bw \       # Output bigwig filename
+            --outFileFormat bigwig \           # Set output format to bigwig
+            --numberOfProcessors &quot;max&quot;         # Utilize all available processors
+</code></pre>
+</li>
+<li>
+<p>Run <code>multiqc</code> across the following files for all samples in the cohort:</p>
+<ul>
+<li><code>STAR</code></li>
+<li><code>picard MarkDuplicates</code> and <code>picard ValidateSamFile</code></li>
+<li><code>qualimap bamqc</code> and <code>qualimap rnaseq</code></li>
+<li><code>fastqc</code></li>
+<li><code>samtools flagstat</code></li>
+</ul>
+</li>
+</ol>
+<h1><a class="header" href="#appendix" id="appendix">Appendix</a></h1>
+<h3><a class="header" href="#reference-genome-comparison" id="reference-genome-comparison">Reference genome comparison</a></h3>
+<p>Below are the results of an analysis of each pipeline's <code>GRCh38</code>-based reference genome. The steps are essentially:</p>
+<ol>
+<li>Research what reference genome each project is using and where to find it.</li>
+<li>Download it.</li>
+<li>Use <code>picard CreateSequenceDictionary</code> to get the md5sums for each sequence in the dictionary.</li>
+<li>Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).</li>
+</ol>
+<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
+<tr><td>chr1</td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td>True</td></tr>
+<tr><td>chr2</td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td>True</td></tr>
+<tr><td>chr3</td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td>True</td></tr>
+<tr><td>chr4</td><td><code>3210fecf1eb92d5489da4346b3fddc6e</code></td><td><code>3210fecf1eb92d5489da4346b3fddc6e</code></td><td><code>3210fecf1eb92d5489da4346b3fddc6e</code></td><td><code>3210fecf1eb92d5489da4346b3fddc6e</code></td><td>True</td></tr>
+<tr><td>chr5</td><td><code>a811b3dc9fe66af729dc0dddf7fa4f13</code></td><td><code>a811b3dc9fe66af729dc0dddf7fa4f13</code></td><td><code>a811b3dc9fe66af729dc0dddf7fa4f13</code></td><td><code>a811b3dc9fe66af729dc0dddf7fa4f13</code></td><td>True</td></tr>
+<tr><td>chr6</td><td><code>5691468a67c7e7a7b5f2a3a683792c29</code></td><td><code>5691468a67c7e7a7b5f2a3a683792c29</code></td><td><code>5691468a67c7e7a7b5f2a3a683792c29</code></td><td><code>5691468a67c7e7a7b5f2a3a683792c29</code></td><td>True</td></tr>
+<tr><td>chr7</td><td><code>cc044cc2256a1141212660fb07b6171e</code></td><td><code>cc044cc2256a1141212660fb07b6171e</code></td><td><code>cc044cc2256a1141212660fb07b6171e</code></td><td><code>cc044cc2256a1141212660fb07b6171e</code></td><td>True</td></tr>
+<tr><td>chr8</td><td><code>c67955b5f7815a9a1edfaa15893d3616</code></td><td><code>c67955b5f7815a9a1edfaa15893d3616</code></td><td><code>c67955b5f7815a9a1edfaa15893d3616</code></td><td><code>c67955b5f7815a9a1edfaa15893d3616</code></td><td>True</td></tr>
+<tr><td>chr9</td><td><code>6c198acf68b5af7b9d676dfdd531b5de</code></td><td><code>6c198acf68b5af7b9d676dfdd531b5de</code></td><td><code>6c198acf68b5af7b9d676dfdd531b5de</code></td><td><code>6c198acf68b5af7b9d676dfdd531b5de</code></td><td>True</td></tr>
+<tr><td>chr10</td><td><code>c0eeee7acfdaf31b770a509bdaa6e51a</code></td><td><code>c0eeee7acfdaf31b770a509bdaa6e51a</code></td><td><code>c0eeee7acfdaf31b770a509bdaa6e51a</code></td><td><code>c0eeee7acfdaf31b770a509bdaa6e51a</code></td><td>True</td></tr>
+<tr><td>chr11</td><td><code>1511375dc2dd1b633af8cf439ae90cec</code></td><td><code>1511375dc2dd1b633af8cf439ae90cec</code></td><td><code>1511375dc2dd1b633af8cf439ae90cec</code></td><td><code>1511375dc2dd1b633af8cf439ae90cec</code></td><td>True</td></tr>
+<tr><td>chr12</td><td><code>96e414eace405d8c27a6d35ba19df56f</code></td><td><code>96e414eace405d8c27a6d35ba19df56f</code></td><td><code>96e414eace405d8c27a6d35ba19df56f</code></td><td><code>96e414eace405d8c27a6d35ba19df56f</code></td><td>True</td></tr>
+<tr><td>chr13</td><td><code>a5437debe2ef9c9ef8f3ea2874ae1d82</code></td><td><code>a5437debe2ef9c9ef8f3ea2874ae1d82</code></td><td><code>a5437debe2ef9c9ef8f3ea2874ae1d82</code></td><td><code>a5437debe2ef9c9ef8f3ea2874ae1d82</code></td><td>True</td></tr>
+<tr><td>chr14</td><td><code>e0f0eecc3bcab6178c62b6211565c807</code></td><td><code>e0f0eecc3bcab6178c62b6211565c807</code></td><td><code>e0f0eecc3bcab6178c62b6211565c807</code></td><td><code>e0f0eecc3bcab6178c62b6211565c807</code></td><td>True</td></tr>
+<tr><td>chr15</td><td><code>f036bd11158407596ca6bf3581454706</code></td><td><code>f036bd11158407596ca6bf3581454706</code></td><td><code>f036bd11158407596ca6bf3581454706</code></td><td><code>f036bd11158407596ca6bf3581454706</code></td><td>True</td></tr>
+<tr><td>chr16</td><td><code>db2d37c8b7d019caaf2dd64ba3a6f33a</code></td><td><code>db2d37c8b7d019caaf2dd64ba3a6f33a</code></td><td><code>db2d37c8b7d019caaf2dd64ba3a6f33a</code></td><td><code>db2d37c8b7d019caaf2dd64ba3a6f33a</code></td><td>True</td></tr>
+<tr><td>chr17</td><td><code>f9a0fb01553adb183568e3eb9d8626db</code></td><td><code>f9a0fb01553adb183568e3eb9d8626db</code></td><td><code>f9a0fb01553adb183568e3eb9d8626db</code></td><td><code>f9a0fb01553adb183568e3eb9d8626db</code></td><td>True</td></tr>
+<tr><td>chr18</td><td><code>11eeaa801f6b0e2e36a1138616b8ee9a</code></td><td><code>11eeaa801f6b0e2e36a1138616b8ee9a</code></td><td><code>11eeaa801f6b0e2e36a1138616b8ee9a</code></td><td><code>11eeaa801f6b0e2e36a1138616b8ee9a</code></td><td>True</td></tr>
+<tr><td>chr19</td><td><code>85f9f4fc152c58cb7913c06d6b98573a</code></td><td><code>85f9f4fc152c58cb7913c06d6b98573a</code></td><td><code>85f9f4fc152c58cb7913c06d6b98573a</code></td><td><code>85f9f4fc152c58cb7913c06d6b98573a</code></td><td>True</td></tr>
+<tr><td>chr20</td><td><code>b18e6c531b0bd70e949a7fc20859cb01</code></td><td><code>b18e6c531b0bd70e949a7fc20859cb01</code></td><td><code>b18e6c531b0bd70e949a7fc20859cb01</code></td><td><code>b18e6c531b0bd70e949a7fc20859cb01</code></td><td>True</td></tr>
+<tr><td>chr21</td><td><code>974dc7aec0b755b19f031418fdedf293</code></td><td><code>974dc7aec0b755b19f031418fdedf293</code></td><td><code>974dc7aec0b755b19f031418fdedf293</code></td><td><code>974dc7aec0b755b19f031418fdedf293</code></td><td>True</td></tr>
+<tr><td>chr22</td><td><code>ac37ec46683600f808cdd41eac1d55cd</code></td><td><code>ac37ec46683600f808cdd41eac1d55cd</code></td><td><code>ac37ec46683600f808cdd41eac1d55cd</code></td><td><code>ac37ec46683600f808cdd41eac1d55cd</code></td><td>True</td></tr>
+<tr><td>chrX</td><td><code>2b3a55ff7f58eb308420c8a9b11cac50</code></td><td><code>2b3a55ff7f58eb308420c8a9b11cac50</code></td><td><code>2b3a55ff7f58eb308420c8a9b11cac50</code></td><td><code>2b3a55ff7f58eb308420c8a9b11cac50</code></td><td>True</td></tr>
+<tr><td>chrY</td><td><code>ce3e31103314a704255f3cd90369ecce</code></td><td><code>ce3e31103314a704255f3cd90369ecce</code></td><td><code>ce3e31103314a704255f3cd90369ecce</code></td><td><code>ce3e31103314a704255f3cd90369ecce</code></td><td>True</td></tr>
+<tr><td>chrM</td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td>True</td></tr>
+<tr><td>chrEBV</td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td>True</td></tr>
+</tbody></table>
+<h3><a class="header" href="#encode-gtf-generation" id="encode-gtf-generation">ENCODE GTF generation</a></h3>
+<p>A small investigation was done to see how ENCODE's GENCODE v24 GTF was being produced (the md5sum between the original GENCODE v24 primary assembly file and ENCODE's version of the file weren't matching up). In short, they just changed the names of some of the contigs. You can verify this yourself by doing an <code>md5sum</code> without the sequence name column of the GTF (or manually download and inspect the differences like I did :)).</p>
+<pre><code class="language-bash">curl -sL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_24/gencode.v24.primary_assembly.annotation.gtf.gz | \
+         gunzip -c | \
+         cut -f2- -d$'\t' | \
+         md5sum
+# 5227fac91c8d32b3fa3a8f78c4bf0e5c  -
+
+curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annotation/@@download/gencode.v24.primary_assembly.annotation.gtf.gz | \
+         gunzip -c | \
+         cut -f2- -d$'\t' | \
+         md5sum
+# 5227fac91c8d32b3fa3a8f78c4bf0e5c  -
+</code></pre>
+<h3><a class="header" href="#gencode-feature-comparisons" id="gencode-feature-comparisons">GENCODE feature comparisons</a></h3>
+<p>Below are a few commands used to quickly evaluate how much the GENCODE geneset has changed over time. This was useful in our discussion about how much value would be lost if we just used <code>GENCODE v21</code> (which was based on <code>GRCh38.p0</code>). See <a href="#GENCODE-compatability">the discussion on the GENCODE compatibility</a> for more information.</p>
+<ul>
+<li>
+<p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
+# Feature exon: 1162114 (45.6341%)
+# Feature CDS: 696929 (27.3671%)
+# Feature UTR: 275100 (10.8027%)
+# Feature gene: 60155 (2.36217%)
+# Feature start_codon: 81862 (3.21457%)
+# Feature Selenocysteine: 114 (0.00447657%)
+# Feature stop_codon: 73993 (2.90557%)
+# Feature transcript: 196327 (7.7094%)
+# Total: 2546594
+
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
+# Feature exon: 1363843 (47.3247%)
+# Feature CDS: 755320 (26.2092%)
+# Feature UTR: 308315 (10.6984%)
+# Feature gene: 60603 (2.10289%)
+# Feature start_codon: 87299 (3.02923%)
+# Feature Selenocysteine: 119 (0.00412924%)
+# Feature stop_codon: 79505 (2.75878%)
+# Feature transcript: 226882 (7.87269%)
+# Total: 2881886
+</code></pre>
+</li>
+<li>
+<p>Commands that were used in the comparison of <code>gene_types</code> for <code>gene</code> features between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
+<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+# Gene type rRNA: 549 (2.54508%)
+# Gene type antisense: 5542 (25.6919%)
+# Gene type pseudogene: 29 (0.13444%)
+# Gene type lincRNA: 7666 (35.5385%)
+# Gene type TEC: 1058 (4.90473%)
+# Gene type miRNA: 3837 (17.7878%)
+# Gene type snoRNA: 978 (4.53386%)
+# Gene type snRNA: 1912 (8.86375%)
+# Total: 21571
+
+gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+# Gene type ribozyme: 8 (0.0351463%)
+# Gene type scaRNA: 49 (0.215271%)
+# Gene type lncRNA: 16840 (73.983%)
+# Gene type rRNA: 52 (0.228451%)
+# Gene type vaultRNA: 1 (0.00439329%)
+# Gene type scRNA: 1 (0.00439329%)
+# Gene type sRNA: 5 (0.0219664%)
+# Gene type pseudogene: 18 (0.0790792%)
+# Gene type TEC: 1064 (4.67446%)
+# Gene type miRNA: 1881 (8.26377%)
+# Gene type snoRNA: 942 (4.13848%)
+# Gene type snRNA: 1901 (8.35164%)
+# Total: 22762
+</code></pre>
+</li>
+<li>
+<p>The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.</p>
+<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print &quot;Level &quot; key &quot;: &quot; levels[key] &quot; (&quot; (levels[key]/total)*100 &quot;%)&quot; }; print &quot;Total  : &quot; total}' gencode.v31.annotation.gtf
+# Level 1: 186461 (6.4701%)
+# Level 2: 2450972 (85.0475%)
+# Level 3: 244453 (8.4824%)
+# Total  : 2881886
+</code></pre>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="0000-quality-assurance-pipeline.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="0000-quality-assurance-pipeline.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
