@@ -1,5 +1,5 @@
 [book]
-authors = ["St. Jude Cloud team"]
+authors = ["St. Jude Cloud Team"]
 multilingual = false
 src = "src"
 title = "St. Jude Cloud RFCs"
