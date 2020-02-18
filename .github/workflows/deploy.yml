@@ -1,0 +1,24 @@
+name: Continuous Deployment
+
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+      - run: bash bin/ci-build.sh
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./book
+          keep_files: true
+          user_name: 'St. Jude Cloud'
+          user_email: support@stjude.cloud
+          commit_message: 'Deployed from ${{ github.event.head_commit.message }}'

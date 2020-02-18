@@ -65,7 +65,7 @@ cargo install mdbook
 ## Usage
 
 ```sh
-bash bin/build.sh
+mdbook build
 python3 -m http.server -d book
 # visit the rendered version in your browser at http://localhost:8000.
 ```
