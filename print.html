@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0000-quality-assurance-pipeline.html"><strong aria-hidden="true">1.</strong> 0000-quality-assurance-pipeline</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">2.</strong> 0001-rnaseq-workflow-v2.0</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -241,206 +241,43 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <p>With any quetions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
 <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
-<li><a href="0000-quality-assurance-pipeline.html#introduction">Introduction</a></li>
-<li><a href="0000-quality-assurance-pipeline.html#motivation">Motivation</a></li>
-<li><a href="0000-quality-assurance-pipeline.html#discussion">Discussion</a></li>
-<li><a href="0000-quality-assurance-pipeline.html#specification">Specification</a></li>
-<li><a href="0000-quality-assurance-pipeline.html#items-still-in-progress">Items Still In-Progress</a></li>
-<li><a href="0000-quality-assurance-pipeline.html#outstanding-questions">Outstanding Questions</a></li>
-</ul>
-<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p>This RFC documents an automated workflow for assessing the integrity and quality
-of St. Jude Cloud genomics data. The end goal is to publish a collection of
-metrics that users can leverage to assess the quality of the data available.
-Furthermore, we outline the method used internally to vet the data before we
-publish it. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/3">associated pull request</a>.</p>
-<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
-<p>Since the introduction of uploading clinical genomics data in real-time (the
-&quot;Real-Time Clinical Genomics&quot; initiative), we need an automated quality
-assurance pipeline that guarantees uploaded data meets predefined standards.
-Guaranteeing data integrity and the reproducibility of these results allows St.
-Jude to assure scientists and researchers that the data we provide is useful. As
-much as possible, we'd like to automate this process to ensure it scales. The end-goal is to present a comprehensive report, much like the example <a href="https://multiqc.info/examples/rna-seq/multiqc_report.html">
-MultiQC report</a>, for
-each dataset + sequencing type tuple.</p>
-<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
-<p>The quality metrics discussed here are sequence and mapping quality metrics.
-Other metrics related to nucleic acid integrity or library quality are typically
-done upstream in the genomics lab contributing the data. Pre-sequencing quality metrics, however, are clearly important and part of our long term interests.</p>
-<h2><a class="header" href="#tool-additions-and-upgrades" id="tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
-<ul>
-<li><code>ngsderive v1.0.1</code> will be added for RNA-seq strandedness derivation, read
-length derivation, and instrument derivation.</li>
-<li><code>fastqc v0.11.8</code> will be upgraded to <code>fastqc v0.11.9</code>. Upgraded to receive the
-benefits of bug fixes and software optimizations.</li>
-<li><code>picard v2.20.2</code> will be upgraded to <code>picard v2.21.8</code>. Upgraded to receive the
-benefits of bug fixes and software optimizations.</li>
-<li><code>qualimap v2.2.2c</code> will be upgraded to <code>qualimap v2.2.2d</code>. Upgraded to receive
-the benefits of bug fixes and software optimizations.</li>
-<li><code>samtools v1.9</code> will be upgraded to <code>samtools v1.10.2</code>. Upgraded to receive
-the benefits of bug fixes and software optimizations.</li>
-</ul>
-<h2><a class="header" href="#automated-metrics-comparison" id="automated-metrics-comparison">Automated metrics comparison</a></h2>
-<table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
-<tr><td>% Aligned</td><td><a href="http://www.htslib.org/doc/samtools.html">Samtools</a></td><td>Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consisitent with sample purity.</td></tr>
-<tr><td>Per Base Sequence Quality</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Per Base Sequence Quality&quot; module from FastQC shows the distribution of quality scores across all bases at each position in the reads.  In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream.  So, there is no changing it at this point.</td></tr>
-<tr><td>Overrepresented Sequences</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Overrepresented Sequences&quot; module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).</td></tr>
-<tr><td>Reads Genomic Origin</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>The &quot;Reads Genomic Origin&quot; from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions.  Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped.  It should be verified that the mapping to intronic regions and exons are within acceptable ranges.  Abnormal results could indicate issues such as DNA contamination.</td></tr>
-<tr><td>rRNA Content</td><td>?</td><td>Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.</td></tr>
-<tr><td>Transcript Coverage and 5’-3’ Bias</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Libraries prepared with polyA selection may have higher biased expression in 3’ region.  If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.</td></tr>
-<tr><td>Junction Analysis</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Analysis of known, partly known, and novel junction positions in spliced alignments.</td></tr>
-<tr><td>Strand Specificity</td><td>ngsderive</td><td>Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).</td></tr>
-<tr><td>GC Content Bias</td><td>?</td><td>GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
-</tbody></table>
-<h2><a class="header" href="#thresholds-and-metrics-for-specific-applications" id="thresholds-and-metrics-for-specific-applications">Thresholds and Metrics for Specific Applications</a></h2>
-<p>To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.## Metrics for WGS</p>
-<p>The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.</p>
-<h3><a class="header" href="#metrics-for-wes" id="metrics-for-wes">Metrics for WES</a></h3>
-<p>The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.</p>
-<h3><a class="header" href="#metrics-for-rnaseq" id="metrics-for-rnaseq">Metrics for RNAseq</a></h3>
-<p>The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage.  Mapping quality is also critical.</p>
-<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
-<p>These are generic instructions for running each of the tools in our pipeline.
-We run our pipeline in a series of QC scripts that are tailored for our compute
-cluster, so those commands may not apply elsewhere.  Instead we've supplied
-examples of the commands used to each package.  Our default memory is 80G and we
-employ 4 threads for these processes.</p>
-<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
-<p>We presume anaconda is available and installed. If not please follow the link to <a href="https://www.anaconda.com/">anaconda</a> first.</p>
-<pre><code class="language-bash">conda create --name bio-qc \
-    --channel bioconda \
-    --channel conda-forge \
-    fastqc==0.11.9 \
-    picard==2.21.8  \
-    qualimap==2.2.2d \
-    samtools==1.10.2  \
-    -y
-
-conda activate bio-qc
-</code></pre>
-<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
-<p>The workflow specification is as follows. Note that some arguments that are not
-integral to the command (such as output directories) or arguments that can vary
-between compute environements (such as memory thresholds or number of threads)
-are not included.</p>
-<ol>
-<li>
-<p>Run <code>samtools quickcheck</code> to ensure that input BAMs are relatively
-well-formed (for instance, to ensure a header and EOF marker exist).</p>
-<pre><code class="language-bash">samtools quickcheck $BAM
-</code></pre>
-</li>
-<li>
-<p>Use Picard's <code>ValidateSamFile</code> tool to ensure the inner contents of the BAM
-file are well-formed.</p>
-<pre><code class="language-bash">picard ValidateSamFile \
-    I=$BAM \                                        # specify bam file
-    MODE=SUMMARY\                                   # concise output
-    INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-    IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
-</code></pre>
-</li>
-<li>
-<p>Run <code>samtools flagstat</code> to gather general statistics such as alignment
-percentage.</p>
-<pre><code class="language-bash">samtools flagstat $BAM 
-</code></pre>
-</li>
-<li>
-<p>Run <code>fastqc</code> to collect sequencing and library-related statistics. These are
-only for informational purposes — as stated above, we typically do not remove
-samples based on this information (with rare exception), as the
-sequencing-related QC work was done upstream in the genomics lab.</p>
-<pre><code class="language-bash">fastqc $BAM
-</code></pre>
-</li>
-<li>
-<p>Run <code>qualimap bamqc</code> to gather more in-depth statistics about read stats,
-coverage, mapping quality, mismatches, etc.</p>
-<pre><code class="language-bash">qualimap bamqc -bam $BAM \          # bam filename
-    -nt $NUM_THREADS \              # threads requested
-    -nw 400                         # number of windows
-</code></pre>
-</li>
-<li>
-<p>If RNA-seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are
-tailored for RNA-seq files.</p>
-<pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
-    -bam $BAM \                             # bam filename
-    -gtf $GTF_REF                           # transcript definition file
-    -pe                                     # specify paired end if paired end
-</code></pre>
-</li>
-<li>
-<p>If RNA-seq, run <code>ngsderive strandedness</code> to determine a backwards-computed
-strandedness of the RNA-seq experiment.</p>
-<pre><code class="language-bash">ngsderive strandedness
-</code></pre>
-</li>
-<li>
-<p>Compute the md5 checksum of the file.</p>
-<pre><code class="language-bash">md5sum $BAM
-</code></pre>
-</li>
-<li>
-<p>Combine all of the above metrics using <code>multiqc</code>.</p>
-<pre><code class="language-bash">multiqc . # recurse all files in '.'
-</code></pre>
-</li>
-</ol>
-<h1><a class="header" href="#items-still-in-progress" id="items-still-in-progress">Items Still In-Progress</a></h1>
-<ul>
-<li><input disabled="" type="checkbox"/>
-Analysis tools for other types of sequencing (ChIP seq)</li>
-<li><input disabled="" type="checkbox"/>
-Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)</li>
-</ul>
-<h1><a class="header" href="#outstanding-questions" id="outstanding-questions">Outstanding Questions</a></h1>
-<ul>
-<li>What thresholds or metrics differentiate a poor-quality sample from a high-quality one?</li>
-<li>What other metrics or properties would be valuable?</li>
-<li>What is best way to define and handle outliers?</li>
-<li>What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone.  Outliers in this case may indicate classification errors or rare biological conditions.  Which metrics are best tested here?</li>
-</ul>
-<h1><a class="header" href="#table-of-contents----omit-in-toc----1" id="table-of-contents----omit-in-toc----1">Table of Contents <!-- omit in toc --></a></h1>
-<ul>
 <li><a href="0001-rnaseq-workflow-v2.0.html#introduction">Introduction</a></li>
 <li><a href="0001-rnaseq-workflow-v2.0.html#motivation">Motivation</a></li>
 <li><a href="0001-rnaseq-workflow-v2.0.html#discussion">Discussion</a></li>
 <li><a href="0001-rnaseq-workflow-v2.0.html#specification">Specification</a></li>
 <li><a href="0001-rnaseq-workflow-v2.0.html#appendix">Appendix</a></li>
 </ul>
-<h1><a class="header" href="#introduction-1" id="introduction-1">Introduction</a></h1>
-<p>This RFC lays out the specification for the RNA-seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/1">associated pull request</a>.</p>
-<h1><a class="header" href="#motivation-1" id="motivation-1">Motivation</a></h1>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/1">associated pull request</a>.</p>
+<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
 <ul>
 <li><strong>Tool additions and updates.</strong> The tools we use are woefully out of date (2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the <a href="0001-rnaseq-workflow-v2.0.html#Tool-additions-updates">section below</a> for more details.
 <ul>
-<li>Note that all of the tools used in the RNA-seq Workflow v1.0 were the latest available version.</li>
+<li>Note that all of the tools used in the RNA-Seq Workflow v1.0 were the latest available version.</li>
 </ul>
 </li>
-<li><strong>Updated reference files.</strong> No changes have really been made to the <code>GRCh38_no_alt</code> analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-seq workflow (<a href="https://www.gencodegenes.org/human/release_31.html">GENCODE v31</a> is now out).</li>
+<li><strong>Updated reference files.</strong> No changes have really been made to the <code>GRCh38_no_alt</code> analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow (<a href="https://www.gencodegenes.org/human/release_31.html">GENCODE v31</a> is now out).</li>
 <li><strong>QC and quality of life improvements based on feedback from the community.</strong> Many interactions with the community have impacted the thoughts in this release:
 <ul>
 <li>A primary driver for the rewrite of the pipeline is the feedback we heard about the <code>ERCC SpikeIn</code> sequences.
 <ul>
 <li>Popular tools such as <code>GATK</code> and <code>picard</code> are generally unhappy if the sequence dictionaries don't match perfectly.</li>
-<li>The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-seq mapping was hence causing issues when using mapped RNA-seq BAM files in conjunction with other non-RNA-seq BAM files in downstream analysis using these tools.</li>
-<li>Last, many of our RNA-seq samples were not generated using 'ERCC' spike-in control sequences.</li>
+<li>The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-Seq mapping was hence causing issues when using mapped RNA-Seq BAM files in conjunction with other non-RNA-Seq BAM files in downstream analysis using these tools.</li>
+<li>Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences.</li>
 <li>After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.</li>
 </ul>
 </li>
-<li>One of the most important themes in the RNA-seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. <code>fq lint</code>, generation and publication of md5sums).</li>
+<li>One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. <code>fq lint</code>, generation and publication of md5sums).</li>
 </ul>
 </li>
 </ul>
-<h1><a class="header" href="#discussion-1" id="discussion-1">Discussion</a></h1>
-<h2><a class="header" href="#tool-additions-and-upgrades-1" id="tool-additions-and-upgrades-1">Tool additions and upgrades</a></h2>
-<p>As part of the RNA-seq workflow v2, multiple tools will be added and upgraded:</p>
+<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
+<h2><a class="header" href="#tool-additions-and-upgrades" id="tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
+<p>As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:</p>
 <ul>
 <li><code>fq v0.2.0</code> (<a href="https://github.com/stjude/fqlib/releases/tag/v0.2.0">Released</a> November 28, 2018) will be added. This tool will be used to validate the output of <code>picard SamToFastq</code>. <code>picard SamToFastq</code> does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.</li>
 <li><code>rseqc v3.0.0</code> (<a href="http://rseqc.sourceforge.net/#download-rseqc">Source</a>) will be added. We have started using <code>infer_experiment.py</code> to infer strandedness from the data and ensure that the data matches what information we get from the lab.</li>
-<li>Added <code>qualimap v.2.2.2</code> (<a href="https://bitbucket.org/kokonech/qualimap/">Source</a>). Although we have been using <code>qualimap</code> quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-seq alignment workflow. The <code>bamqc</code> and <code>rnaseq</code> subcommands are both used.</li>
+<li>Added <code>qualimap v.2.2.2</code> (<a href="https://bitbucket.org/kokonech/qualimap/">Source</a>). Although we have been using <code>qualimap</code> quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-Seq alignment workflow. The <code>bamqc</code> and <code>rnaseq</code> subcommands are both used.</li>
 <li>Update <code>STAR 2.5.3a</code> (<a href="https://github.com/alexdobin/STAR/releases/tag/2.5.3a">Released</a> March 17, 2017) to <code>STAR 2.7.1a</code> (<a href="https://github.com/alexdobin/STAR/releases/tag/2.7.1a">Released</a> May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.</li>
 <li>Update <code>samtools 1.4.0</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.4">Released</a> March 13, 2017) to <code>samtools 1.9</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.9">Released</a> July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).</li>
 <li>Update <code>picard 2.9.4</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.9.4">Released</a> June 15, 2017) to <code>picard 2.20.2</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.20.2">Released</a> May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.</li>
@@ -454,9 +291,9 @@ Useful metadata from various stages (sample collection, laboratory, pre-sequenci
 <p>As is apparent in the question, the <code>GRCh38</code> reference genome is regularly patched with non-coordinate altering, backwards compatable changes (see more information <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/">here</a>). On the other hand, each <code>GENCODE</code> gene model release is based on a particular patch of the reference genome. This may be problematic because most bioinformatics analyses use a reference genome based on the non-patched version of <code>GRCh38</code>. What follows is our discussion and investigation into the effect between mismatching nucleotide sequences in the reference genome and the gene model.</p>
 <p>First, we researched what some of the projects we respect in the community are doing:</p>
 <table><thead><tr><th>Pipeline</th><th>Reference Genome</th><th>Reference Genome Patch</th><th>Gene Model</th><th>Gene Model Patch</th></tr></thead><tbody>
-<tr><td>GDC's <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">mRNA-seq pipeline</a></td><td><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files"><code>GRCh38_no_alt</code>-based w/ decoys + viral</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a></td><td><code>GRCh38.p2</code></td></tr>
-<tr><td>ENCODE's <a href="https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq">RNA-seq pipeline</a></td><td><a href="https://www.encodeproject.org/files/ENCFF742NER/"><code>GRCh38_no_alt</code>-based w/ SpikeIns</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a></td><td><code>GRCh38.p5</code></td></tr>
-<tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
+<tr><td>GDC's <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">mRNA-Seq pipeline</a></td><td><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files"><code>GRCh38_no_alt</code>-based w/ decoys + viral</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a></td><td><code>GRCh38.p2</code></td></tr>
+<tr><td>ENCODE's <a href="https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq">RNA-Seq pipeline</a></td><td><a href="https://www.encodeproject.org/files/ENCFF742NER/"><code>GRCh38_no_alt</code>-based w/ SpikeIns</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a></td><td><code>GRCh38.p5</code></td></tr>
+<tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-Seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
 </tbody></table>
 <p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="0001-rnaseq-workflow-v2.0.html#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <p>Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply <a href="https://github.com/alexdobin/STAR/issues/673">here</a>. In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.</p>
@@ -487,7 +324,7 @@ Useful metadata from various stages (sample collection, laboratory, pre-sequenci
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
-<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 <ul>
 <li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
 <li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
@@ -520,8 +357,8 @@ Useful metadata from various stages (sample collection, laboratory, pre-sequenci
 <li>Removed a section of the pipeline that reformatted the header of the BAM to be cleaner. <code>STAR</code> outputs a header that is formatted fine already, and I found this code to just be an area where an error could be introduced for little benefit.</li>
 <li>I removed a section of custom code that checks for duplicate read groups. <code>picard ValidateSamFile</code> does this for you (see <a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=7571">the documentation</a> for this tool. Specifically, the <code>DUPLICATE_READ_GROUP_ID</code> error).</li>
 </ul>
-<h1><a class="header" href="#specification-1" id="specification-1">Specification</a></h1>
-<h2><a class="header" href="#dependencies-1" id="dependencies-1">Dependencies</a></h2>
+<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
+<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
 <p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
 <pre><code class="language-bash">conda create -n star-mapping \
     -c conda-forge \
@@ -541,7 +378,7 @@ Useful metadata from various stages (sample collection, laboratory, pre-sequenci
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 </code></pre>
 <h2><a class="header" href="#reference-files" id="reference-files">Reference files</a></h2>
-<p>The following reference files are used as the basis of the RNA-seq Workflow v2.0:</p>
+<p>The following reference files are used as the basis of the RNA-Seq Workflow v2.0:</p>
 <ul>
 <li>
 <p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
@@ -573,12 +410,12 @@ md5sum -c gencode.v31.annotation.gtf.md5
      --runThreadN $NCPU \                          # Number of threads to use to build genome database.
      --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
      --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
-     --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-seq read-1).
+     --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
 </code></pre>
 </li>
 </ul>
-<h2><a class="header" href="#workflow-1" id="workflow-1">Workflow</a></h2>
-<p>Here are the resulting steps in the RNA-seq Workflow v2.0 pipeline.</p>
+<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<p>Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.</p>
 <ol>
 <li>
 <p>Run <code>samtools quickcheck</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.</p>
@@ -672,7 +509,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
                 -outdir $OUTPUT_DIR \              # Output directory.
                 -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
                 -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;strand-specific-reverse&quot; for St. Jude Cloud data.
-                -pe                                # All RNA-seq data in St. Jude Cloud is currently paired-end.
+                -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
 </code></pre>
 </li>
 <li>
@@ -688,7 +525,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 </code></pre>
 </li>
 <li>
-<p>Generate the remaining files generally desired as output for the RNA-seq Workflow.</p>
+<p>Generate the remaining files generally desired as output for the RNA-Seq Workflow.</p>
 <pre><code class="language-bash">samtools flagstat $INPUT_BAM
 samtools index $INPUT_BAM
 md5sum $INPUT_BAM
