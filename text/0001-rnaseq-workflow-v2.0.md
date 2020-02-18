@@ -8,30 +8,30 @@
 
 # Introduction
 
-This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/1).
+This RFC lays out the specification for the RNA-seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/1).
 
 # Motivation
 
 - **Tool additions and updates.** The tools we use are woefully out of date (2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the [section below](#Tool-additions-updates) for more details.
-  - Note that all of the tools used in the RNA-Seq Workflow v1.0 were the latest available version.
-- **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow ([GENCODE v31](https://www.gencodegenes.org/human/release_31.html) is now out).
+  - Note that all of the tools used in the RNA-seq Workflow v1.0 were the latest available version.
+- **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-seq workflow ([GENCODE v31](https://www.gencodegenes.org/human/release_31.html) is now out).
 - **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release:
   - A primary driver for the rewrite of the pipeline is the feedback we heard about the `ERCC SpikeIn` sequences.
     - Popular tools such as `GATK` and `picard` are generally unhappy if the sequence dictionaries don't match perfectly.
-    - The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-Seq mapping was hence causing issues when using mapped RNA-Seq BAM files in conjunction with other non-RNA-Seq BAM files in downstream analysis using these tools.
-    - Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences.
+    - The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-seq mapping was hence causing issues when using mapped RNA-seq BAM files in conjunction with other non-RNA-seq BAM files in downstream analysis using these tools.
+    - Last, many of our RNA-seq samples were not generated using 'ERCC' spike-in control sequences.
     - After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.
-  - One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
+  - One of the most important themes in the RNA-seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
 
 # Discussion
 
 ## Tool additions and upgrades
 
-As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
+As part of the RNA-seq workflow v2, multiple tools will be added and upgraded:
 
 - `fq v0.2.0` ([Released](https://github.com/stjude/fqlib/releases/tag/v0.2.0) November 28, 2018) will be added. This tool will be used to validate the output of `picard SamToFastq`. `picard SamToFastq` does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.
 - `rseqc v3.0.0` ([Source](http://rseqc.sourceforge.net/#download-rseqc)) will be added. We have started using `infer_experiment.py` to infer strandedness from the data and ensure that the data matches what information we get from the lab.
-- Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)). Although we have been using `qualimap` quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-Seq alignment workflow. The `bamqc` and `rnaseq` subcommands are both used.
+- Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)). Although we have been using `qualimap` quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-seq alignment workflow. The `bamqc` and `rnaseq` subcommands are both used.
 - Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
 - Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).
 - Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
@@ -49,9 +49,9 @@ First, we researched what some of the projects we respect in the community are d
 
 | Pipeline                                                                 | Reference Genome                                                     | Reference Genome Patch | Gene Model                 | Gene Model Patch |
 | ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------- | -------------------------- | ---------------- |
-| GDC's [mRNA-Seq pipeline][gdc-mrnaseq-pipeline]                          | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome]      | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
-| ENCODE's [RNA-Seq pipeline][encode-rnaseq-pipeline]                      | [`GRCh38_no_alt`-based w/ SpikeIns][encode-reference-genome]         | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
-| Broad Institute's [GTEx + TOPMed RNA-Seq pipeline][gtex-rnaseq-pipeline] | [Broad's `GRCh38` w/ ERCC SpikeIn][broad-institute-reference-genome] | `GRCh38.p0`            | [GENCODE v26][gencode-v26] | `GRCh38.p10`     |
+| GDC's [mRNA-seq pipeline][gdc-mrnaseq-pipeline]                          | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome]      | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
+| ENCODE's [RNA-seq pipeline][encode-rnaseq-pipeline]                      | [`GRCh38_no_alt`-based w/ SpikeIns][encode-reference-genome]         | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
+| Broad Institute's [GTEx + TOPMed RNA-seq pipeline][gtex-rnaseq-pipeline] | [Broad's `GRCh38` w/ ERCC SpikeIn][broad-institute-reference-genome] | `GRCh38.p0`            | [GENCODE v26][gencode-v26] | `GRCh38.p10`     |
 
 [gdc-mrnaseq-pipeline]: https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
 [gdc-reference-genome]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files
@@ -86,7 +86,7 @@ Given that there was no perfect option, we decided to stick with option #3.
 
 Originally, I had posed this question to the group:
 
-> - Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+> - Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 >   - The first sentence in section 2.2.2 of the [STAR 2.7.1.a manual](https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf): "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.
 >   - Here is what [the GENCODE FAQ](https://www.gencodegenes.org/pages/faq.html) has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the `Ensembl-genebuild` and manual curation of the `Ensembl-Havana` team, this level should be harmless in the event that levels 1 & 2 don't apply.
 >   - Last, the various other pipelines in the community don't tend to remove these features:
@@ -142,7 +142,7 @@ cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 
 ## Reference files
 
-The following reference files are used as the basis of the RNA-Seq Workflow v2.0:
+The following reference files are used as the basis of the RNA-seq Workflow v2.0:
 
 - Similarly to all analysis pipelines in St. Jude Cloud, we use the `GRCh38_no_alt` analysis set for our reference genome. You can get a copy of the file [here](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz). Additionally, you can get the file by running the following commands:
 
@@ -177,12 +177,12 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
        --runThreadN $NCPU \                          # Number of threads to use to build genome database.
        --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
        --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
-       --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
+       --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-seq read-1).
   ```
 
 ## Workflow
 
-Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
+Here are the resulting steps in the RNA-seq Workflow v2.0 pipeline.
 
 1. Run `samtools quickcheck` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
 2. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
@@ -283,7 +283,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                     -outdir $OUTPUT_DIR \              # Output directory.
                     -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
                     -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
-                    -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
+                    -pe                                # All RNA-seq data in St. Jude Cloud is currently paired-end.
     ```
 
 11. Next, `htseq-count` is run for the final counts file to be delivered:
@@ -297,7 +297,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
                --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
                $INPUT_BAM                           # Input BAM file.
     ```
-12. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
+12. Generate the remaining files generally desired as output for the RNA-seq Workflow.
     ```bash
     samtools flagstat $INPUT_BAM
     samtools index $INPUT_BAM
