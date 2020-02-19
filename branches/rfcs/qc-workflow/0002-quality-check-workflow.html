@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0002-quality-check-workflow - St. Jude Cloud RFCs</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li><li class="expanded "><a href="0002-quality-check-workflow.html" class="active"><strong aria-hidden="true">2.</strong> 0002-quality-check-workflow</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+<li><a href="#items-still-in-progress">Items Still In-Progress</a></li>
+<li><a href="#outstanding-questions">Outstanding Questions</a></li>
+</ul>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>This RFC documents an automated workflow for assessing the integrity and quality
+of St. Jude Cloud genomics data. The end goal is to publish a collection of
+metrics that users can leverage to assess the quality of the data available.
+Furthermore, we outline the method used internally to vet the data before we
+publish it. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/3">associated pull request</a>.</p>
+<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<p>Since the introduction of uploading clinical genomics data in real-time (the
+&quot;Real-Time Clinical Genomics&quot; initiative), we need an automated quality
+assurance pipeline that guarantees uploaded data meets predefined standards.
+Guaranteeing data integrity and the reproducibility of these results allows St.
+Jude to assure scientists and researchers that the data we provide is useful. As
+much as possible, we'd like to automate this process to ensure it scales. The end-goal is to present a comprehensive report, much like the example <a href="https://multiqc.info/examples/rna-seq/multiqc_report.html">
+MultiQC report</a>, for
+each dataset + sequencing type tuple.</p>
+<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
+<p>The quality metrics discussed here are sequence and mapping quality metrics.
+Other metrics related to nucleic acid integrity or library quality are typically
+done upstream in the genomics lab contributing the data. Pre-sequencing quality metrics, however, are clearly important and part of our long term interests.</p>
+<h2><a class="header" href="#tool-additions-and-upgrades" id="tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
+<ul>
+<li><code>ngsderive v1.0.1</code> will be added for RNA-seq strandedness derivation, read
+length derivation, and instrument derivation.</li>
+<li><code>fastqc v0.11.8</code> will be upgraded to <code>fastqc v0.11.9</code>. Upgraded to receive the
+benefits of bug fixes and software optimizations.</li>
+<li><code>picard v2.20.2</code> will be upgraded to <code>picard v2.21.8</code>. Upgraded to receive the
+benefits of bug fixes and software optimizations.</li>
+<li><code>qualimap v2.2.2c</code> will be upgraded to <code>qualimap v2.2.2d</code>. Upgraded to receive
+the benefits of bug fixes and software optimizations.</li>
+<li><code>samtools v1.9</code> will be upgraded to <code>samtools v1.10.2</code>. Upgraded to receive
+the benefits of bug fixes and software optimizations.</li>
+</ul>
+<h2><a class="header" href="#automated-metrics-comparison" id="automated-metrics-comparison">Automated metrics comparison</a></h2>
+<table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
+<tr><td>% Aligned</td><td><a href="http://www.htslib.org/doc/samtools.html">Samtools</a></td><td>Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consisitent with sample purity.</td></tr>
+<tr><td>Per Base Sequence Quality</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Per Base Sequence Quality&quot; module from FastQC shows the distribution of quality scores across all bases at each position in the reads.  In our case, this is just to inform our end users — the quality of the sequencing run has already been assessed by the lab upstream.  So, there is no changing it at this point.</td></tr>
+<tr><td>Overrepresented Sequences</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Overrepresented Sequences&quot; module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).</td></tr>
+<tr><td>Reads Genomic Origin</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>The &quot;Reads Genomic Origin&quot; from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions.  Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped.  It should be verified that the mapping to intronic regions and exons are within acceptable ranges.  Abnormal results could indicate issues such as DNA contamination.</td></tr>
+<tr><td>rRNA Content</td><td>?</td><td>Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.</td></tr>
+<tr><td>Transcript Coverage and 5’-3’ Bias</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Libraries prepared with polyA selection may have higher biased expression in 3’ region.  If reads primarily accumulate at the 3’ end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.</td></tr>
+<tr><td>Junction Analysis</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Analysis of known, partly known, and novel junction positions in spliced alignments.</td></tr>
+<tr><td>Strand Specificity</td><td>ngsderive</td><td>Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).</td></tr>
+<tr><td>GC Content Bias</td><td>?</td><td>GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
+</tbody></table>
+<h2><a class="header" href="#thresholds-and-metrics-for-specific-applications" id="thresholds-and-metrics-for-specific-applications">Thresholds and Metrics for Specific Applications</a></h2>
+<p>To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.## Metrics for WGS</p>
+<p>The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.</p>
+<h3><a class="header" href="#metrics-for-wes" id="metrics-for-wes">Metrics for WES</a></h3>
+<p>The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.</p>
+<h3><a class="header" href="#metrics-for-rnaseq" id="metrics-for-rnaseq">Metrics for RNAseq</a></h3>
+<p>The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage.  Mapping quality is also critical.</p>
+<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
+<p>These are generic instructions for running each of the tools in our pipeline.
+We run our pipeline in a series of QC scripts that are tailored for our compute
+cluster, so those commands may not apply elsewhere.  Instead we've supplied
+examples of the commands used to each package.  Our default memory is 80G and we
+employ 4 threads for these processes.</p>
+<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
+<p>We presume anaconda is available and installed. If not please follow the link to <a href="https://www.anaconda.com/">anaconda</a> first.</p>
+<pre><code class="language-bash">conda create --name bio-qc \
+    --channel bioconda \
+    --channel conda-forge \
+    fastqc==0.11.9 \
+    picard==2.21.8  \
+    qualimap==2.2.2d \
+    samtools==1.10.2  \
+    -y
+
+conda activate bio-qc
+</code></pre>
+<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<p>The workflow specification is as follows. Note that some arguments that are not
+integral to the command (such as output directories) or arguments that can vary
+between compute environements (such as memory thresholds or number of threads)
+are not included.</p>
+<ol>
+<li>
+<p>Run <code>samtools quickcheck</code> to ensure that input BAMs are relatively
+well-formed (for instance, to ensure a header and EOF marker exist).</p>
+<pre><code class="language-bash">samtools quickcheck $BAM
+</code></pre>
+</li>
+<li>
+<p>Use Picard's <code>ValidateSamFile</code> tool to ensure the inner contents of the BAM
+file are well-formed.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+    I=$BAM \                                        # specify bam file
+    MODE=SUMMARY\                                   # concise output
+    INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
+    IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
+</code></pre>
+</li>
+<li>
+<p>Run <code>samtools flagstat</code> to gather general statistics such as alignment
+percentage.</p>
+<pre><code class="language-bash">samtools flagstat $BAM 
+</code></pre>
+</li>
+<li>
+<p>Run <code>fastqc</code> to collect sequencing and library-related statistics. These are
+only for informational purposes — as stated above, we typically do not remove
+samples based on this information (with rare exception), as the
+sequencing-related QC work was done upstream in the genomics lab.</p>
+<pre><code class="language-bash">fastqc $BAM
+</code></pre>
+</li>
+<li>
+<p>Run <code>qualimap bamqc</code> to gather more in-depth statistics about read stats,
+coverage, mapping quality, mismatches, etc.</p>
+<pre><code class="language-bash">qualimap bamqc -bam $BAM \          # bam filename
+    -nt $NUM_THREADS \              # threads requested
+    -nw 400                         # number of windows
+</code></pre>
+</li>
+<li>
+<p>If RNA-seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are
+tailored for RNA-seq files.</p>
+<pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
+    -bam $BAM \                             # bam filename
+    -gtf $GTF_REF                           # transcript definition file
+    -pe                                     # specify paired end if paired end
+</code></pre>
+</li>
+<li>
+<p>If RNA-seq, run <code>ngsderive strandedness</code> to determine a backwards-computed
+strandedness of the RNA-seq experiment.</p>
+<pre><code class="language-bash">ngsderive strandedness
+</code></pre>
+</li>
+<li>
+<p>Compute the md5 checksum of the file.</p>
+<pre><code class="language-bash">md5sum $BAM
+</code></pre>
+</li>
+<li>
+<p>Combine all of the above metrics using <code>multiqc</code>.</p>
+<pre><code class="language-bash">multiqc . # recurse all files in '.'
+</code></pre>
+</li>
+</ol>
+<h1><a class="header" href="#items-still-in-progress" id="items-still-in-progress">Items Still In-Progress</a></h1>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Analysis tools for other types of sequencing (ChIP seq)</li>
+<li><input disabled="" type="checkbox"/>
+Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)</li>
+</ul>
+<h1><a class="header" href="#outstanding-questions" id="outstanding-questions">Outstanding Questions</a></h1>
+<ul>
+<li>What thresholds or metrics differentiate a poor-quality sample from a high-quality one?</li>
+<li>What other metrics or properties would be valuable?</li>
+<li>What is best way to define and handle outliers?</li>
+<li>What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone.  Outliers in this case may indicate classification errors or rare biological conditions.  Which metrics are best tested here?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="0001-rnaseq-workflow-v2.0.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="0001-rnaseq-workflow-v2.0.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
