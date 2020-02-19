@@ -35,7 +35,7 @@ done upstream in the genomics lab contributing the data. Pre-sequencing quality 
 ## Tool additions and upgrades
 
 * `ngsderive v1.0.1` will be added for RNA-seq strandedness derivation, read
-  length derivation, and instrument derivation.
+* `fastq_screen v0.13.0` will be added to estimate the percentage of material derived from different sources (human, mouse PhiX, etc).
 
 ## Automated metrics comparison
 
@@ -53,7 +53,9 @@ done upstream in the genomics lab contributing the data. Pre-sequencing quality 
 
 ## Thresholds and Metrics for Specific Applications 
 
- To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.## Metrics for WGS
+ To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.
+ 
+ ## Metrics for WGS
     
 The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.
 
@@ -84,7 +86,8 @@ conda create --name bio-qc \
     fastqc==0.11.8 \
     picard==2.20.2  \
     qualimap==2.2.2c \
-    samtools==1.9  \
+    samtools==1.9 \
+    fastq_screen==0.13.0 \
     ngsderive==1.0.1 \
     -y
 
