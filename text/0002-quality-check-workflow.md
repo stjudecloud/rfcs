@@ -87,7 +87,7 @@ conda create --name bio-qc \
     picard==2.20.2  \
     qualimap==2.2.2c \
     samtools==1.9 \
-    fastq_screen==0.13.0 \
+    fastq-screen==0.13.0 \
     ngsderive==1.0.1 \
     -y
 
