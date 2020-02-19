@@ -697,8 +697,8 @@ Other metrics related to nucleic acid integrity or library quality are typically
 done upstream in the genomics lab contributing the data. Pre-sequencing quality metrics, however, are clearly important and part of our long term interests.</p>
 <h2><a class="header" href="#tool-additions-and-upgrades-1" id="tool-additions-and-upgrades-1">Tool additions and upgrades</a></h2>
 <ul>
-<li><code>ngsderive v1.0.1</code> will be added for RNA-seq strandedness derivation, read
-length derivation, and instrument derivation.</li>
+<li><code>ngsderive v1.0.1</code> will be added for RNA-seq strandedness derivation, read</li>
+<li><code>fastq_screen v0.13.0</code> will be added to estimate the percentage of material derived from different sources (human, mouse PhiX, etc).</li>
 </ul>
 <h2><a class="header" href="#automated-metrics-comparison" id="automated-metrics-comparison">Automated metrics comparison</a></h2>
 <table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
@@ -713,7 +713,8 @@ length derivation, and instrument derivation.</li>
 <tr><td>GC Content Bias</td><td>?</td><td>GC profiles are typically remarkably stable.  Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
 </tbody></table>
 <h2><a class="header" href="#thresholds-and-metrics-for-specific-applications" id="thresholds-and-metrics-for-specific-applications">Thresholds and Metrics for Specific Applications</a></h2>
-<p>To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thrresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.## Metrics for WGS</p>
+<p>To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict.  Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates.  By statistical thresholds, we are referring to distributional tests that formally define outliers.  By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded.   Statistical tests can be performed on large populations of QC data. We are already in postion to do that today.  Empirical tests, however, require foreknowledge of the correct results.  This requires experimental design and implementation through a laboratory at some cost.</p>
+<h2><a class="header" href="#metrics-for-wgs" id="metrics-for-wgs">Metrics for WGS</a></h2>
 <p>The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical.  The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives.  So metrics that are sensitive to impurity are valuable.</p>
 <h3><a class="header" href="#metrics-for-wes" id="metrics-for-wes">Metrics for WES</a></h3>
 <p>The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.</p>
@@ -733,7 +734,8 @@ employ 4 threads for these processes.</p>
     fastqc==0.11.8 \
     picard==2.20.2  \
     qualimap==2.2.2c \
-    samtools==1.9  \
+    samtools==1.9 \
+    fastq_screen==0.13.0 \
     ngsderive==1.0.1 \
     -y
 
