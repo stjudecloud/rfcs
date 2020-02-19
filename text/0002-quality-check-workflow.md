@@ -36,14 +36,6 @@ done upstream in the genomics lab contributing the data. Pre-sequencing quality 
 
 * `ngsderive v1.0.1` will be added for RNA-seq strandedness derivation, read
   length derivation, and instrument derivation.
-* `fastqc v0.11.8` will be upgraded to `fastqc v0.11.9`. Upgraded to receive the
-  benefits of bug fixes and software optimizations.
-* `picard v2.20.2` will be upgraded to `picard v2.21.8`. Upgraded to receive the
-  benefits of bug fixes and software optimizations.
-* `qualimap v2.2.2c` will be upgraded to `qualimap v2.2.2d`. Upgraded to receive
-  the benefits of bug fixes and software optimizations.
-* `samtools v1.9` will be upgraded to `samtools v1.10.2`. Upgraded to receive
-  the benefits of bug fixes and software optimizations.
 
 ## Automated metrics comparison
 
@@ -89,10 +81,11 @@ We presume anaconda is available and installed. If not please follow the link to
 conda create --name bio-qc \
     --channel bioconda \
     --channel conda-forge \
-    fastqc==0.11.9 \
-    picard==2.21.8  \
-    qualimap==2.2.2d \
-    samtools==1.10.2  \
+    fastqc==0.11.8 \
+    picard==2.20.2  \
+    qualimap==2.2.2c \
+    samtools==1.9  \
+    ngsderive==1.0.1 \
     -y
 
 conda activate bio-qc
