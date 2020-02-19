@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - St. Jude Cloud RFCs</title>
+        <title>RFC Drafts - St. Jude Cloud RFCs</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li><li class="expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li><li class="expanded affix "><a href="drafts.html" class="active">RFC Drafts</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,104 +148,22 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p align="center">
-  <a href="https://github.com/stjudecloud/rfcs"><img src="https://github.com/stjudecloud/rfcs/raw/master/docs/rfcs-banner-blueprint.jpg" width="800" title="St. Jude Cloud RFCs"></a>
-  <a href="https://actions-badge.atrox.dev/stjudecloud/rfcs/goto"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fstjudecloud%2Frfcs%2Fbadge&style=flat" /></a>
-  <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
-    <img alt="Gitter: RFCs" src="https://badges.gitter.im/stjudecloud/rfcs.svg" />
-  </a>
-</p>
-<blockquote>
-<p>This repository contains all Request for Comments (or <a href="https://en.wikipedia.org/wiki/Request_for_Comments">rfcs</a>) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.</p>
-</blockquote>
-<h3><a class="header" href="#-a-hrefhttpsstjudecloudgithubiorfcshomepagea" id="-a-hrefhttpsstjudecloudgithubiorfcshomepagea">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
-<h2><a class="header" href="#process-and-evaluation" id="process-and-evaluation">Process and Evaluation</a></h2>
-<p>Initiation of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please <a href="mailto:support@stjude.cloud">contact us</a> before investing a large amount of time in your proposal.</p>
-<h3><a class="header" href="#overview" id="overview">Overview</a></h3>
-<p>All RFCs go through a three-stage process from draft to adoption:</p>
-<ol>
-<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
+                        <h1><a class="header" href="#drafts" id="drafts">Drafts</a></h1>
 <ul>
-<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community. </li>
-<li>The amount of time the RFC spends in this state is variable depending on the scope of the proposal.</li>
+<li><a href="./branches/master">[DRAFT] master</a></li>
+<li><a href="./branches/rfcs/qc-workflow">[DRAFT] qc-workflow</a></li>
 </ul>
-</li>
-<li>The RFC opens for discussion from users and stakeholders within the St. Jude community. 
-<ul>
-<li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
-<li>The RFC will remain in this phase for <strong>1 week</strong>.</li>
-</ul>
-</li>
-<li>The RFC opens for discussion from the broader community.
-<ul>
-<li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
-<li>The RFC will remain in this phase for <strong>2 weeks</strong>.</li>
-</ul>
-</li>
-</ol>
-<p>Each phase of the process brings about further refinement of details and hardening of the proposal.</p>
-<h3><a class="header" href="#evaluation-and-acceptance" id="evaluation-and-acceptance">Evaluation and acceptance</a></h3>
-<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. </p>
-<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. </p>
-<h3><a class="header" href="#creating-a-proposal" id="creating-a-proposal">Creating a proposal</a></h3>
-<ol>
-<li>Create an initial draft of the RFC by creating a pull request on this repo.
-<ul>
-<li>Create a branch on this repo with the form <code>&lt;username&gt;/&lt;featurename&gt;</code>.</li>
-<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace &quot;template&quot; with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
-<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>) </li>
-<li>Ensure that your pull request has <code>[WIP]</code> prefixing the title as long as it is not ready for review!</li>
-</ul>
-</li>
-<li>Open up the discussion for the community.
-<ul>
-<li>Ensure your pull request's main comment has a &quot;rendered&quot; tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
-<li>Remove the <code>[WIP]</code> if necessary.</li>
-<li>Assign yourself as the assignee and add any relevant community members you'd like to review.</li>
-</ul>
-</li>
-<li>Once the RFC has reached a consensus, it is ready for inclusion in the main repository.
-<ul>
-<li>An owner of this repository will comment on the pull request with an assigned RFC number.</li>
-<li>Change your filename and resources folder to reflect this change (e.g. rename <code>text/0000-rnaseq-workflow-v2.0.md</code> to <code>text/1234-rnaseq-workflow-v2.0.md</code>).</li>
-<li>Ensure all of your links still work in your rendered copy.</li>
-<li>Merge in the PR and delete the branch.</li>
-</ul>
-</li>
-</ol>
-<h2><a class="header" href="#install" id="install">Install</a></h2>
-<pre><code class="language-sh">cargo install mdbook
-</code></pre>
-<h2><a class="header" href="#usage" id="usage">Usage</a></h2>
-<pre><code class="language-sh">mdbook build
-python3 -m http.server -d book
-# visit the rendered version in your browser at http://localhost:8000.
-</code></pre>
-<h2><a class="header" href="#author" id="author">Author</a></h2>
-<p>👤 <strong>St. Jude Cloud Team</strong></p>
-<ul>
-<li>Website: https://stjude.cloud</li>
-<li>Github: <a href="https://github.com/stjudecloud">@stjudecloud</a></li>
-<li>Twitter: <a href="https://twitter.com/StJudeResearch">@StJudeResearch</a></li>
-</ul>
-<h2><a class="header" href="#contributing" id="contributing">Contributing</a></h2>
-<p>Contributions, issues and feature requests are welcome!<br />Feel free to check <a href="https://github.com/stjudecloud/rfcs/issues">issues page</a>. You can also take a look at the <a href="https://github.com/stjudecloud/rfcs/blob/master/CONTRIBUTING.md">contributing guide</a>.</p>
-<h2><a class="header" href="#-license" id="-license">📝 License</a></h2>
-<p>Copyright © 2020 <a href="https://github.com/stjudecloud">St. Jude Cloud Team</a>.<br />
-This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md">MIT</a> licensed.</p>
-<h2><a class="header" href="#questions" id="questions">Questions</a></h2>
-<p>With any quetions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-
-                        
-                            <a rel="next" href="0001-rnaseq-workflow-v2.0.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="0001-rnaseq-workflow-v2.0.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
+                        
+
                         
 
                         <div style="clear: both"></div>
@@ -255,11 +173,11 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-
-                
-                    <a href="0001-rnaseq-workflow-v2.0.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a href="0001-rnaseq-workflow-v2.0.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
+                
+
                 
             </nav>
 
