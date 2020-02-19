@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>structural-variation - St. Jude Cloud RFCs</title>
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="0001-rnaseq-workflow-v2.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0</a></li><li class="expanded "><a href="structural-variation.html" class="active"><strong aria-hidden="true">2.</strong> structural-variation</a></li><li class="expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+</ul>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the Structural Variation (SV) pipeline. This is a new pipeline that will produce SV results for St. Jude Cloud samples. </p>
+<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<p>St. Jude Cloud currently provides short variant <a href="https://www.stjude.cloud/docs/guides/data/about-our-data/#gvcf-files">files in gVCF format</a> produced through Microsoft Genomics Service using GATK's haplotype caller. Additionally for a subset of datasets, St. Jude Cloud provides <a href="https://www.stjude.cloud/docs/guides/data/about-our-data/#somatic-vcf-files">somatic VCF files</a> where the SNV/Indel variants were produced by the St. Jude somatic variant analysis pipeline using Bambino. Unlike the gVCF files, these variants have been post-processed and manually curated. The variants were then lifted over to HG38.</p>
+<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
+<h2><a class="header" href="#current-process" id="current-process">Current Process</a></h2>
+<p>Currently there are three main algorithms applied to detect SV events: CONSERTING [WGS], CREST [WGS], and CICERO [RNA-Seq]. Note that data from all three sources is not available for all samples available on St. Jude Cloud. For those samples where these algorithms were run, the original runs utilize GRCh37-lite and the St. Jude Cloud samples are aligned to GRCh38. CREST and CICERO currently do not support GRCh38. Each of these three algorithms requires significant post processing and manual quality control. Given these factors, utilizing these for SV calling will require significant development, computational time, and evaluation and quality control. Before continuing with these methods alone, it is prudent to review the current state of affairs as it regards the discovery of SVs in genomic samples.</p>
+<h2><a class="header" href="#comparison-to-other-large-scale-genomic-projects" id="comparison-to-other-large-scale-genomic-projects">Comparison to other large-scale genomic projects</a></h2>
+<p>The current trend in detection of structural variation in whole genome sequencing is towards the application of multiple algorithms and the synthesis of their resulting callsets to produce a higher quality set of variants. </p>
+<h3><a class="header" href="#genome-data-commons-gdc" id="genome-data-commons-gdc">Genome Data Commons (GDC)</a></h3>
+<p>The GDC <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/">DNA-Seq variant calling pipeline</a> utilizes MuSE, MuTect2, VarScan2, SomaticSniper, and Pindel for detection of somatic mutations. Pindel is the structural variation algorithm capable of detecting deletions, duplications, insertions, inversions, and translocations using split read information (soft-clips). In addition, VarScan2 detects copy number alterations.</p>
+<h3><a class="header" href="#gnomad-sv" id="gnomad-sv">gnomad-SV</a></h3>
+<p>The <a href="https://gnomad.broadinstitute.org/about">Genome Aggregration Database (gnomAD) - Structural Variation (SV)</a> encompasses over 10,000 genomes from various disease-specific and population studies. The data is aligned against GRCh37. The dataset utilizes four SV calling algorithms: Manta, DELLY, MELT, and cn.MOPS. Manta detects deletions, duplications, insertions, inversions, and translocations using read pair based information, split reads, and assembly. DELLY detects deletions, duplications, inversions, and translocations using read pair information and split reads. MELT detects a specific class of insertions known as mobile element insertions using read pair information. cn.MOPS detects copy number variation. </p>
+<h3><a class="header" href="#gonl" id="gonl">GoNL</a></h3>
+<p>The <a href="http://www.nlgenome.nl/">Genome of the Netherlands (GoNL)</a> is a project containing 250 trios comprising parents and offspring. The project utilizes a number of SV calling algorithms including: Pindel, MATE-CLEVER, Mobster, 1-2-3SV, BreakDancer, GenomeSTRiP, CNVnator, and DWAC-seq. MATE-CLEVER detects deletions and insertions. Mobster detects mobile element insertions. 1-2-3SV is capable of detecting deletions, insertions, inversions, and translocations. BreakDancer is used for detecting deletions, insertions, inversions, and translocations. GenomeSTRiP is used to detect deletions and is optimized for calling variants in multiple samples. CNVnator detects deletions and duplications. DWAC-seq detects copy number variation using a dynamic window approach. Pindel is described above. </p>
+<h3><a class="header" href="#1000-genomes" id="1000-genomes">1000 Genomes</a></h3>
+<p>The <a href="https://www.internationalgenome.org/">1000 Genomes Project</a> is a project containing over 2500 individuals across three phases. Similar to other projects, 1000 Genomes used a number of SV calling algorithms including: BreakDancer, Delly, VariationHunter, CNVnator, readDepth, GenomeSTRiP, Pindel, MELT, and DINUMT. Delly is capable of detecting deletions, duplications, inversions, and translocations. VariationHunter is used for detection of deletions, insertions, and inversions. The readDepth algorithm detects deletions and duplications. DINUMT detects nuclear mitochondrial genome insertion events. The other algorithms are described above.</p>
+<h3><a class="header" href="#gtex" id="gtex">GTEx</a></h3>
+<p>The <a href="https://gtexportal.org/home/">Genotype-Tissue Expression (GTEx)</a> contains data from around 1000 individuals. The projects uses Lumpy and GenomeSTRiP for detection of structural variants. Lumpy is capable of detecting deletions, duplications, inversions, and translocations. GenomeSTRiP is described above.</p>
+<h2><a class="header" href="#evaluation-of-wgs-sv-detection-algorithms" id="evaluation-of-wgs-sv-detection-algorithms">Evaluation of WGS SV detection algorithms</a></h2>
+<p><a href="https://link.springer.com/article/10.1186/s13059-019-1720-5">Kosugi, et al</a>, present an evaluation of 69 SV calling algorithms utilizing both simulated and real human WGS data. Their evaluation provides a reference set of performance data for the various algorithms as well as recommendations for performing SV calling. To evaluate the performance of the various callers, they performed variant calling on both simulated and real data. They provide a combined F score for the four classes of variants evaluated.</p>
+<img src="../resources/structural-variation/figure1-sv_type_specificity.png" width="800">
+<p>In addition to variant calling performance, they considered the computational costs of the various algorithms. The evaluation was performed using only reads and reference files for chromosome 8.</p>
+<img src="../resources/structural-variation/figure2-sv_algorithm_runtime_memory.png" width="800">
+<p>Additionally, the authors evaluated the accuracy of overlapping call sets. They combined algorithms' results and looked at the effect on precision for being called by multiple algorithms. Unsurprisingly, the precision increased. CREST is highlighted as an algorithm in the deletion category that showed a &gt; two-fold increase in precision when combined with another algorithm. The authors note that combining algorithms from different method classes led to higher precision but lower recall than combining two algorithms of the same class. </p>
+<p>The authors recommend using a specific algorithm suitable for each type and size of structural variation. Table 1 provides a list of SV callers exhibiting good results in both simulated and real data sets.</p>
+<img src="../resources/structural-variation/table1-good-sv-calling.png" width="800">
+<h2><a class="header" href="#internal-evaluation" id="internal-evaluation">Internal evaluation</a></h2>
+<p>Internal evaluation from Steve Rice and Eric Davis indicates that Manta is the best of the currently available SV callers which agrees with the public literature. They also evaluated SvABA and found it to be less accurate and slower than Manta.</p>
+<h1><a class="header" href="#proposed-specification" id="proposed-specification">Proposed Specification</a></h1>
+<h2><a class="header" href="#process-for-existing-structural-variation-results" id="process-for-existing-structural-variation-results">Process for existing structural variation results</a></h2>
+<p>Where we currently have manually curated SV results from our internal pipeline, we propose performing liftover to hg38 coordinates and making the results available in St. Jude Cloud. This will match the process used for somatic SNV/Indels that have been manually curated after being produced by internal SJ pipelines. In addition, we propose to make variant calls available from our new process alongside the prior results.</p>
+<h2><a class="header" href="#new-process-for-structural-variation-results" id="new-process-for-structural-variation-results">New process for structural variation results</a></h2>
+<p>For all data sets, we propose to produce a set of structural variants using publicly available algorithm(s). As there is sufficient evidence to suggest that Illumina's Manta caller is the best currently available option and has been used in similar projects, this process should include Manta at the core. Additionally, Manta supports WGS, WES, and RNA-seq inputs for SV calling so we can utilize it across all of our sample types. Of the tested categories, Manta ranked outside of the top ten algorithms only in large duplication events. In addition to Manta, we propose to run our internal SV callers: CONSERTING, CREST, and CICERO, once they have been updated to handle hg38.</p>
+<h1><a class="header" href="#open-questions" id="open-questions">Open questions</a></h1>
+<ol>
+<li>Are we interested in calling specific insertion event categories such as mobile element insertions, nuclear insertions of mitochondrial genome, or viral element insertions? If so we may want to include callers that specifically handle those categories.</li>
+<li>Do we want to include additional SV calling algorithms? If so, which ones? GRIDSS had similar performance to Manta and was generally a good option in the analysis of Kosugi, et. al. We could also supplement with high performing algorithms in individual categories of SV, rather than a more generic option that performs relatively well across types as recommended in Kosugi.</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="0001-rnaseq-workflow-v2.0.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="drafts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="0001-rnaseq-workflow-v2.0.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="drafts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
