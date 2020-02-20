@@ -345,6 +345,7 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <li>Add <code>picard ValidateSamFile</code> to the checks after the <code>STAR</code> alignment and <code>picard MarkDuplicates</code> steps. The criticism internally is that <code>ValidateSamFile</code> is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
 <ul>
 <li><code>INVALID_PLATFORM_VALUE</code> is pretty annoying. It just complains if a read group doesn't contain a <code>PL</code> attribute. I'm not sure it's worth going back and fixing these.</li>
+<li><code>MISSING_PLATFORM_VALUE</code>. Similar to <code>INVALID_PLATFORM_VALUE</code>, some of our samples have read groups with missing platform values and so we ignore those errors for now.</li>
 </ul>
 </li>
 <li>For dependency management, we have moved to using <code>conda</code> within standard docker images. All packages should be available within the <code>defaults</code>, <code>conda-forge</code>, and <code>bioconda</code> repositories.</li>
@@ -407,7 +408,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
      --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
      --runThreadN $NCPU \                          # Number of threads to use to build genome database.
      --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-     --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
+     --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file.
      --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
 </code></pre>
 </li>
@@ -473,7 +474,8 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <li>
 <p>Run <code>picard ValidateSamFile</code> on the aligned and marked BAM file.</p>
 <pre><code class="language-bash">picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
-                       IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
+                       IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+                       IGNORE=MISSING_PLATFORM_VALUE
 </code></pre>
 </li>
 <li>
