@@ -158,15 +158,21 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
        --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
        --runThreadN $NCPU \                          # Number of threads to use to build genome database.
        --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-       --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file.
+       --sjdbGTFfile $GENCODE_GTF_V31 \              # GENCODE v31 gene model file.
        --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
   ```
 
 ## Workflow
 
-Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline.
+Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/rnaseq/rnaseq-standard.wdl).
 
-1. Run `samtools quickcheck` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+
+   ```bash
+   picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
+                     IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                     IGNORE=MISSING_PLATFORM_VALUE
+   ```
 2. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
 
    ```bash
@@ -182,7 +188,8 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline.
              INPUT=$INPUT_BAM \
              FASTQ=$FASTQ_R1 \
              SECOND_END_FASTQ=$FASTQ_R2 \
-            RE_REVERSE=true
+             RE_REVERSE=true \
+             VALIDATION_STRINGENCY=SILENT
    ```
 4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
@@ -199,7 +206,6 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline.
         --runThreadN $NCPU \                           # Number of threads to use. You must request the correct amount from HPCF first!
         --outSAMunmapped Within \                      # Keep unmapped reads in the final BAM file.
         --outSAMstrandField intronMotif \              # Preserve compatibility with Cufflinks by including the XS attribute (strand derived from intron motif).
-        --outSAMtype BAM SortedByCoordinate \          # Output a BAM file that is coordinate sorted.
         --outSAMattributes NH HI AS nM NM MD XS \      # Recommended SAM attributes to include for compatibility. Refer to manual for specifics.
         --outFilterMultimapScoreRange 1 \              # Ensures that all multi-mapped reads will need to share the mapping score.
         --outFilterMultimapNmax 20 \                   # Max number of multi-mapped SAM entries for each read.
@@ -215,95 +221,59 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline.
         --twopassMode Basic                            # Use STAR two-pass mapping technique (refer to manual).
    ```
 
-6. Run `picard Sort` on the `STAR`-aligned BAM file.
+6. Run `picard SortSam` on the `STAR`-aligned BAM file. Note that this is much more memory efficient than using `STAR`'s built-in sorting (which often takes 100GB+ of RAM).
 
    ```bash
-   picard MarkDuplicates I=$STAR_BAM \                  # Input BAM.
-                         O=$MARKED_BAM \                # Duplicate-marked output BAM.
-                         VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
-                         CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-                         CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
-                         COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-                         METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
+   picard SortSam I=$STAR_BAM \                  # Input BAM.
+                  O=$MARKED_BAM \                # Duplicate-marked output BAM.
+                  SO="coordinate" \              # 
+                  CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+                  CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+                  COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+                  VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
    ```
 
-7. Run `picard ValidateSamFile` on the aligned and marked BAM file.
+7. Index the coordinate-sorted BAM file.
 
    ```bash
-   picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
-                          IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
-                          IGNORE=MISSING_PLATFORM_VALUE
+   samtools index $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
    ```
 
-8. Run `fastqc` on the data for convenience of end users.
-   ```bash
-   fastqc -f bam \     # Specify that we are working on a BAM file.
-          -o $OUTDIR \ # Specify an out directory.
-          -t $NCPU \   # Specify number of threads.
-          $INPUT_BAM   # Input BAM we are QC'ing.
-   ```
-9. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
+8. Run `picard ValidateSamFile` on the aligned and marked BAM file.
 
    ```bash
-   infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
-
-   # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
-   #   - If proportion of forward orientation evidence fraction is >= 0.8, assign "strand-specific-forward".
-   #   - If proportion of reverse orientation evidence fraction is >= 0.8, assign "strand-specific-reverse".
-   #   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
-   #   - Else flag for manual triage.
+   picard ValidateSamFile I=$STAR_SORTED_BAM \    # STAR-aligned, coordinate-sorted BAM.
+                  IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+                  IGNORE=MISSING_PLATFORM_VALUE
    ```
 
-10. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
+9. Run `ngsderive`'s `strandedness` subcommand to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any discrepancies. This is particularly useful for historical samples. Additionally,
+if the value for strandedness isn't known at run time, we can use the inferred value (if reported).
 
-    ```bash
-    qualimap bamqc -bam $INPUT_BAM \     # Input BAM.
-                   -outdir $OUTPUT_DIR \ # Output directory.
-                   -nt $NCPUS            # Number of CPUs to use.
-    ```
+   ```bash
+   ngsderive strandedness $STAR_SORTED_BAM \     # STAR-aligned, coordinate-sorted BAM.
+                          -g $GENCODE_GTF_V31_GZ # GENCODE v31 GTF (gzipped)
+   ```
 
-    and
+10. Next, `htseq-count` is run for the final counts file to be delivered.
 
-    ```bash
-    qualimap rnaseq -bam $INPUT_BAM \                  # Input BAM.
-                    -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
-                    -outdir $OUTPUT_DIR \              # Output directory.
-                    -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
-                    -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
-                    -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
-    ```
-
-11. Next, `htseq-count` is run for the final counts file to be delivered:
     ```bash
     htseq-count -f bam \                            # Specify input file as BAM.
                -r pos \                             # Specify the BAM is position sorted.
-               -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
-               -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+               -s $PROVIDED_OR_INFERRED \           # Strandedness as specified by the lab and confirmed by `ngsderive strandedness` above. Typically `reverse` for St. Jude Cloud data.
+               -m union \                           # For reference, GDC uses "intersection-nonempty".
                -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
                --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
                --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
-               $INPUT_BAM                           # Input BAM file.
+               $STAR_SORTED_BAM \                   # STAR-aligned, coordinate-sorted BAM.
+               $GENCODE_GTF_V31                     # GENCODE v31 GTF
     ```
-12. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
-    ```bash
-    samtools flagstat $INPUT_BAM
-    samtools index $INPUT_BAM
-    md5sum $INPUT_BAM
-    ```
-13. Run `bamCoverage` to generate bigwig file.
-    ```bash
-    bamCoverage --bam ${bam} \                     # Input BAM file
-                --outFileName ${prefix}.bw \       # Output bigwig filename
-                --outFileFormat bigwig \           # Set output format to bigwig
-                --numberOfProcessors "max"         # Utilize all available processors
-    ```
-14. Run `multiqc` across the following files for all samples in the cohort:
 
-    - `STAR`
-    - `picard MarkDuplicates` and `picard ValidateSamFile`
-    - `qualimap bamqc` and `qualimap rnaseq`
-    - `fastqc`
-    - `samtools flagstat`
+11. Generate the `md5sum` for the BAM
+
+   ```bash
+   md5sum $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
+   ```
 
 # Appendix
 
