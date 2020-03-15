@@ -10,9 +10,9 @@
 # Introduction
 
 This RFC documents an automated workflow for assessing the integrity and quality
-of St. Jude Cloud genomics data. The goal of this RFC is two-fold:
+of St. Jude Cloud genomics data. The goal of this RFC is two-fold.
 
-1. Establish state of the art method for comprehensively evaluating genomics data quality at scale — both at time of receipt and after processing.
+1. Establish state of the art method for comprehensively evaluating genomics data quality at scale: both at time of receipt and after processing.
 2. Publish a collection of metrics that end-users of St. Jude Cloud can leverage to assess the quality of the data available. This context should save users time computing the information themselves while also informing appropriate use of the data.
 
 You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/3).
@@ -20,7 +20,11 @@ You can find the relevant discussion on the [associated pull request](https://gi
 # Motivation
 
 St. Jude Cloud is one of the largest repositories of omics data available for request to date. As such, the project processes thousands of samples from whole-genome, whole-exome, RNA-seq, and various omics-based assays each year. 
-A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to (1) define the standard set of QC tools used to evaluating omics-based data, (2) identify and implement key metrics that can be automated to assist in manual observation of the data, and (3) publish these results alongside the data already published in St. Jude Cloud so that end-users can similar view results.
+A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to
+
+* define the standard set of QC tools used to evaluating omics-based data
+* identify and implement key metrics that can be automated to assist in manual observation of the data, and
+* publish these results alongside the data already published in St. Jude Cloud so that end-users can similar view results.
 
 # Discussion
 
