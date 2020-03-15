@@ -231,7 +231,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There migh
    ```bash
    picard SortSam I=$STAR_BAM \                  # Input BAM.
                   O=$MARKED_BAM \                # Duplicate-marked output BAM.
-                  SO="coordinate" \              # 
+                  SO="coordinate" \              # Specify the output should be coordinate-sorted
                   CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                   CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
                   COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
