@@ -36,10 +36,10 @@ By the time data reaches the St. Jude Cloud team from various sources, extensive
 
 Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the *computational* QC of the files produce for publication in St. Jude Cloud. While we do produce results that define *experimental* results (such as `fastqc`), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.
 
-## Tools Used
+## Tools
 
-* `ngsderive v1.0.2` will be added for RNA-seq strandedness derivation, read
-* `fastq_screen v0.13.0` will be added to estimate the percentage of material derived from different sources (human, mouse PhiX, etc).
+* `ngsderive v1.0.2` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
+* `fastq_screen v0.13.0` is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).
 
 ## Automated metrics comparison
 
