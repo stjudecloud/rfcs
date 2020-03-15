@@ -92,6 +92,9 @@ After discussion internally, we decided to discontinue removing `level 3` annota
 
 ## Quality of life improvements
 
+- Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard MarkDuplicates` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
+  - `INVALID_PLATFORM_VALUE` is pretty annoying. It just complains if a read group doesn't contain a `PL` attribute. I'm not sure it's worth going back and fixing these.
+  - `MISSING_PLATFORM_VALUE`. Similar to `INVALID_PLATFORM_VALUE`, some of our samples have read groups with missing platform values and so we ignore those errors for now.
 - For dependency management, we have moved to using `conda` within standard docker images. All packages should be available within the `defaults`, `conda-forge`, and `bioconda` repositories.
 - Add a checksum algorithm and publish the results in the data browser. After consideration internally, we decided to use the `md5sum` checksum because of its ubiquity.
 
