@@ -276,9 +276,9 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 
 11. Generate the `md5sum` for the BAM
 
-   ```bash
-   md5sum $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
-   ```
+    ```bash
+    md5sum $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
+    ```
 
 # Appendix
 
