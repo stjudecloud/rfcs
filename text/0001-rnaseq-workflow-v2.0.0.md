@@ -117,6 +117,7 @@ conda create -n star-mapping \
     samtools==1.9 \
     star==2.7.1a \
     htseq==0.11.2 \
+    ngsderive==1.0.2 \
     -y
 ```
 
