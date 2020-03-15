@@ -274,12 +274,6 @@ if the value for strandedness isn't known at run time, we can use the inferred v
                $GENCODE_GTF_V31                     # GENCODE v31 GTF
     ```
 
-11. Generate the `md5sum` for the BAM
-
-    ```bash
-    md5sum $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
-    ```
-
 # Appendix
 
 ### Reference genome comparison
