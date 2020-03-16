@@ -58,8 +58,6 @@ TODO
 
 In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).
 
-#### Metrics
-
 | Name                  | Experiments | Check  | Description                                                                                                          |
 | --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
 | Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
