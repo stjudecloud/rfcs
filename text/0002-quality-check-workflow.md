@@ -56,6 +56,14 @@ TODO
 
 `ngsderive` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
 
+In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).
+
+| Name                  | Applicable Experiments | Check Type | Description                                                                                                          |
+| --------------------- | ---------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| Inferred instrument   | All                    | Manual     | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
+| Inferred read length  | All                    | Manual     | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
+| Inferred strandedness | RNA-seq                | Manual     | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
+
 ### picard
 
 `picard` is for several operations including validating BAM files  with `ValidateSam` and converting SAM to FastQ files with `SamToFastq`.
