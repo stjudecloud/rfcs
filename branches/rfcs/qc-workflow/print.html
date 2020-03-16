@@ -699,20 +699,18 @@ A standard, robust method to assess pre-processing and post-processing quality f
 <p>Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the <em>computational</em> QC of the files produce for publication in St. Jude Cloud. While we do produce results that define <em>experimental</em> results (such as <code>fastqc</code>), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.</p>
 <h2><a class="header" href="#tools-and-metrics" id="tools-and-metrics">Tools and Metrics</a></h2>
 <p>Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the <a href="0002-quality-check-workflow.html#dependencies">dependencies</a> section.</p>
-<h2><a class="header" href="#fastqc" id="fastqc">fastqc</a></h2>
+<h3><a class="header" href="#fastqc" id="fastqc">fastqc</a></h3>
 <p>TODO</p>
-<h2><a class="header" href="#qualimap" id="qualimap">qualimap</a></h2>
+<h3><a class="header" href="#qualimap" id="qualimap">qualimap</a></h3>
 <p>TODO</p>
-<h2><a class="header" href="#samtools" id="samtools">samtools</a></h2>
+<h3><a class="header" href="#samtools" id="samtools">samtools</a></h3>
 <p>TODO </p>
-<h2><a class="header" href="#ngsderive" id="ngsderive">ngsderive</a></h2>
+<h3><a class="header" href="#ngsderive" id="ngsderive">ngsderive</a></h3>
 <p><code>ngsderive</code> is an in-house tool developed to backwards derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
-<h2><a class="header" href="#picard" id="picard">picard</a></h2>
+<h3><a class="header" href="#picard" id="picard">picard</a></h3>
 <p><code>picard</code> is for several operations including validating BAM files  with <code>ValidateSam</code> and converting SAM to FastQ files with <code>SamToFastq</code>.</p>
-<h2><a class="header" href="#fastq-screen" id="fastq-screen">fastq-screen</a></h2>
-<ul>
-<li><code>fastq_screen</code> is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).</li>
-</ul>
+<h3><a class="header" href="#fastq-screen" id="fastq-screen">fastq-screen</a></h3>
+<p><code>fastq_screen</code> is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).</p>
 <h2><a class="header" href="#automated-metrics-comparison" id="automated-metrics-comparison">Automated metrics comparison</a></h2>
 <table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
 <tr><td>% Aligned</td><td><a href="http://www.htslib.org/doc/samtools.html">Samtools</a></td><td>Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consisitent with sample purity.</td></tr>
