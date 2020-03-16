@@ -40,29 +40,29 @@ Thus, the scope of this RFC, and the QC of samples on the project in general, is
 
 Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the [dependencies](#dependencies) section.
 
-## fastqc
+### fastqc
 
 TODO
 
-## qualimap
+### qualimap
 
 TODO
 
-## samtools
+### samtools
 
 TODO 
 
-## ngsderive
+### ngsderive
 
 `ngsderive` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
 
-## picard
+### picard
 
 `picard` is for several operations including validating BAM files  with `ValidateSam` and converting SAM to FastQ files with `SamToFastq`.
 
-## fastq-screen
+### fastq-screen
 
-* `fastq_screen` is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).
+`fastq_screen` is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).
 
 ## Automated metrics comparison
 
