@@ -708,7 +708,7 @@ A standard, robust method to assess pre-processing and post-processing quality f
 <h3><a class="header" href="#ngsderive" id="ngsderive">ngsderive</a></h3>
 <p><code>ngsderive</code> is an in-house tool developed to backwards derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
 <p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).</p>
-<table><thead><tr><th>Name</th><th>Applicable Experiments</th><th>Check Type</th><th>Description</th></tr></thead><tbody>
+<table><thead><tr><th>Name</th><th>Experiments</th><th>Check</th><th>Description</th></tr></thead><tbody>
 <tr><td>Inferred instrument</td><td>All</td><td>Manual</td><td>Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).</td></tr>
 <tr><td>Inferred read length</td><td>All</td><td>Manual</td><td>Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available).</td></tr>
 <tr><td>Inferred strandedness</td><td>RNA-seq</td><td>Manual</td><td>Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available).</td></tr>
