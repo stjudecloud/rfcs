@@ -58,11 +58,11 @@ TODO
 
 In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).
 
-| Name                  | Applicable Experiments | Check Type | Description                                                                                                          |
-| --------------------- | ---------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| Inferred instrument   | All                    | Manual     | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
-| Inferred read length  | All                    | Manual     | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
-| Inferred strandedness | RNA-seq                | Manual     | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
+| Name                  | Experiments | Check  | Description                                                                                                          |
+| --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
+| Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
+| Inferred read length  | All         | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
+| Inferred strandedness | RNA-seq     | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
 
 ### picard
 
