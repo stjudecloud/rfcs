@@ -36,10 +36,33 @@ By the time data reaches the St. Jude Cloud team from various sources, extensive
 
 Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the *computational* QC of the files produce for publication in St. Jude Cloud. While we do produce results that define *experimental* results (such as `fastqc`), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.
 
-## Tools
+## Tools and Metrics
 
-* `ngsderive v1.0.2` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
-* `fastq_screen v0.13.0` is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).
+Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the [dependencies](#dependencies) section.
+
+## fastqc
+
+TODO
+
+## qualimap
+
+TODO
+
+## samtools
+
+TODO 
+
+## ngsderive
+
+`ngsderive` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
+
+## picard
+
+`picard` is for several operations including validating BAM files  with `ValidateSam` and converting SAM to FastQ files with `SamToFastq`.
+
+## fastq-screen
+
+* `fastq_screen` is used estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).
 
 ## Automated metrics comparison
 
@@ -92,7 +115,7 @@ conda create --name bio-qc \
     qualimap==2.2.2c \
     samtools==1.9 \
     fastq-screen==0.13.0 \
-    ngsderive==1.0.1 \
+    ngsderive==1.0.2 \
     -y
 
 conda activate bio-qc
