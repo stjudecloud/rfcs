@@ -455,7 +455,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <li>
 <p>Run <code>picard SortSam</code> on the <code>STAR</code>-aligned BAM file. Note that this is much more memory efficient than using <code>STAR</code>'s built-in sorting (which often takes 100GB+ of RAM).</p>
 <pre><code class="language-bash">picard SortSam I=$STAR_BAM \                  # Input BAM.
-               O=$MARKED_BAM \                # Duplicate-marked output BAM.
+               O=$SORTED_BAM \                # Coordinate-sorted BAM.
                SO=&quot;coordinate&quot; \              # Specify the output should be coordinate-sorted
                CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
@@ -469,7 +469,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 </code></pre>
 </li>
 <li>
-<p>Run <code>picard ValidateSamFile</code> on the aligned and marked BAM file.</p>
+<p>Run <code>picard ValidateSamFile</code> on the aligned and sorted BAM file.</p>
 <pre><code class="language-bash">picard ValidateSamFile I=$STAR_SORTED_BAM \    # STAR-aligned, coordinate-sorted BAM.
                IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
                IGNORE=MISSING_PLATFORM_VALUE
