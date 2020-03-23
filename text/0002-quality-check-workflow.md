@@ -40,17 +40,17 @@ Thus, the scope of this RFC, and the QC of samples on the project in general, is
 
 Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the [dependencies](#dependencies) section.
 
-### fastqc
+### samtools
 
-TODO
+TODO 
 
 ### qualimap
 
 TODO
 
-### samtools
+### fastqc
 
-TODO 
+TODO
 
 ### ngsderive
 
