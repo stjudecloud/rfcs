@@ -92,37 +92,36 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+                    <h1 class="menu-title">St. Jude Cloud RFCs</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -699,12 +698,12 @@ A standard, robust method to assess pre-processing and post-processing quality f
 <p>Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the <em>computational</em> QC of the files produce for publication in St. Jude Cloud. While we do produce results that define <em>experimental</em> results (such as <code>fastqc</code>), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.</p>
 <h2><a class="header" href="#tools-and-metrics" id="tools-and-metrics">Tools and Metrics</a></h2>
 <p>Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the <a href="0002-quality-check-workflow.html#dependencies">dependencies</a> section.</p>
-<h3><a class="header" href="#fastqc" id="fastqc">fastqc</a></h3>
-<p>TODO</p>
-<h3><a class="header" href="#qualimap" id="qualimap">qualimap</a></h3>
-<p>TODO</p>
 <h3><a class="header" href="#samtools" id="samtools">samtools</a></h3>
 <p>TODO </p>
+<h3><a class="header" href="#qualimap" id="qualimap">qualimap</a></h3>
+<p>TODO</p>
+<h3><a class="header" href="#fastqc" id="fastqc">fastqc</a></h3>
+<p>TODO</p>
 <h3><a class="header" href="#ngsderive" id="ngsderive">ngsderive</a></h3>
 <p><code>ngsderive</code> is an in-house tool developed to backwards derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
 <p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).</p>
