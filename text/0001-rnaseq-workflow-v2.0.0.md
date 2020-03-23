@@ -230,7 +230,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There migh
 
    ```bash
    picard SortSam I=$STAR_BAM \                  # Input BAM.
-                  O=$MARKED_BAM \                # Duplicate-marked output BAM.
+                  O=$SORTED_BAM \                # Coordinate-sorted BAM.
                   SO="coordinate" \              # Specify the output should be coordinate-sorted
                   CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                   CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
@@ -244,7 +244,7 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There migh
    samtools index $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
    ```
 
-8. Run `picard ValidateSamFile` on the aligned and marked BAM file.
+8. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
 
    ```bash
    picard ValidateSamFile I=$STAR_SORTED_BAM \    # STAR-aligned, coordinate-sorted BAM.
