@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>chipseq_workflow - St. Jude Cloud RFCs</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="chipseq_workflow.html" class="active"><strong aria-hidden="true">2.</strong> chipseq_workflow</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+<li><a href="#appendix">Appendix</a></li>
+</ul>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the ChIP-Seq mapping pipeline.</p>
+<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
+<h2><a class="header" href="#aligner-choice" id="aligner-choice">Aligner choice</a></h2>
+<p>The epigenetics community and the results analyses are highly varied. Unlike RNA-Seq or DNA-Seq, there is not a standard mapping choice for human analysis. Generally the community primarily uses either <code>bowtie2</code> or <code>bwa</code> for alignment. Both aligners use similar data structures internally for mapping via an FM-index.</p>
+<p>To provide ChIP-Seq data in St. Jude Cloud, we need to elect a single alignment method. Therefore we investigate how alignment is handled by other large projects.</p>
+<table><thead><tr><th>Resource</th><th>Aligner</th><th>Reference</th></tr></thead><tbody>
+<tr><td>ENCODE</td><td>BWA</td><td>https://genome.cshlp.org/content/22/9/1813.full, https://www.encodeproject.org/pipelines/ENCPL220NBH/</td></tr>
+<tr><td>ChIP-Atlas</td><td>Bowtie2</td><td>https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc</td></tr>
+<tr><td>ChIPSummitDB</td><td>BWA</td><td>https://academic.oup.com/database/article/doi/10.1093/database/baz141/5700342#191914006</td></tr>
+<tr><td>Roadmap Epigenomics Project</td><td>Pash 3.0</td><td>https://www.nature.com/articles/nature14248#Sec12</td></tr>
+<tr><td>Cistrome</td><td>BWA</td><td>http://cistrome.org/db/#/,https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788</td></tr>
+</tbody></table>
+<p>Internally, Computational Biology has historically used BWA to map ChIP-Seq data. The Center for Applied Bioinformatics also uses BWA as their standard aligner for ChIP-Seq experiments.</p>
+<h2><a class="header" href="#multiple-mapped-reads" id="multiple-mapped-reads">Multiple mapped reads</a></h2>
+<p>To reduce false positives, ChIP-Seq experiments commonly filter to only uniquely mapped reads. In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, we do not filter reads.</p>
+<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
+<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
+<p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
+<pre><code class="language-bash">conda create -n star-mapping \
+    -c conda-forge \
+    -c bioconda \
+    picard==2.20.2 \
+    samtools==1.9 \
+    bwa==0.7.17 \
+    ngsderive==1.0.2 \
+    -y
+</code></pre>
+<p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
+<pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
+</code></pre>
+<h2><a class="header" href="#reference-files" id="reference-files">Reference files</a></h2>
+<p>The following reference files are used as the basis of the ChIP-Seq Workflow:</p>
+<ul>
+<li>
+<p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
+<pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
+gunzip GRCh38_no_alt.fa.gz
+
+echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+md5sum -c GRCh38_no_alt.fa.md5
+# &gt; GRCh38_no_alt.fa: OK
+</code></pre>
+<ul>
+<li>Last, the following command is used to prepare the BWA index file:</li>
+</ul>
+<pre><code class="language-bash">bwa index GRCh38_no_alt.fa
+</code></pre>
+</li>
+</ul>
+<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<p>Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/chipseq/chipseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
+<ol>
+<li>
+<p>Run <code>picard ValidateSam</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.</p>
+<pre><code class="language-bash">picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
+                  IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                  IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Split BAM file into multiple BAMs on the different read groups using <code>samtools split</code>. See <a href="http://www.htslib.org/doc/samtools.html">the samtools documentation</a> for more information.</p>
+<pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
+               -f '%*_%!.%.'              # Format of output BAM file names.
+</code></pre>
+<p>If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.</p>
+</li>
+<li>
+<p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
+<pre><code class="language-bash">   picard SamToFastq \
+          INPUT=$INPUT_BAM \
+          FASTQ=$FASTQ_R1 \
+          SECOND_END_FASTQ=$FASTQ_R2 \
+          RE_REVERSE=true \
+          VALIDATION_STRINGENCY=SILENT
+</code></pre>
+</li>
+<li>
+<p>Run <code>fq lint</code> on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
+<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
+</code></pre>
+</li>
+<li>
+<p>Run the <code>BWA</code> alignment algorithm.</p>
+<pre><code class="language-bash">bwa aln $INDEX_PREFIX \
+     $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
+
+# For single end data
+bwa samse \
+     $INDEX_PREFIX \
+     $SAI \
+     $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+
+# For paired end data
+bwa sampe \
+     $INDEX_PREFIX \
+     $SAI_R1 \
+     $SAI_R2 \
+     $ALL_FASTQ_R1 \
+     $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard SortSam</code> on the <code>BWA</code>-aligned BAM file.</p>
+<pre><code class="language-bash">picard SortSam I=$BWA_BAM \                   # Input BAM.
+               O=$BWASORTED_BAM \             # Coordinate-sorted BAM.
+               SO=&quot;coordinate&quot; \              # Specify the output should be coordinate-sorted
+               CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+               CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+               COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+               VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
+</code></pre>
+</li>
+<li>
+<p>Index the coordinate-sorted BAM file.</p>
+<pre><code class="language-bash">samtools index $BWA_SORTED_BAM # BWA-aligned, coordinate-sorted BAM.
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard ValidateSamFile</code> on the aligned and sorted BAM file.</p>
+<pre><code class="language-bash">picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
+               IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+               IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+</ol>
+<h1><a class="header" href="#appendix" id="appendix">Appendix</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="0001-rnaseq-workflow-v2.0.0.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="drafts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="0001-rnaseq-workflow-v2.0.0.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="drafts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
