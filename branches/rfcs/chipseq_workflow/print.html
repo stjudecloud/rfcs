@@ -772,6 +772,14 @@ bwa sampe \
                       METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
 </code></pre>
 </li>
+<li>
+<p>Run <code>bamCoverage</code> to generate bigwig file.</p>
+<pre><code class="language-bash">bamCoverage --bam ${MARKED_BAM} \              # Input BAM file
+            --outFileName ${prefix}.bw \       # Output bigwig filename
+            --outFileFormat bigwig \           # Set output format to bigwig
+            --numberOfProcessors &quot;max&quot;         # Utilize all available processors
+</code></pre>
+</li>
 </ol>
 <h1><a class="header" href="#appendix-1" id="appendix-1">Appendix</a></h1>
 <h1><a class="header" href="#drafts" id="drafts">Drafts</a></h1>
