@@ -174,4 +174,13 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                          METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
    ```
 
+10. Run `bamCoverage` to generate bigwig file.
+
+    ```bash
+    bamCoverage --bam ${MARKED_BAM} \              # Input BAM file
+                --outFileName ${prefix}.bw \       # Output bigwig filename
+                --outFileFormat bigwig \           # Set output format to bigwig
+                --numberOfProcessors "max"         # Utilize all available processors
+    ```
+
 # Appendix
