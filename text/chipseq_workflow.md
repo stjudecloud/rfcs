@@ -26,7 +26,7 @@ To provide ChIP-Seq data in St. Jude Cloud, we need to elect a single alignment 
 | ChIP-Atlas                  | Bowtie2  | https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc            |
 | ChIPSummitDB                | BWA      | https://academic.oup.com/database/article/doi/10.1093/database/baz141/5700342#191914006               |
 | Roadmap Epigenomics Project | Pash 3.0 | https://www.nature.com/articles/nature14248#Sec12                                                     |
-| Cistrome                    | BWA      | http://cistrome.org/db/#/,https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788           |
+| Cistrome                    | BWA      | http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788          |
 
 Internally, Computational Biology has historically used BWA to map ChIP-Seq data. The Center for Applied Bioinformatics also uses BWA as their standard aligner for ChIP-Seq experiments.
 
@@ -125,7 +125,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
    bwa samse \
         $INDEX_PREFIX \
         $SAI \
-        $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+        $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
 
    # For paired end data
    bwa sampe \
@@ -133,7 +133,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
         $SAI_R1 \
         $SAI_R2 \
         $ALL_FASTQ_R1 \
-        $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+        $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
    ```
 
 6. Run `picard SortSam` on the `BWA`-aligned BAM file.
@@ -143,7 +143,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                   O=$BWASORTED_BAM \             # Coordinate-sorted BAM.
                   SO="coordinate" \              # Specify the output should be coordinate-sorted
                   CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-                  CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+                  CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
                   COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
                   VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
    ```
@@ -160,6 +160,18 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
    picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
                   IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
                   IGNORE=MISSING_PLATFORM_VALUE
+   ```
+
+9. Run `picard MarkDuplicates` on the `BWA`-aligned BAM file.
+
+   ```bash
+   picard MarkDuplicates I=$BWA_SORTED_BAM \            # Input BAM.
+                         O=$MARKED_BAM \                # Duplicate-marked output BAM.
+                         VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
+                         CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+                         CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
+                         COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+                         METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
    ```
 
 # Appendix
