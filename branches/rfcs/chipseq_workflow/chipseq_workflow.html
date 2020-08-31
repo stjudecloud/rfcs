@@ -179,7 +179,7 @@
 <tr><td>ChIP-Atlas</td><td>Bowtie2</td><td>https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc</td></tr>
 <tr><td>ChIPSummitDB</td><td>BWA</td><td>https://academic.oup.com/database/article/doi/10.1093/database/baz141/5700342#191914006</td></tr>
 <tr><td>Roadmap Epigenomics Project</td><td>Pash 3.0</td><td>https://www.nature.com/articles/nature14248#Sec12</td></tr>
-<tr><td>Cistrome</td><td>BWA</td><td>http://cistrome.org/db/#/,https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788</td></tr>
+<tr><td>Cistrome</td><td>BWA</td><td>http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788</td></tr>
 </tbody></table>
 <p>Internally, Computational Biology has historically used BWA to map ChIP-Seq data. The Center for Applied Bioinformatics also uses BWA as their standard aligner for ChIP-Seq experiments.</p>
 <h2><a class="header" href="#multiple-mapped-reads" id="multiple-mapped-reads">Multiple mapped reads</a></h2>
@@ -259,7 +259,7 @@ md5sum -c GRCh38_no_alt.fa.md5
 bwa samse \
      $INDEX_PREFIX \
      $SAI \
-     $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+     $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
 
 # For paired end data
 bwa sampe \
@@ -267,7 +267,7 @@ bwa sampe \
      $SAI_R1 \
      $SAI_R2 \
      $ALL_FASTQ_R1 \
-     $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $OUTPUT_BAM
+     $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
 </code></pre>
 </li>
 <li>
@@ -276,7 +276,7 @@ bwa sampe \
                O=$BWASORTED_BAM \             # Coordinate-sorted BAM.
                SO=&quot;coordinate&quot; \              # Specify the output should be coordinate-sorted
                CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-               CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+               CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
                COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
                VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
 </code></pre>
@@ -291,6 +291,17 @@ bwa sampe \
 <pre><code class="language-bash">picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
                IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
                IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard MarkDuplicates</code> on the <code>BWA</code>-aligned BAM file.</p>
+<pre><code class="language-bash">picard MarkDuplicates I=$BWA_SORTED_BAM \            # Input BAM.
+                      O=$MARKED_BAM \                # Duplicate-marked output BAM.
+                      VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
+                      CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+                      CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
+                      COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+                      METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
 </code></pre>
 </li>
 </ol>
