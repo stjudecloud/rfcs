@@ -12,6 +12,8 @@ This RFC lays out the specification for the ChIP-Seq mapping pipeline.
 
 # Motivation
 
+To provide the epigenetics community with access to the large number of ChIP-Seq experiments that have been performed at St. Jude Children's Research Hospital, we are proposing the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no decisions on downstream analysis, opting instead to focus on harmonizing the underlying sequencing data and leaving analyis decisions to the user.
+
 # Discussion
 
 ## Aligner choice
