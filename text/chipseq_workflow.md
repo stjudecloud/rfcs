@@ -41,7 +41,7 @@ To reduce false positives, ChIP-Seq experiments commonly filter to only uniquely
 If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need to install [anaconda](https://www.anaconda.com/) first.
 
 ```bash
-conda create -n star-mapping \
+conda create -n chipseq-mapping \
     -c conda-forge \
     -c bioconda \
     picard==2.20.2 \
