@@ -780,10 +780,10 @@ conda activate bio-qc
 <li>
 <p>Use Picard's <code>ValidateSamFile</code> tool to ensure the inner contents of the BAM file are well-formed.</p>
 <pre><code class="language-bash">picard ValidateSamFile \
-       I=$BAM \                                        # specify bam file
-       MODE=SUMMARY\                                   # concise output
-       INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-       IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
+    I=$BAM \                                        # specify bam file
+    MODE=SUMMARY\                                   # concise output
+    INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
+    IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
 </code></pre>
 </li>
 <li>
@@ -809,8 +809,8 @@ conda activate bio-qc
 <li>
 <p>Run <code>qualimap bamqc</code> to gather more in-depth statistics about read stats, coverage, mapping quality, mismatches, etc.</p>
 <pre><code class="language-bash">qualimap bamqc -bam $BAM \          # bam filename
-       -nt $NUM_THREADS \              # threads requested
-       -nw 400                         # number of windows
+    -nt $NUM_THREADS \              # threads requested
+    -nw 400                         # number of windows
 </code></pre>
 </li>
 <li>
@@ -827,9 +827,9 @@ conda activate bio-qc
 <li>
 <p>If RNA-seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are tailored for RNA-seq files.</p>
 <pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
-       -bam $BAM \                             # bam filename
-       -gtf $GTF_REF                           # transcript definition file
-       -pe                                     # specify paired end if paired end
+   -bam $BAM \                              # bam filename
+   -gtf $GTF_REF                            # transcript definition file
+   -pe                                      # specify paired end if paired end
 </code></pre>
 </li>
 <li>
