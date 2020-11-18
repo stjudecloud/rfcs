@@ -140,10 +140,10 @@ The workflow specification is as follows. Note that some arguments that are not 
 
       ```bash
       picard ValidateSamFile \
-             I=$BAM \                                        # specify bam file
-             MODE=SUMMARY\                                   # concise output
-             INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-             IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
+          I=$BAM \                                        # specify bam file
+          MODE=SUMMARY\                                   # concise output
+          INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
+          IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
       ```
 
 3. Run `samtools flagstat` to gather general statistics such as alignment percentage.
@@ -174,8 +174,8 @@ The workflow specification is as follows. Note that some arguments that are not 
 
       ```bash
       qualimap bamqc -bam $BAM \          # bam filename
-             -nt $NUM_THREADS \              # threads requested
-             -nw 400                         # number of windows
+          -nt $NUM_THREADS \              # threads requested
+          -nw 400                         # number of windows
       ```
 
 8. If WGS or WES data, run `fastq_screen`. For performance, we subsample the input BAM using `samtools view -s $computed_fraction` before running it through `picard SamToFastq`. The resulting fastqs are validated with `fq lint` provided by `fqlib`.
@@ -195,9 +195,9 @@ The workflow specification is as follows. Note that some arguments that are not 
 
       ```bash
       qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
-             -bam $BAM \                             # bam filename
-             -gtf $GTF_REF                           # transcript definition file
-             -pe                                     # specify paired end if paired end
+         -bam $BAM \                              # bam filename
+         -gtf $GTF_REF                            # transcript definition file
+         -pe                                      # specify paired end if paired end
       ```
 
 11. Combine all of the above metrics using `multiqc`.
