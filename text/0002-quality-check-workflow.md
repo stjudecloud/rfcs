@@ -40,7 +40,7 @@ Here, we outline each tool, what metrics are considered in an automated manner, 
 
 #### samtools
 
-Samtools is used both as a utility for file transformations, and its `flagstat` command is used to generate metricts for quality checking. Metrics include number of duplicate reads and properly paired reads.
+Samtools is used both as a utility for file transformations, and its `flagstat` command is used to generate metrics for quality checking. Metrics include number of duplicate reads and properly paired reads.
 
 #### qualimap
 
