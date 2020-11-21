@@ -713,7 +713,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h3><a class="header" href="#tools-and-metrics" id="tools-and-metrics">Tools and Metrics</a></h3>
 <p>Here, we outline each tool, what metrics are considered in an automated manner, and which metrics require manual inspection. To keep from duplicating information and to ensure the RFC does not get out of sync, versions for each tool can be found in the <a href="0002-quality-check-workflow.html#dependencies">dependencies</a> section.</p>
 <h4><a class="header" href="#samtools" id="samtools">samtools</a></h4>
-<p>Samtools is used both as a utility for file transformations, and its <code>flagstat</code> command is used to generate metricts for quality checking. Metrics include number of duplicate reads and properly paired reads.</p>
+<p>Samtools is used both as a utility for file transformations, and its <code>flagstat</code> command is used to generate metrics for quality checking. Metrics include number of duplicate reads and properly paired reads.</p>
 <h4><a class="header" href="#qualimap" id="qualimap">qualimap</a></h4>
 <p>Qualimap is used to find coverage across the genome, insert sizes, and QC content.</p>
 <h4><a class="header" href="#fastqc" id="fastqc">fastqc</a></h4>
