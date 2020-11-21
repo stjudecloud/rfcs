@@ -18,7 +18,7 @@ You can find the relevant discussion on the [associated pull request](https://gi
 
 ## Motivation
 
-St. Jude Cloud is one of the largest repositories of omics data available for request to date. As such, the project processes thousands of samples from whole-genome, whole-exome, RNA-seq, and various omics-based assays each year. A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to
+St. Jude Cloud is one of the largest repositories of omics data available for request to date. As such, the project processes thousands of samples from whole genome, whole exome, RNA-Seq, and various omics-based assays each year. A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to
 
 - define the standard set of QC tools used to evaluating omics-based data
 - identify and implement key metrics that can be automated to assist in manual observation of the data, and
@@ -52,15 +52,15 @@ FastQC generates metrics about read quality scores, sequence duplication levels 
 
 #### ngsderive
 
-`ngsderive` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
+`ngsderive` is an in-house tool developed to backwards derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-Seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
 
-In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).
+In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-Seq).
 
 | Name                  | Experiments | Check  | Description                                                                                                          |
 | --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
 | Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
 | Inferred read length  | All         | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
-| Inferred strandedness | RNA-seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available). |
+| Inferred strandedness | RNA-Seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available). |
 
 #### picard
 
@@ -98,7 +98,7 @@ The quality metrics of special concern for WES include depth of coverage in exon
 
 #### Metrics for RNAseq
 
-The quality metrics of special concern for RNA-seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.
+The quality metrics of special concern for RNA-Seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.
 
 ## Specification
 
@@ -185,13 +185,13 @@ The workflow specification is as follows. Note that some arguments that are not 
          fastq_screen $combined_fastq
       ```
 
-9. If RNA-seq, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-seq experiment.
+9. If RNA-Seq, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-Seq experiment.
 
       ```bash
       ngsderive strandedness
       ```
 
-10. If RNA-seq data, run `qualimap rnaseq` to gather QC statistics that are tailored for RNA-seq files.
+10. If RNA-Seq data, run `qualimap rnaseq` to gather QC statistics that are tailored for RNA-Seq files.
 
       ```bash
       qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
