@@ -18,3 +18,16 @@ excluded_words:
   - omics
   - omics-based
   - fastqc
+  - ngsderive
+  - SamToFastq
+  - fastq
+  - fastq-screen
+  - unstranded
+  - conda
+  - bioconda
+  - conda-forge
+  - multiqc
+  - fastqs
+  - fqlib
+  - readlen
+  - gtf

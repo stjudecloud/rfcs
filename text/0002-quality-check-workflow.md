@@ -128,7 +128,7 @@ For linting created fastqs, `fqlib` must be installed. See installation instruct
 
 ### Workflow
 
-The workflow specification is as follows. Note that some arguments that are not integral to the command (such as output directories) or arguments that can vary between compute environements (such as memory thresholds or number of threads) are not included.
+The workflow specification is as follows. Note that some arguments that are not integral to the command (such as output directories) or arguments that can vary between compute environments (such as memory thresholds or number of threads) are not included.
 
 1. Compute the md5 checksum of the file.
 
