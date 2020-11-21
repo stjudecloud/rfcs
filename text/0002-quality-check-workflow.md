@@ -32,11 +32,11 @@ There are (at least) two different types of QC typically carried out omics-based
 
 By the time data reaches the St. Jude Cloud team from various sources, extensive _experimental_ and _computational_ evaluation have already been carried out. Each contributing project has its own thresholds for quality in both areas which is dependent on the best practices at that point in time and the goals of the project. Most often, we take the computational data, revert it back to its raw form (such as FastQ files), and reprocess it using our harmonization pipeline.
 
-Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the _computational_ QC of the files produce for publication in St. Jude Cloud. While we do produce results that define _experimental_ results (such as `fastqc` ), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.
+Thus, the scope of this RFC, and the QC of samples on the project in general, is limited to the _computational_ QC of the files produced for publication in St. Jude Cloud. While we do produce results that define _experimental_ results (such as `fastqc` ), these are rarely used to decide which files pass or fail our QC. We hope that the inclusion of these results will save end-users time and aide in decision-making about downstream analysis approaches.
 
 ### Tools and Metrics
 
-Here, we outline each tool, what metrics are considered in an automated manner, and which metrics and require manual inspect. To keep from duplicating information and to ensure the RFC doesn't get out of sync, versions for each tool can be found in the [dependencies](#dependencies) section.
+Here, we outline each tool, what metrics are considered in an automated manner, and which metrics require manual inspection. To keep from duplicating information and to ensure the RFC does not get out of sync, versions for each tool can be found in the [dependencies](#dependencies) section.
 
 #### samtools
 
@@ -60,7 +60,7 @@ In the QC pipeline, we leverage all currently available subcommands to try to de
 | --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
 | Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
 | Inferred read length  | All         | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
-| Inferred strandedness | RNA-seq     | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
+| Inferred strandedness | RNA-seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available). |
 
 #### picard
 
@@ -74,10 +74,10 @@ In the QC pipeline, we leverage all currently available subcommands to try to de
 
 | Name                               | Produced By | Description                                                                                                                                                                                                                                                                                                                                                                                               |
 | ---------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| % Aligned                          | [Samtools]  | Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consisitent with sample purity.                                                                                                                                                                                                                                            |
-| Per Base Sequence Quality          | [FastQC]    | The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is just to inform our end users -- the quality of the sequencing run has already been assessed by the lab upstream. So, there is no changing it at this point.                                                                              |
+| % Aligned                          | [Samtools]  | Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consistent with sample purity.                                                                                                                                                                                                                                            |
+| Per Base Sequence Quality          | [FastQC]    | The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is to inform our end users -- the quality of the sequencing run has already been assessed by the lab upstream.                                                                               |
 | Overrepresented Sequences          | [FastQC]    | The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).                                                                                                                                                                               |
-| Reads Genomic Origin               | [Qualimap]  | The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are being mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination. |
+| Reads Genomic Origin               | [Qualimap]  | The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination. |
 | rRNA Content                       | ?           | Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.                                                                                                                                                                                                                                             |
 | Transcript Coverage and 5'-3' Bias | [Qualimap]  | Libraries prepared with polyA selection may have higher biased expression in 3' region. If reads primarily accumulate at the 3' end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.                                                                                                                                                                |
 | Junction Analysis                  | [Qualimap]  | Analysis of known, partly known, and novel junction positions in spliced alignments.                                                                                                                                                                                                                                                                                                                      |
@@ -86,23 +86,23 @@ In the QC pipeline, we leverage all currently available subcommands to try to de
 
 #### Thresholds and Metrics for Specific Applications
 
-To apply quality control metrics to vett data, we need reasonable thresholds that are practically acheivable and neither too lax or too strict. Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates. By statistical thresholds, we are referring to distributional tests that formally define outliers. By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded. Statistical tests can be performed on large populations of QC data. We are already in postion to do that today. Empirical tests, however, require foreknowledge of the correct results. This requires experimental design and implementation through a laboratory at some cost.
+To apply quality control metrics to vet data, we need reasonable thresholds that are practically achievable and neither too lax nor too strict. Our preference is for statistically or empirically determined thresholds rather than arbitrary estimates. By statistical thresholds, we are referring to distributional tests that formally define outliers. By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded. Statistical tests can be performed on large populations of QC data. We are already in a position to do that today. Empirical tests, however, require foreknowledge of the correct results. This requires experimental design and implementation through a laboratory at some cost.
 
 #### Metrics for WGS
 
-The quality metrics of special concern for WGS include depth of coverage and genomic regional coverage. Mapping quality is also critical. The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives. So metrics that are sensitive to impurity are valuable.
+The quality metrics of special concern for WGS include depth of coverage and coverage distribution across genomic regions. Mapping quality is also critical. The analysis of whole genome sequencing to call variants depends on depth and sample purity. Accurate calls are made through replication and contamination creates false positives. So metrics that are sensitive to impurity are valuable.
 
 #### Metrics for WES
 
-The quality metrics of special concern for WES include depth of coverage in exomic regions. Mapping quality, % mapped and duplication rate are also important.
+The quality metrics of special concern for WES include depth of coverage in exonic regions. Mapping quality, mapping percentage, and duplication rate are also important.
 
 #### Metrics for RNAseq
 
-The quality metrics of special concern for RNAseq include mapping percentage, percentage properly paired reads, and exomic regional coverage. Mapping quality is also critical.
+The quality metrics of special concern for RNA-seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.
 
 ## Specification
 
-These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead we've supplied examples of the commands used to each package. Our default memory is 80G and we employ 4 threads for these processes.
+These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead, we have supplied examples of the commands used in each package. Our default memory is 80G and we employ 4 threads for these processes.
 
 ### Dependencies
 
@@ -197,7 +197,7 @@ The workflow specification is as follows. Note that some arguments that are not 
       qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
          -bam $BAM \                              # bam filename
          -gtf $GTF_REF                            # transcript definition file
-         -pe                                      # specify paired end if paired end
+         [-pe]                                      # specify paired end if paired end
       ```
 
 11. Combine all of the above metrics using `multiqc`.
@@ -208,7 +208,7 @@ The workflow specification is as follows. Note that some arguments that are not 
 
 ## Items Still In-Progress
 
-- [ ] Analysis tools for other types of sequencing (ChIP seq)
+- [ ] Analysis tools for other types of sequencing (ChIP-seq)
 - [ ] Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)
 
 ## Outstanding Questions
