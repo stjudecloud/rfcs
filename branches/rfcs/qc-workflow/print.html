@@ -699,7 +699,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </ol>
 <p>You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/3">associated pull request</a>.</p>
 <h2><a class="header" href="#motivation-1" id="motivation-1">Motivation</a></h2>
-<p>St. Jude Cloud is one of the largest repositories of omics data available for request to date. As such, the project processes thousands of samples from whole-genome, whole-exome, RNA-seq, and various omics-based assays each year. A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to</p>
+<p>St. Jude Cloud is one of the largest repositories of omics data available for request to date. As such, the project processes thousands of samples from whole genome, whole exome, RNA-Seq, and various omics-based assays each year. A standard, robust method to assess pre-processing and post-processing quality for samples has been developed in-house, but there are some shortcomings with our current approach. In particular, this RFC will attempt to</p>
 <ul>
 <li>define the standard set of QC tools used to evaluating omics-based data</li>
 <li>identify and implement key metrics that can be automated to assist in manual observation of the data, and</li>
@@ -719,12 +719,12 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h4><a class="header" href="#fastqc" id="fastqc">fastqc</a></h4>
 <p>FastQC generates metrics about read quality scores, sequence duplication levels and length distributions, among others.</p>
 <h4><a class="header" href="#ngsderive" id="ngsderive">ngsderive</a></h4>
-<p><code>ngsderive</code> is an in-house tool developed to backwards derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
-<p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-seq).</p>
+<p><code>ngsderive</code> is an in-house tool developed to backwards derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-Seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
+<p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-Seq).</p>
 <table><thead><tr><th>Name</th><th>Experiments</th><th>Check</th><th>Description</th></tr></thead><tbody>
 <tr><td>Inferred instrument</td><td>All</td><td>Manual</td><td>Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).</td></tr>
 <tr><td>Inferred read length</td><td>All</td><td>Manual</td><td>Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available).</td></tr>
-<tr><td>Inferred strandedness</td><td>RNA-seq</td><td>Manual</td><td>Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).</td></tr>
+<tr><td>Inferred strandedness</td><td>RNA-Seq</td><td>Manual</td><td>Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).</td></tr>
 </tbody></table>
 <h4><a class="header" href="#picard" id="picard">picard</a></h4>
 <p><code>picard</code> is for several operations including validating BAM files with <code>ValidateSam</code> and converting SAM to FastQ files with <code>SamToFastq</code> .</p>
@@ -749,7 +749,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h4><a class="header" href="#metrics-for-wes" id="metrics-for-wes">Metrics for WES</a></h4>
 <p>The quality metrics of special concern for WES include depth of coverage in exonic regions. Mapping quality, mapping percentage, and duplication rate are also important.</p>
 <h4><a class="header" href="#metrics-for-rnaseq" id="metrics-for-rnaseq">Metrics for RNAseq</a></h4>
-<p>The quality metrics of special concern for RNA-seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.</p>
+<p>The quality metrics of special concern for RNA-Seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.</p>
 <h2><a class="header" href="#specification-1" id="specification-1">Specification</a></h2>
 <p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead, we have supplied examples of the commands used in each package. Our default memory is 80G and we employ 4 threads for these processes.</p>
 <h3><a class="header" href="#dependencies-1" id="dependencies-1">Dependencies</a></h3>
@@ -820,12 +820,12 @@ conda activate bio-qc
 </code></pre>
 </li>
 <li>
-<p>If RNA-seq, run <code>ngsderive strandedness</code> to determine a backwards-computed strandedness of the RNA-seq experiment.</p>
+<p>If RNA-Seq, run <code>ngsderive strandedness</code> to determine a backwards-computed strandedness of the RNA-Seq experiment.</p>
 <pre><code class="language-bash">ngsderive strandedness
 </code></pre>
 </li>
 <li>
-<p>If RNA-seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are tailored for RNA-seq files.</p>
+<p>If RNA-Seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are tailored for RNA-Seq files.</p>
 <pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
    -bam $BAM \                              # bam filename
    -gtf $GTF_REF                            # transcript definition file
