@@ -642,11 +642,11 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h1><a class="header" href="#introduction-1" id="introduction-1">Introduction</a></h1>
 <p>This RFC lays out the specification for the ChIP-Seq mapping pipeline.</p>
 <h1><a class="header" href="#motivation-1" id="motivation-1">Motivation</a></h1>
-<p>To provide the epigenetics community with access to the large number of ChIP-Seq experiments that have been performed at St. Jude Children's Research Hospital, we are proposing the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no decisions on downstream analysis, opting instead to focus on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
+<p>To provide the epigenetics community access to data from ChIP-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
 <h1><a class="header" href="#discussion-1" id="discussion-1">Discussion</a></h1>
 <h2><a class="header" href="#aligner-choice" id="aligner-choice">Aligner choice</a></h2>
-<p>The epigenetics community and the results analyses are highly varied. Unlike RNA-Seq or DNA-Seq, there is not a standard mapping choice for human analysis. Generally the community primarily uses either <code>bowtie2</code> or <code>bwa</code> for alignment. Both aligners use similar data structures internally for mapping via an FM-index.</p>
-<p>To provide ChIP-Seq data in St. Jude Cloud, we need to elect a single alignment method. Therefore we investigate how alignment is handled by other large projects.</p>
+<p>The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either <code>bowtie2</code> or <code>bwa</code> for alignment. Both of these aligners use similar internal data structures for mapping via an FM-index.</p>
+<p>To provide harmonized ChIP-Seq data in St. Jude Cloud, we need to select a single alignment method. Therefore we investigated how alignment was handled by other large projects.</p>
 <table><thead><tr><th>Resource</th><th>Aligner</th><th>Reference</th></tr></thead><tbody>
 <tr><td>ENCODE</td><td>BWA</td><td>https://genome.cshlp.org/content/22/9/1813.full, https://www.encodeproject.org/pipelines/ENCPL220NBH/</td></tr>
 <tr><td>ChIP-Atlas</td><td>Bowtie2</td><td>https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc</td></tr>
@@ -654,9 +654,9 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <tr><td>Roadmap Epigenomics Project</td><td>Pash 3.0</td><td>https://www.nature.com/articles/nature14248#Sec12</td></tr>
 <tr><td>Cistrome</td><td>BWA</td><td>http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788</td></tr>
 </tbody></table>
-<p>Internally, Computational Biology has historically used BWA to map ChIP-Seq data. The Center for Applied Bioinformatics also uses BWA as their standard aligner for ChIP-Seq experiments.</p>
+<p>Within St. Jude, Computational Biology has historically used BWA to map ChIP-Seq data. Also, the St. Jude Center for Applied Bioinformatics uses BWA as their standard aligner for ChIP-Seq experiments.</p>
 <h2><a class="header" href="#multiple-mapped-reads" id="multiple-mapped-reads">Multiple mapped reads</a></h2>
-<p>To reduce false positives, ChIP-Seq experiments commonly filter to only uniquely mapped reads. In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, we do not filter reads.</p>
+<p>To reduce false positives, ChIP-Seq experiments commonly filter out reads that are not uniquely mapped.  In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, however, we do not filter reads.</p>
 <h1><a class="header" href="#specification-1" id="specification-1">Specification</a></h1>
 <h2><a class="header" href="#dependencies-1" id="dependencies-1">Dependencies</a></h2>
 <p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
@@ -706,7 +706,7 @@ md5sum -c GRCh38_no_alt.fa.md5
 <pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
                -f '%*_%!.%.'              # Format of output BAM file names.
 </code></pre>
-<p>If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.</p>
+<p>If the BAM has unaccounted reads, those will need to be removed and the samtools split step will need to be rerun.</p>
 </li>
 <li>
 <p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
@@ -719,14 +719,14 @@ md5sum -c GRCh38_no_alt.fa.md5
 </code></pre>
 </li>
 <li>
-<p>Run <code>fq lint</code> on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
+<p>Run <code>fq lint</code> on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
 <pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
 </code></pre>
 </li>
 <li>
 <p>Run the <code>BWA</code> alignment algorithm.</p>
 <pre><code class="language-bash">bwa aln $INDEX_PREFIX \
-     $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
+     $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple files. The order of your R1 and R2 files must match!
 
 # For single end data
 bwa samse \
@@ -751,7 +751,7 @@ bwa sampe \
                CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
                COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-               VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
+               VALIDATION_STRINGENCY=SILENT   # Turn off validation stringency for this step.
 </code></pre>
 </li>
 <li>
