@@ -98,7 +98,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                   -f '%*_%!.%.'              # Format of output BAM file names.
    ```
 
-   If the BAM has unaccounted reads, those will need to be removed and the samtools split step will need to be rerun.
+   If the BAM has unaccounted reads, those reads will need to be removed and the samtools split step will need to be rerun.
 
 3. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
 
