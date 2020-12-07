@@ -12,15 +12,15 @@ This RFC lays out the specification for the ChIP-Seq mapping pipeline.
 
 # Motivation
 
-To provide the epigenetics community with access to the large number of ChIP-Seq experiments that have been performed at St. Jude Children's Research Hospital, we are proposing the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no decisions on downstream analysis, opting instead to focus on harmonizing the underlying sequencing data and leaving analysis decisions to the user.
+To provide the epigenetics community access to data from ChIP-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.
 
 # Discussion
 
 ## Aligner choice
 
-The epigenetics community and the results analyses are highly varied. Unlike RNA-Seq or DNA-Seq, there is not a standard mapping choice for human analysis. Generally the community primarily uses either `bowtie2` or `bwa` for alignment. Both aligners use similar data structures internally for mapping via an FM-index.
+The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either `bowtie2` or `bwa` for alignment. Both of these aligners use similar internal data structures for mapping via an FM-index.
 
-To provide ChIP-Seq data in St. Jude Cloud, we need to elect a single alignment method. Therefore we investigate how alignment is handled by other large projects.
+To provide harmonized ChIP-Seq data in St. Jude Cloud, we need to select a single alignment method. Therefore we investigated how alignment was handled by other large projects.
 
 | Resource                    | Aligner  | Reference                                                                                             |
 | --------------------------- | -------- | ----------------------------------------------------------------------------------------------------- |
@@ -30,11 +30,11 @@ To provide ChIP-Seq data in St. Jude Cloud, we need to elect a single alignment 
 | Roadmap Epigenomics Project | Pash 3.0 | https://www.nature.com/articles/nature14248#Sec12                                                     |
 | Cistrome                    | BWA      | http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788          |
 
-Internally, Computational Biology has historically used BWA to map ChIP-Seq data. The Center for Applied Bioinformatics also uses BWA as their standard aligner for ChIP-Seq experiments.
+Within St. Jude, Computational Biology has historically used BWA to map ChIP-Seq data. Also, the St. Jude Center for Applied Bioinformatics uses BWA as their standard aligner for ChIP-Seq experiments.
 
 ## Multiple mapped reads
 
-To reduce false positives, ChIP-Seq experiments commonly filter to only uniquely mapped reads. In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, we do not filter reads.
+To reduce false positives, ChIP-Seq experiments commonly filter out reads that are not uniquely mapped.  In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, however, we do not filter reads.
 
 # Specification
 
@@ -98,7 +98,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                   -f '%*_%!.%.'              # Format of output BAM file names.
    ```
 
-   If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.
+   If the BAM has unaccounted reads, those will need to be removed and the samtools split step will need to be rerun.
 
 3. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
 
@@ -111,7 +111,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
              VALIDATION_STRINGENCY=SILENT
    ```
 
-4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
+4. Run `fq lint` on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
    ```bash
    fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
@@ -121,7 +121,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 
    ```bash
    bwa aln $INDEX_PREFIX \
-        $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple. The order of your R1 and R2 files has to match!
+        $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple files. The order of your R1 and R2 files must match!
 
    # For single end data
    bwa samse \
@@ -147,7 +147,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                   CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                   CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
                   COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-                  VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
+                  VALIDATION_STRINGENCY=SILENT   # Turn off validation stringency for this step.
    ```
 
 7. Index the coordinate-sorted BAM file.
