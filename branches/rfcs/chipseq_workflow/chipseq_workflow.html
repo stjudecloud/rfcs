@@ -238,7 +238,7 @@ md5sum -c GRCh38_no_alt.fa.md5
 <pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
                -f '%*_%!.%.'              # Format of output BAM file names.
 </code></pre>
-<p>If the BAM has unaccounted reads, those will need to be removed and the samtools split step will need to be rerun.</p>
+<p>If the BAM has unaccounted reads, those reads will need to be removed and the samtools split step will need to be rerun.</p>
 </li>
 <li>
 <p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
