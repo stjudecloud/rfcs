@@ -667,6 +667,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
     samtools==1.9 \
     bwa==0.7.17 \
     ngsderive==1.0.2 \
+    deeptools==3.5.0 \
     -y
 </code></pre>
 <p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
