@@ -50,6 +50,7 @@ conda create -n chipseq-mapping \
     samtools==1.9 \
     bwa==0.7.17 \
     ngsderive==1.0.2 \
+    deeptools==3.5.0 \
     -y
 ```
 
