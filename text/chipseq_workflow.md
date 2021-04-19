@@ -35,7 +35,7 @@ Open source projects are ones that publish the source code of their analysis pip
 | [ENCODE-DCC/chip-seq-pipeline] [[1][chip-seq-pipeline-1]] | 1.4 (2018-03-08)   | BWA 0.7.10 (2014-07-14) (bwa-aln)                                                                                            |
 | [ENCODE-DCC/chip-seq-pipeline2]                           | 1.8.0 (2021-03-26) | Bowtie 2 2.3.4.3 (2018-09-17) (default)<br />BWA 0.7.17 (2017-11-07) (If read-length >= 70 bp, bwa-mem; otherwise, bwa-aln.) |
 | [nf-core/chipseq] [[1][nf-core/chipseq-1]]                | 1.2.1 (2020-07-29) | BWA 0.7.17 (2017-11-07) (bwa-mem)                                                                                            |
-| [stjude/SEASEQ]                                           | 1.0 (2021-03-31)   | Bowtie 1.2.3 (2019-07-05)                                                                                                    |
+| [stjude/SEASEQ]                                           | 1.1 (2021-04-19)   | Bowtie 1.2.3 (2019-07-05)                                                                                                    |
 
 [ENCODE-DCC/chip-seq-pipeline]: https://github.com/ENCODE-DCC/chip-seq-pipeline
 [chip-seq-pipeline-1]: http://doi.org/10.1101/gr.136184.111
