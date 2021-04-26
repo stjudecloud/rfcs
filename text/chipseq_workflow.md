@@ -18,17 +18,52 @@ To provide the epigenetics community access to data from ChIP-Seq experiments pe
 
 ## Aligner choice
 
-The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either `bowtie2` or `bwa` for alignment. Both of these aligners use similar internal data structures for mapping via an FM-index.
+The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either [Bowtie], [Bowtie 2], or [BWA] for alignment. These aligners use similar internal data structures for mapping via an FM-index.
 
 To provide harmonized ChIP-Seq data in St. Jude Cloud, we need to select a single alignment method. Therefore we investigated how alignment was handled by other large projects.
 
-| Resource                    | Aligner  | Reference                                                                                             |
-| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------- |
-| ENCODE                      | BWA      | https://genome.cshlp.org/content/22/9/1813.full, https://www.encodeproject.org/pipelines/ENCPL220NBH/ |
-| ChIP-Atlas                  | Bowtie2  | https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc            |
-| ChIPSummitDB                | BWA      | https://academic.oup.com/database/article/doi/10.1093/database/baz141/5700342#191914006               |
-| Roadmap Epigenomics Project | Pash 3.0 | https://www.nature.com/articles/nature14248#Sec12                                                     |
-| Cistrome                    | BWA      | http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788          |
+[Bowtie]: http://bowtie-bio.sourceforge.net/index.shtml
+[Bowtie 2]: http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
+[BWA]: http://bio-bwa.sourceforge.net/
+
+### Open source
+
+Open source projects are ones that publish the source code of their analysis pipelines. This allows anyone to freely explore and review the details of each step.
+
+| Project                                                   | Stable release     | Aligner                                                                                                                      |
+| --------------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| [ENCODE-DCC/chip-seq-pipeline] [[1][chip-seq-pipeline-1]] | 1.4 (2018-03-08)   | BWA 0.7.10 (2014-07-14) (bwa-aln)                                                                                            |
+| [ENCODE-DCC/chip-seq-pipeline2]                           | 1.8.0 (2021-03-26) | Bowtie 2 2.3.4.3 (2018-09-17) (default)<br />BWA 0.7.17 (2017-11-07) (If read-length >= 70 bp, bwa-mem; otherwise, bwa-aln.) |
+| [nf-core/chipseq] [[1][nf-core/chipseq-1]]                | 1.2.1 (2020-07-29) | BWA 0.7.17 (2017-11-07) (bwa-mem)                                                                                            |
+| [stjude/SEASEQ]                                           | 1.1 (2021-04-19)   | Bowtie 1.2.3 (2019-07-05)                                                                                                    |
+
+[ENCODE-DCC/chip-seq-pipeline]: https://github.com/ENCODE-DCC/chip-seq-pipeline
+[chip-seq-pipeline-1]: http://doi.org/10.1101/gr.136184.111
+[ENCODE-DCC/chip-seq-pipeline2]: https://github.com/ENCODE-DCC/chip-seq-pipeline2
+[nf-core/chipseq]: https://nf-co.re/chipseq
+[nf-core/chipseq-1]: https://www.nature.com/articles/s41587-020-0439-x
+[stjude/SEASEQ]: https://github.com/stjude/seaseq
+
+### Description only
+
+Some projects only provide written descriptions of their analysis pipelines, either published in a paper or some other online document. These projects do not make their source code publicly available or easily accessible.
+
+| Project                                             | Publication year | Aligner                     |
+| --------------------------------------------------- | ---------------- | --------------------------- |
+| [ChIP-Atlas] [[1][chip-atlas-1], [2][chip-atlas-2]] | 2018             | Bowtie 2 2.2.2 (2014-04-10) |
+| [ChIPSummitDB] [[1][chipsummitdb-1]]                | 2020             | BWA                         |
+| [Cistrome Project] [[1][cistrome-project-1]]        | 2018             | BWA                         |
+| [Roadmap Epigenomics Project] [[1][rep-1]]          | 2015             | PASH 3.0 (2010)             |
+
+[ChIP-Atlas]: https://chip-atlas.org/
+[chip-atlas-1]: https://doi.org/10.15252/embr.201846255
+[chip-atlas-2]: https://github.com/inutano/chip-atlas/wiki#2-primary-processing
+[ChIPSummitDB]: http://summit.med.unideb.hu/summitdb/
+[chipsummitdb-1]: https://doi.org/10.1093/database/baz141
+[Cistrome Project]: http://cistrome.org/
+[cistrome-project-1]: https://doi.org/10.1093/nar/gky1094
+[Roadmap Epigenomics Project]: http://www.roadmapepigenomics.org/
+[rep-1]: https://doi.org/10.1038/nature14248
 
 Within St. Jude, Computational Biology has historically used BWA to map ChIP-Seq data. Also, the St. Jude Center for Applied Bioinformatics uses BWA as their standard aligner for ChIP-Seq experiments.
 
