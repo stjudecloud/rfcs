@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+                        <h1 id="table-of-contents----omit-in-toc---"><a class="header" href="#table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#motivation">Motivation</a></li>
@@ -171,26 +171,35 @@
 <li><a href="#specification">Specification</a></li>
 <li><a href="#appendix">Appendix</a></li>
 </ul>
-<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This RFC lays out the specification for the ChIP-Seq mapping pipeline.</p>
-<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
 <p>To provide the epigenetics community access to data from ChIP-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ChIP-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
-<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
-<h2><a class="header" href="#aligner-choice" id="aligner-choice">Aligner choice</a></h2>
-<p>The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either <code>bowtie2</code> or <code>bwa</code> for alignment. Both of these aligners use similar internal data structures for mapping via an FM-index.</p>
+<h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
+<h2 id="aligner-choice"><a class="header" href="#aligner-choice">Aligner choice</a></h2>
+<p>The epigenetics community and the results analyses of ChIP-seq experiments are highly varied. Unlike RNA-Seq or DNA-Seq, there is no standard mapping method for the analysis of human data. The community primarily uses either <a href="http://bowtie-bio.sourceforge.net/index.shtml">Bowtie</a>, <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie 2</a>, or <a href="http://bio-bwa.sourceforge.net/">BWA</a> for alignment. These aligners use similar internal data structures for mapping via an FM-index.</p>
 <p>To provide harmonized ChIP-Seq data in St. Jude Cloud, we need to select a single alignment method. Therefore we investigated how alignment was handled by other large projects.</p>
-<table><thead><tr><th>Resource</th><th>Aligner</th><th>Reference</th></tr></thead><tbody>
-<tr><td>ENCODE</td><td>BWA</td><td>https://genome.cshlp.org/content/22/9/1813.full, https://www.encodeproject.org/pipelines/ENCPL220NBH/</td></tr>
-<tr><td>ChIP-Atlas</td><td>Bowtie2</td><td>https://chip-atlas.org/, https://github.com/inutano/chip-atlas/wiki#primary_processing_doc</td></tr>
-<tr><td>ChIPSummitDB</td><td>BWA</td><td>https://academic.oup.com/database/article/doi/10.1093/database/baz141/5700342#191914006</td></tr>
-<tr><td>Roadmap Epigenomics Project</td><td>Pash 3.0</td><td>https://www.nature.com/articles/nature14248#Sec12</td></tr>
-<tr><td>Cistrome</td><td>BWA</td><td>http://cistrome.org/db/#/, https://academic.oup.com/nar/article/47/D1/D729/5193328#129642788</td></tr>
+<h3 id="open-source"><a class="header" href="#open-source">Open source</a></h3>
+<p>Open source projects are ones that publish the source code of their analysis pipelines. This allows anyone to freely explore and review the details of each step.</p>
+<table><thead><tr><th>Project</th><th>Stable release</th><th>Aligner</th></tr></thead><tbody>
+<tr><td><a href="https://github.com/ENCODE-DCC/chip-seq-pipeline">ENCODE-DCC/chip-seq-pipeline</a> [<a href="http://doi.org/10.1101/gr.136184.111">1</a>]</td><td>1.4 (2018-03-08)</td><td>BWA 0.7.10 (2014-07-14) (bwa-aln)</td></tr>
+<tr><td><a href="https://github.com/ENCODE-DCC/chip-seq-pipeline2">ENCODE-DCC/chip-seq-pipeline2</a></td><td>1.8.0 (2021-03-26)</td><td>Bowtie 2 2.3.4.3 (2018-09-17) (default)<br />BWA 0.7.17 (2017-11-07) (If read-length &gt;= 70 bp, bwa-mem; otherwise, bwa-aln.)</td></tr>
+<tr><td><a href="https://nf-co.re/chipseq">nf-core/chipseq</a> [<a href="https://www.nature.com/articles/s41587-020-0439-x">1</a>]</td><td>1.2.1 (2020-07-29)</td><td>BWA 0.7.17 (2017-11-07) (bwa-mem)</td></tr>
+<tr><td><a href="https://github.com/stjude/seaseq">stjude/SEASEQ</a></td><td>1.1 (2021-04-19)</td><td>Bowtie 1.2.3 (2019-07-05)</td></tr>
+</tbody></table>
+<h3 id="description-only"><a class="header" href="#description-only">Description only</a></h3>
+<p>Some projects only provide written descriptions of their analysis pipelines, either published in a paper or some other online document. These projects do not make their source code publicly available or easily accessible.</p>
+<table><thead><tr><th>Project</th><th>Publication year</th><th>Aligner</th></tr></thead><tbody>
+<tr><td><a href="https://chip-atlas.org/">ChIP-Atlas</a> [<a href="https://doi.org/10.15252/embr.201846255">1</a>, <a href="https://github.com/inutano/chip-atlas/wiki#2-primary-processing">2</a>]</td><td>2018</td><td>Bowtie 2 2.2.2 (2014-04-10)</td></tr>
+<tr><td><a href="http://summit.med.unideb.hu/summitdb/">ChIPSummitDB</a> [<a href="https://doi.org/10.1093/database/baz141">1</a>]</td><td>2020</td><td>BWA</td></tr>
+<tr><td><a href="http://cistrome.org/">Cistrome Project</a> [<a href="https://doi.org/10.1093/nar/gky1094">1</a>]</td><td>2018</td><td>BWA</td></tr>
+<tr><td><a href="http://www.roadmapepigenomics.org/">Roadmap Epigenomics Project</a> [<a href="https://doi.org/10.1038/nature14248">1</a>]</td><td>2015</td><td>PASH 3.0 (2010)</td></tr>
 </tbody></table>
 <p>Within St. Jude, Computational Biology has historically used BWA to map ChIP-Seq data. Also, the St. Jude Center for Applied Bioinformatics uses BWA as their standard aligner for ChIP-Seq experiments.</p>
-<h2><a class="header" href="#multiple-mapped-reads" id="multiple-mapped-reads">Multiple mapped reads</a></h2>
+<h2 id="multiple-mapped-reads"><a class="header" href="#multiple-mapped-reads">Multiple mapped reads</a></h2>
 <p>To reduce false positives, ChIP-Seq experiments commonly filter out reads that are not uniquely mapped.  In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, however, we do not filter reads.</p>
-<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
-<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
+<h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
 <p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
 <pre><code class="language-bash">conda create -n chipseq-mapping \
     -c conda-forge \
@@ -205,7 +214,7 @@
 <p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 </code></pre>
-<h2><a class="header" href="#reference-files" id="reference-files">Reference files</a></h2>
+<h2 id="reference-files"><a class="header" href="#reference-files">Reference files</a></h2>
 <p>The following reference files are used as the basis of the ChIP-Seq Workflow:</p>
 <ul>
 <li>
@@ -224,7 +233,7 @@ md5sum -c GRCh38_no_alt.fa.md5
 </code></pre>
 </li>
 </ul>
-<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
 <p>Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/chipseq/chipseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
 <ol>
 <li>
@@ -319,7 +328,7 @@ bwa sampe \
 </code></pre>
 </li>
 </ol>
-<h1><a class="header" href="#appendix" id="appendix">Appendix</a></h1>
+<h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
 
                     </main>
 

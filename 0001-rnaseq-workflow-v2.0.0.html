@@ -163,7 +163,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#table-of-contents----omit-in-toc---" id="table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+                        <h1 id="table-of-contents----omit-in-toc---"><a class="header" href="#table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#motivation">Motivation</a></li>
@@ -171,9 +171,9 @@
 <li><a href="#specification">Specification</a></li>
 <li><a href="#appendix">Appendix</a></li>
 </ul>
-<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/1">associated pull request</a>.</p>
-<h1><a class="header" href="#motivation" id="motivation">Motivation</a></h1>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
 <ul>
 <li><strong>Tool additions and updates.</strong> The tools used in the first version of the RNA-seq pipeline are now woefully out of date (~2 years old). We desire to upgrade the tools to their latest published versions available so we can enjoy the benefits they provide. Furthermore, we'd like to explore adding many more tools to begin publishing QC results (probably a different QC pipeline in the future). See the <a href="#tool-additions-updates">section below on tool additions and updates</a> for more details.</li>
 <li><strong>Updated reference files.</strong> No changes have really been made to the <code>GRCh38_no_alt</code> analysis set reference genome. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow. <a href="https://www.gencodegenes.org/human/release_31.html">GENCODE v31</a> is the latest at the time of writing, so we'd like to utilize the new information contained there as well.</li>
@@ -189,8 +189,8 @@
 </ul>
 </li>
 </ul>
-<h1><a class="header" href="#discussion" id="discussion">Discussion</a></h1>
-<h2><a class="header" href="#tool-additions-and-upgrades" id="tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
+<h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
+<h2 id="tool-additions-and-upgrades"><a class="header" href="#tool-additions-and-upgrades">Tool additions and upgrades</a></h2>
 <p>As part of the RNA-Seq workflow v2.0.0, multiple tools will be added and upgraded:</p>
 <ul>
 <li><code>fq v0.2.0</code> (<a href="https://github.com/stjude/fqlib/releases/tag/v0.2.0">Released</a> November 28, 2018) will be added. This tool will be used to validate the output of <code>picard SamToFastq</code>. <code>picard SamToFastq</code> does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.</li>
@@ -199,7 +199,7 @@
 <li>Update <code>samtools 1.4.0</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.4">Released</a> March 13, 2017) to <code>samtools 1.9</code> (<a href="https://github.com/samtools/samtools/releases/tag/1.9">Released</a> July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).</li>
 <li>Update <code>picard 2.9.4</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.9.4">Released</a> June 15, 2017) to <code>picard 2.20.2</code> (<a href="https://github.com/broadinstitute/picard/releases/tag/2.20.2">Released</a> May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.</li>
 </ul>
-<h2><a class="header" href="#gencode-compatability" id="gencode-compatability">GENCODE compatability</a></h2>
+<h2 id="gencode-compatability"><a class="header" href="#gencode-compatability">GENCODE compatability</a></h2>
 <p>One of the major discussions during this round of revisions was the compatability of the <code>GRCh38_no_alt</code> reference genome with the latest <code>GENCODE</code> gene set. It was posed as the following question:</p>
 <blockquote>
 <p>This has just been an outstanding question of mine for a while — how big of an impact (if any at all) does the mismatch between the patch builds have? GENCODE v31 is built against <code>GRCh38.p12</code> (see the in the title on the <a href="https://www.gencodegenes.org/human/release_31.html">webpage</a>), but obviously the no alt analysis set is derived from <code>GRCh38.p0</code> (with the pseudoautosomal regions hard masked, the EBV chromosome added, etc.)</p>
@@ -235,7 +235,7 @@
 </li>
 </ol>
 <p>After discussion with the group, we decided to stick with option #3.</p>
-<h2><a class="header" href="#gene-model-post-processing" id="gene-model-post-processing">Gene model post-processing</a></h2>
+<h2 id="gene-model-post-processing"><a class="header" href="#gene-model-post-processing">Gene model post-processing</a></h2>
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
@@ -255,7 +255,7 @@
 </ul>
 </blockquote>
 <p>After discussion internally, we decided to discontinue removing <code>level 3</code> annotations by default. This is more consistent with what is being done in the community and it was decided that this was the most straightforward method with little associated risk. Therefore we are no longer performing any post-processing of the gene model.</p>
-<h2><a class="header" href="#quality-of-life-improvements" id="quality-of-life-improvements">Quality of life improvements</a></h2>
+<h2 id="quality-of-life-improvements"><a class="header" href="#quality-of-life-improvements">Quality of life improvements</a></h2>
 <ul>
 <li>Add <code>picard ValidateSamFile</code> to the checks after the <code>STAR</code> alignment and <code>picard SortSam</code> steps. The criticism internally is that <code>ValidateSamFile</code> is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
 <ul>
@@ -266,13 +266,13 @@
 <li>For dependency management, we have moved to using <code>conda</code> within standard docker images. All packages should be available within the <code>defaults</code>, <code>conda-forge</code>, and <code>bioconda</code> repositories.</li>
 <li>Add a checksum algorithm and publish the results in the data browser. After consideration internally, we decided to use the <code>md5sum</code> checksum because of its ubiquity.</li>
 </ul>
-<h2><a class="header" href="#various-other-changes" id="various-other-changes">Various other changes</a></h2>
+<h2 id="various-other-changes"><a class="header" href="#various-other-changes">Various other changes</a></h2>
 <ul>
 <li>Removed a section of the pipeline that reformatted the header of the BAM to be cleaner. <code>STAR</code> outputs a header that is formatted fine already, and I found this code to just be an area where an error could be introduced for little benefit.</li>
 <li>Removed a section of custom code that checks for duplicate read groups. <code>picard ValidateSamFile</code> does this for you (see <a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=7571">the documentation</a> for this tool. Specifically, the <code>DUPLICATE_READ_GROUP_ID</code> error).</li>
 </ul>
-<h1><a class="header" href="#specification" id="specification">Specification</a></h1>
-<h2><a class="header" href="#dependencies" id="dependencies">Dependencies</a></h2>
+<h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
 <p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
 <pre><code class="language-bash">conda create -n star-mapping \
     -c conda-forge \
@@ -287,7 +287,7 @@
 <p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 </code></pre>
-<h2><a class="header" href="#reference-files" id="reference-files">Reference files</a></h2>
+<h2 id="reference-files"><a class="header" href="#reference-files">Reference files</a></h2>
 <p>The following reference files are used as the basis of the RNA-Seq Workflow v2.0.0:</p>
 <ul>
 <li>
@@ -324,7 +324,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 </code></pre>
 </li>
 </ul>
-<h2><a class="header" href="#workflow" id="workflow">Workflow</a></h2>
+<h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
 <p>Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/rnaseq/rnaseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
 <ol>
 <li>
@@ -423,8 +423,8 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 </code></pre>
 </li>
 </ol>
-<h1><a class="header" href="#appendix" id="appendix">Appendix</a></h1>
-<h3><a class="header" href="#reference-genome-comparison" id="reference-genome-comparison">Reference genome comparison</a></h3>
+<h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
+<h3 id="reference-genome-comparison"><a class="header" href="#reference-genome-comparison">Reference genome comparison</a></h3>
 <p>Below are the results of an analysis of each pipeline's <code>GRCh38</code>-based reference genome. The steps are essentially:</p>
 <ol>
 <li>Research what reference genome each project is using and where to find it.</li>
@@ -461,7 +461,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <tr><td>chrM</td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td>True</td></tr>
 <tr><td>chrEBV</td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td>True</td></tr>
 </tbody></table>
-<h3><a class="header" href="#encode-gtf-generation" id="encode-gtf-generation">ENCODE GTF generation</a></h3>
+<h3 id="encode-gtf-generation"><a class="header" href="#encode-gtf-generation">ENCODE GTF generation</a></h3>
 <p>A small investigation was done to see how ENCODE's GENCODE v24 GTF was being produced (the md5sum between the original GENCODE v24 primary assembly file and ENCODE's version of the file weren't matching up). In short, they just changed the names of some of the contigs. You can verify this yourself by doing an <code>md5sum</code> without the sequence name column of the GTF (or manually download and inspect the differences like I did :)).</p>
 <pre><code class="language-bash">curl -sL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_24/gencode.v24.primary_assembly.annotation.gtf.gz | \
          gunzip -c | \
@@ -475,7 +475,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
          md5sum
 # 5227fac91c8d32b3fa3a8f78c4bf0e5c  -
 </code></pre>
-<h3><a class="header" href="#gencode-feature-comparisons" id="gencode-feature-comparisons">GENCODE feature comparisons</a></h3>
+<h3 id="gencode-feature-comparisons"><a class="header" href="#gencode-feature-comparisons">GENCODE feature comparisons</a></h3>
 <p>Below are a few commands used to quickly evaluate how much the GENCODE geneset has changed over time. This was useful in our discussion about how much value would be lost if we just used <code>GENCODE v21</code> (which was based on <code>GRCh38.p0</code>). See <a href="#GENCODE-compatability">the discussion on the GENCODE compatibility</a> for more information.</p>
 <ul>
 <li>
