@@ -12,3 +12,6 @@ excluded_words:
   - samse
   - ncpu
   - sampe
+  - Bowtie
+  - stjude
+  - chipsummitdb-
