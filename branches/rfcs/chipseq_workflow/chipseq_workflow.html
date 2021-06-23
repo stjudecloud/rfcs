@@ -147,8 +147,25 @@
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#motivation">Motivation</a></li>
-<li><a href="#discussion">Discussion</a></li>
-<li><a href="#specification">Specification</a></li>
+<li><a href="#discussion">Discussion</a>
+<ul>
+<li><a href="#aligner-choice">Aligner choice</a>
+<ul>
+<li><a href="#open-source">Open source</a></li>
+<li><a href="#description-only">Description only</a></li>
+</ul>
+</li>
+<li><a href="#multiple-mapped-reads">Multiple mapped reads</a></li>
+</ul>
+</li>
+<li><a href="#specification">Specification</a>
+<ul>
+<li><a href="#required-metadata">Required Metadata</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+<li><a href="#reference-files">Reference files</a></li>
+<li><a href="#workflow">Workflow</a></li>
+</ul>
+</li>
 <li><a href="#appendix">Appendix</a></li>
 </ul>
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
@@ -179,6 +196,14 @@
 <h2 id="multiple-mapped-reads"><a class="header" href="#multiple-mapped-reads">Multiple mapped reads</a></h2>
 <p>To reduce false positives, ChIP-Seq experiments commonly filter out reads that are not uniquely mapped.  In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, however, we do not filter reads.</p>
 <h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
+<h2 id="required-metadata"><a class="header" href="#required-metadata">Required Metadata</a></h2>
+<p>Due to the nature of the experimental methods, ChIP-Seq requires additional metadata to be understood and used for analysis. The following information must be provided for all ChIP-Seq samples to enable their release on St. Jude Cloud.</p>
+<ul>
+<li>Antibody manufacturer/vendor</li>
+<li>Antibody product/catalog number</li>
+<li>Antibody lot number</li>
+<li>Antibody target/mark</li>
+</ul>
 <h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
 <p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
 <pre><code class="language-bash">conda create -n chipseq-mapping \
