@@ -3,7 +3,15 @@
 - [Introduction](#introduction)
 - [Motivation](#motivation)
 - [Discussion](#discussion)
+  - [Aligner choice](#aligner-choice)
+    - [Open source](#open-source)
+    - [Description only](#description-only)
+  - [Multiple mapped reads](#multiple-mapped-reads)
 - [Specification](#specification)
+  - [Required Metadata](#required-metadata)
+  - [Dependencies](#dependencies)
+  - [Reference files](#reference-files)
+  - [Workflow](#workflow)
 - [Appendix](#appendix)
 
 # Introduction
@@ -72,6 +80,15 @@ Within St. Jude, Computational Biology has historically used BWA to map ChIP-Seq
 To reduce false positives, ChIP-Seq experiments commonly filter out reads that are not uniquely mapped.  In order to simplify the ChIP-Seq workflow and to provide the most widely usable alignment data, however, we do not filter reads.
 
 # Specification
+
+## Required Metadata
+
+Due to the nature of the experimental methods, ChIP-Seq requires additional metadata to be understood and used for analysis. The following information must be provided for all ChIP-Seq samples to enable their release on St. Jude Cloud.
+
+* Antibody manufacturer/vendor
+* Antibody product/catalog number
+* Antibody lot number
+* Antibody target/mark
 
 ## Dependencies
 
