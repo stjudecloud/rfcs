@@ -219,6 +219,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                 --outFileName ${prefix}.bw \       # Output bigwig filename
                 --outFileFormat bigwig \           # Set output format to bigwig
                 --numberOfProcessors "max"         # Utilize all available processors
+                --extendReads ${fragment_length}
     ```
 
 # Appendix
