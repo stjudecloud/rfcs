@@ -807,8 +807,8 @@ conda activate bio-qc
 <p>If RNA-Seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are tailored for RNA-Seq files.</p>
 <pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
    -bam $BAM \                              # bam filename
-   -gtf $GTF_REF                            # transcript definition file
-   [-pe]                                      # specify paired end if paired end
+   -gtf $GTF_REF \                          # transcript definition file
+   [-pe]                                    # specify paired end if paired end
 </code></pre>
 </li>
 <li>
