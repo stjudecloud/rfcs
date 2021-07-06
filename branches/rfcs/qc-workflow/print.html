@@ -732,7 +732,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h2 id="specification-1"><a class="header" href="#specification-1">Specification</a></h2>
 <p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead, we have supplied examples of the commands used in each package. Our default memory is 80G and we employ 4 threads for these processes.</p>
 <h3 id="dependencies-1"><a class="header" href="#dependencies-1">Dependencies</a></h3>
-<p>We presume anaconda is available and installed. If not please follow the link to <a href="https://www.anaconda.com/">anaconda</a> first.</p>
+<p>We presume Anaconda is available and installed. If not, please follow the link to <a href="https://www.anaconda.com/">Anaconda</a> first.</p>
 <pre><code class="language-bash">conda create --name bio-qc \
     --channel bioconda \
     --channel conda-forge \
