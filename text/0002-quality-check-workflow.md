@@ -196,8 +196,8 @@ The workflow specification is as follows. Note that some arguments that are not 
       ```bash
       qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
          -bam $BAM \                              # bam filename
-         -gtf $GTF_REF                            # transcript definition file
-         [-pe]                                      # specify paired end if paired end
+         -gtf $GTF_REF \                          # transcript definition file
+         [-pe]                                    # specify paired end if paired end
       ```
 
 11. Combine all of the above metrics using `multiqc`.
