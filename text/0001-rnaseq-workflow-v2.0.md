@@ -49,13 +49,13 @@ First, we researched what some of the projects we respect in the community are d
 
 | Pipeline                                                                 | Reference Genome                                                     | Reference Genome Patch | Gene Model                 | Gene Model Patch |
 | ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------- | -------------------------- | ---------------- |
-| GDC's [mRNA-seq pipeline][gdc-mrnaseq-pipeline]                          | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome]      | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
+| GDC's [mRNA-Seq pipeline][gdc-mrnaseq-pipeline]                          | [`GRCh38_no_alt`-based w/ decoys + viral][gdc-reference-genome]      | `GRCh38.p0`            | [GENCODE v22][gencode-v22] | `GRCh38.p2`      |
 | ENCODE's [RNA-Seq pipeline][encode-rnaseq-pipeline]                      | [`GRCh38_no_alt`-based w/ SpikeIns][encode-reference-genome]         | `GRCh38.p0`            | [GENCODE v24][gencode-v24] | `GRCh38.p5`      |
 | Broad Institute's [GTEx + TOPMed RNA-Seq pipeline][gtex-rnaseq-pipeline] | [Broad's `GRCh38` w/ ERCC SpikeIn][broad-institute-reference-genome] | `GRCh38.p0`            | [GENCODE v26][gencode-v26] | `GRCh38.p10`     |
 
 [gdc-mrnaseq-pipeline]: https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/
 [gdc-reference-genome]: https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files
-[encode-rnaseq-pipeline]: https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-Seq
+[encode-rnaseq-pipeline]: https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq
 [encode-reference-genome]: https://www.encodeproject.org/files/ENCFF742NER/
 [gtex-rnaseq-pipeline]: https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation
 [broad-institute-reference-genome]: https://software.broadinstitute.org/gatk/download/bundle
