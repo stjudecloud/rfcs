@@ -124,7 +124,7 @@ conda create --name bio-qc \
 conda activate bio-qc
 ```
 
-For linting created fastqs, `fqlib` must be installed. See installation instructions [here](https://github.com/stjude/fqlib)
+For linting created fastqs, `fqlib` must be installed. See installation instructions [here](https://github.com/stjude/fqlib).
 
 ### Workflow
 
