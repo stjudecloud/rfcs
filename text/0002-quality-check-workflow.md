@@ -185,7 +185,7 @@ The workflow specification is as follows. Note that some arguments that are not 
          fastq_screen $combined_fastq
       ```
 
-9. If RNA-Seq, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-Seq experiment.
+9. If RNA-Seq data, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-Seq experiment.
 
       ```bash
       ngsderive strandedness
