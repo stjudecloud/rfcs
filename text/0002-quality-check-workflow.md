@@ -215,7 +215,7 @@ The workflow specification is as follows. Note that arguments that are not integ
 
 - What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
 - What other metrics or properties would be valuable?
-- What is best way to define and handle outliers?
+- What is the best way to define and handle outliers?
 - What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone. Outliers in this case may indicate classification errors or rare biological conditions. Which metrics are best tested here?
 
 [fastqc]: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
