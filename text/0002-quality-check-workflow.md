@@ -106,7 +106,7 @@ These are generic instructions for running each of the tools in our pipeline. We
 
 ### Dependencies
 
-We presume anaconda is available and installed. If not please follow the link to [anaconda](https://www.anaconda.com/) first.
+We presume Anaconda is available and installed. If not, please follow the link to [Anaconda](https://www.anaconda.com/) first.
 
 ```bash
 conda create --name bio-qc \
