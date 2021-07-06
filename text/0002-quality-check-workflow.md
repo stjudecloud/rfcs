@@ -52,19 +52,21 @@ FastQC generates metrics about read quality scores, sequence duplication levels 
 
 #### ngsderive
 
-`ngsderive` is an in-house tool developed to backwards-derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-Seq strandedness. Please see [the repository](https://github.com/claymcleod/ngsderive/) for more information.
+`ngsderive` is an in-house tool developed to backwards-derive useful information from omics data. In this RFC, `ngsderive` is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), PHRED score encoding, and RNA-Seq strandedness. `ngsderive` is also used to annotate splice junctions in RNA-Seq data. Please see [the repository](https://github.com/stjudecloud/ngsderive/) for more information.
 
-In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-Seq).
+In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, encoding, strandedness (if RNA-Seq), and to annotate junctions (if RNA-Seq).
 
 | Name                  | Experiments | Check  | Description                                                                                                          |
 | --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
 | Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
 | Inferred read length  | All         | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
-| Inferred strandedness | RNA-Seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available). |
+| Inferred encoding     | All         | Manual | Ensure that the PHRED score ASCII encoding is "PHRED+33", which is synonomous with "Sanger/Illumina 1.8+ encoding".  |
+| Inferred strandedness | RNA-Seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).                   |
+| Junction Annotation   | RNA-Seq     | Manual | Ensure there is a sensible portion of novel, partial-novel, and annotated junctions.                                 |
 
 #### picard
 
-`picard` is used for several operations, including validating BAM files with `ValidateSam` and converting SAM to FastQ files with `SamToFastq` .
+`picard` is used for several operations, including validating BAM files with `ValidateSamFile` and converting SAM to FastQ files with `SamToFastq`.
 
 #### fastq-screen
 
@@ -72,17 +74,17 @@ In the QC pipeline, we leverage all currently available subcommands to try to de
 
 ### Automated metrics comparison
 
-| Name                               | Produced By | Description                                                                                                                                                                                                                                                                                                                                                                                               |
-| ---------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| % Aligned                          | [Samtools]  | Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consistent with sample purity.                                                                                                                                                                                                                                            |
-| Per Base Sequence Quality          | [FastQC]    | The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is to inform our end users -- the quality of the sequencing run has already been assessed by the lab upstream.                                                                               |
-| Overrepresented Sequences          | [FastQC]    | The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).                                                                                                                                                                               |
-| Reads Genomic Origin               | [Qualimap]  | The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination. |
-| rRNA Content                       | ?           | Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.                                                                                                                                                                                                                                             |
-| Transcript Coverage and 5'-3' Bias | [Qualimap]  | Libraries prepared with poly(A) selection may have higher biased expression in 3' region. If reads primarily accumulate at the 3' end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.                                                                                                                                                                |
-| Junction Analysis                  | [Qualimap]  | Analysis of known, partly known, and novel junction positions in spliced alignments.                                                                                                                                                                                                                                                                                                                      |
-| Strand Specificity                 | ngsderive   | Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).                                                                                                                                                                                                                                                                                            |
-| GC Content Bias                    | ?           | GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).                                                                                                                                                                                                                                                     |
+| Name                               | Produced By             | Description                                                                                                                                                                                                                                                                                                                                                                                         |
+| ---------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| % Aligned                          | [Samtools]              | Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consistent with sample purity.                                                                                                                                                                                                                                       |
+| Per Base Sequence Quality          | [FastQC]                | The "Per Base Sequence Quality" module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is to inform our end users -- the quality of the sequencing run has already been assessed by the lab upstream.                                                                                                                        |
+| Overrepresented Sequences          | [FastQC]                | The "Overrepresented Sequences" module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).                                                                                                                                                                         |
+| Reads Genomic Origin               | [Qualimap]              | The "Reads Genomic Origin" from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination. |
+| rRNA Content                       | ?                       | Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.                                                                                                                                                                                                                                       |
+| Transcript Coverage and 5'-3' Bias | [Qualimap]              | Libraries prepared with poly(A) selection may have higher biased expression in 3' region. If reads primarily accumulate at the 3' end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.                                                                                                                                                        |
+| Junction Analysis                  | [ngsderive]             | Analysis of known, partly known, and novel junction positions in spliced alignments.                                                                                                                                                                                                                                                                                                                |
+| Strand Specificity                 | [ngsderive]             | Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).                                                                                                                                                                                                                                                                                      |
+| GC Content Bias                    | [Qualimap] and [FastQC] | GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).                                                                                                                                                                                                                                               |
 
 #### Thresholds and Metrics for Specific Applications
 
@@ -102,7 +104,7 @@ The quality metrics of special concern for RNA-Seq include mapping percentage, p
 
 ## Specification
 
-These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead, we have supplied examples of the commands used in each package. Our default memory is 80G and we employ 4 threads for these processes.
+These are generic instructions for running each of the tools in our pipeline. We run our pipeline as a [WDL workflow](https://github.com/stjudecloud/workflows/blob/master/workflows/qc/quality-check-standard.wdl). We have supplied examples of the commands used for each package. For the typical memory requirements of each command, please see our [WDL repository](https://github.com/stjudecloud/workflows).
 
 ### Dependencies
 
@@ -117,8 +119,8 @@ conda create --name bio-qc \
     qualimap==2.2.2c \
     samtools==1.9 \
     fastq-screen==0.13.0 \
-    ngsderive==1.1.0 \
-    multiqc==1.9 \
+    ngsderive==2.2.0 \
+    multiqc==1.10.1 \
     -y
 
 conda activate bio-qc
@@ -140,17 +142,15 @@ The workflow specification is as follows. Note that arguments that are not integ
 
       ```bash
       picard ValidateSamFile \
-          I=$BAM \                                        # specify bam file
-          MODE=SUMMARY\                                   # concise output
-          INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-          IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
+          I=$BAM             \  # specify bam file
+          MODE=SUMMARY          # concise output
       ```
 
 3. Run `samtools flagstat` to gather general statistics such as alignment percentage.
 
-    ```bash
-    samtools flagstat $BAM
-    ```
+      ```bash
+      samtools flagstat $BAM
+      ```
 
 4. Run `fastqc` to collect sequencing and library-related statistics. These are only for informational purposes -- as stated above, we typically do not remove samples based on this information (with rare exception), as the sequencing-related QC work was done upstream in the genomics lab.
 
@@ -170,37 +170,52 @@ The workflow specification is as follows. Note that arguments that are not integ
       ngsderive readlen $BAM
       ```
 
-7. Run `qualimap bamqc` to gather more in-depth statistics about read stats, coverage, mapping quality, mismatches, etc.
+7. Run `ngsderive encoding` to infer PHRED score encoding.
 
       ```bash
-      qualimap bamqc -bam $BAM \          # bam filename
-          -nt $NUM_THREADS \              # threads requested
-          -nw 400                         # number of windows
+      ngsderive encoding \
+          -n -1          \  # parse the entire file
+          $BAM
       ```
 
-8. If WGS or WES data, run `fastq_screen`. For performance, we subsample the input BAM using `samtools view -s $computed_fraction` before running it through `picard SamToFastq`. The resulting fastqs are validated with `fq lint` provided by `fqlib`.
+8. Run `qualimap bamqc` to gather more in-depth statistics about read stats, coverage, mapping quality, mismatches, etc.
+
+      ```bash
+      qualimap bamqc -bam $BAM \  # bam filename
+          -nt $NUM_THREADS     \  # threads requested
+          -nw 400                 # number of windows
+      ```
+
+9. If WGS or WES data, run `fastq_screen`. For performance, we subsample the input BAM using `samtools view -s $computed_fraction` before running it through `picard SamToFastq`. The resulting fastqs are validated with `fq lint` provided by `fqlib`.
 
       ```bash
       cat $fastq_1 $fastq_2 > $combined_fastq
-      fastq_screen $combined_fastq
+      fastq_screen          \
+          --aligner bowtie2 \
+          $combined_fastq
       ```
 
-9. If RNA-Seq data, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-Seq experiment.
+10. If RNA-Seq data, run `ngsderive strandedness` to determine a backwards-computed strandedness of the RNA-Seq experiment.
 
       ```bash
-      ngsderive strandedness
+      ngsderive strandedness $BAM
       ```
 
-10. If RNA-Seq data, run `qualimap rnaseq` to gather QC statistics that are tailored for RNA-Seq files.
+11. If RNA-Seq data, run `ngsderive junction-annotation` to calculate the number of known, novel, and partial-novel junctions.
 
       ```bash
-      qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
-         -bam $BAM \                              # bam filename
-         -gtf $GTF_REF \                          # transcript definition file
-         [-pe]                                    # specify paired end if paired end
+      ngsderive junction-annotation $BAM
       ```
 
-11. Combine all of the above metrics using `multiqc`.
+12. If RNA-Seq data, run `qualimap rnaseq` to gather QC statistics that are tailored for RNA-Seq files.
+
+      ```bash
+      qualimap rnaseq --java-mem-size=$MEM_SIZE \  # memory
+         -bam $BAM                              \  # bam filename
+         [-pe]                                     # specify paired end if paired end
+      ```
+
+13. Combine all of the above metrics using `multiqc`.
 
       ```bash
       multiqc . # recurse all files in '.'
@@ -223,3 +238,4 @@ The workflow specification is as follows. Note that arguments that are not integ
 [picard]: https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_ValidateSamFile.php
 [qualimap]: http://qualimap.bioinfo.cipf.es/doc_html/command_line.html
 [samtools]: http://www.htslib.org/doc/samtools.html
+[ngsderive]: https://github.com/stjudecloud/ngsderive/
