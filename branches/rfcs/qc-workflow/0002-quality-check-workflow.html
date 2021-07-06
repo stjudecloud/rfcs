@@ -277,7 +277,7 @@ conda activate bio-qc
 <li>
 <p>If WGS or WES data, run <code>fastq_screen</code>. For performance, we subsample the input BAM using <code>samtools view -s $computed_fraction</code> before running it through <code>picard SamToFastq</code>. The resulting fastqs are validated with <code>fq lint</code> provided by <code>fqlib</code>.</p>
 <pre><code class="language-bash">cat $fastq_1 $fastq_2 &gt; $combined_fastq
-   fastq_screen $combined_fastq
+fastq_screen $combined_fastq
 </code></pre>
 </li>
 <li>
