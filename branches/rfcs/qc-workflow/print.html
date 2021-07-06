@@ -698,15 +698,17 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h4 id="fastqc"><a class="header" href="#fastqc">fastqc</a></h4>
 <p>FastQC generates metrics about read quality scores, sequence duplication levels and length distributions, among others.</p>
 <h4 id="ngsderive"><a class="header" href="#ngsderive">ngsderive</a></h4>
-<p><code>ngsderive</code> is an in-house tool developed to backwards-derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), and RNA-Seq strandedness. Please see <a href="https://github.com/claymcleod/ngsderive/">the repository</a> for more information.</p>
-<p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, and strandedness (if RNA-Seq).</p>
+<p><code>ngsderive</code> is an in-house tool developed to backwards-derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), PHRED score encoding, and RNA-Seq strandedness. <code>ngsderive</code> is also used to annotate splice junctions in RNA-Seq data. Please see <a href="https://github.com/stjudecloud/ngsderive/">the repository</a> for more information.</p>
+<p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, encoding, strandedness (if RNA-Seq), and to annotate junctions (if RNA-Seq).</p>
 <table><thead><tr><th>Name</th><th>Experiments</th><th>Check</th><th>Description</th></tr></thead><tbody>
 <tr><td>Inferred instrument</td><td>All</td><td>Manual</td><td>Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).</td></tr>
 <tr><td>Inferred read length</td><td>All</td><td>Manual</td><td>Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available).</td></tr>
+<tr><td>Inferred encoding</td><td>All</td><td>Manual</td><td>Ensure that the PHRED score ASCII encoding is &quot;PHRED+33&quot;, which is synonomous with &quot;Sanger/Illumina 1.8+ encoding&quot;.</td></tr>
 <tr><td>Inferred strandedness</td><td>RNA-Seq</td><td>Manual</td><td>Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).</td></tr>
+<tr><td>Junction Annotation</td><td>RNA-Seq</td><td>Manual</td><td>Ensure there is a sensible portion of novel, partial-novel, and annotated junctions.</td></tr>
 </tbody></table>
 <h4 id="picard"><a class="header" href="#picard">picard</a></h4>
-<p><code>picard</code> is used for several operations, including validating BAM files with <code>ValidateSam</code> and converting SAM to FastQ files with <code>SamToFastq</code> .</p>
+<p><code>picard</code> is used for several operations, including validating BAM files with <code>ValidateSamFile</code> and converting SAM to FastQ files with <code>SamToFastq</code>.</p>
 <h4 id="fastq-screen"><a class="header" href="#fastq-screen">fastq-screen</a></h4>
 <p><code>fastq_screen</code> is used to estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).</p>
 <h3 id="automated-metrics-comparison"><a class="header" href="#automated-metrics-comparison">Automated metrics comparison</a></h3>
@@ -717,9 +719,9 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <tr><td>Reads Genomic Origin</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>The &quot;Reads Genomic Origin&quot; from Qualimap determines how many alignments fall into exonic, intronic, and intergenic regions. Even if there is a high genomic mapping rate, it is necessary to check where the reads are mapped. It should be verified that the mapping to intronic regions and exons are within acceptable ranges. Abnormal results could indicate issues such as DNA contamination.</td></tr>
 <tr><td>rRNA Content</td><td>?</td><td>Verify that excess ribosomal content is filtered/normalized across samples to ensure that alignment rates and subsequent normalization of data is not skewed.</td></tr>
 <tr><td>Transcript Coverage and 5'-3' Bias</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Libraries prepared with poly(A) selection may have higher biased expression in 3' region. If reads primarily accumulate at the 3' end of transcripts (in poly(A)-selected samples), this might indicate the starting RNA was of low quality.</td></tr>
-<tr><td>Junction Analysis</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a></td><td>Analysis of known, partly known, and novel junction positions in spliced alignments.</td></tr>
-<tr><td>Strand Specificity</td><td>ngsderive</td><td>Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).</td></tr>
-<tr><td>GC Content Bias</td><td>?</td><td>GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
+<tr><td>Junction Analysis</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>Analysis of known, partly known, and novel junction positions in spliced alignments.</td></tr>
+<tr><td>Strand Specificity</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).</td></tr>
+<tr><td>GC Content Bias</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a> and <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
 </tbody></table>
 <h4 id="thresholds-and-metrics-for-specific-applications"><a class="header" href="#thresholds-and-metrics-for-specific-applications">Thresholds and Metrics for Specific Applications</a></h4>
 <p>To apply quality control metrics to vet data, we need reasonable thresholds that are practically achievable and neither too lax nor too strict. Our preference is for statistically or empirically determined thresholds, rather than arbitrary estimates. By statistical thresholds, we are referring to distributional tests that formally define outliers. By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded. Statistical tests can be performed on large populations of QC data. We are already in a position to do that today. Empirical tests, however, require foreknowledge of the correct results. This requires experimental design and implementation through a laboratory at some cost.</p>
@@ -730,7 +732,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h4 id="metrics-for-rnaseq"><a class="header" href="#metrics-for-rnaseq">Metrics for RNAseq</a></h4>
 <p>The quality metrics of special concern for RNA-Seq include mapping percentage, percentage properly paired reads, and exonic region coverage. Mapping quality is also critical.</p>
 <h2 id="specification-1"><a class="header" href="#specification-1">Specification</a></h2>
-<p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline in a series of QC scripts that are tailored for our compute cluster, so those commands may not apply elsewhere. Instead, we have supplied examples of the commands used in each package. Our default memory is 80G and we employ 4 threads for these processes.</p>
+<p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline as a <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/qc/quality-check-standard.wdl">WDL workflow</a>. We have supplied examples of the commands used for each package. For the typical memory requirements of each command, please see our <a href="https://github.com/stjudecloud/workflows">WDL repository</a>.</p>
 <h3 id="dependencies-1"><a class="header" href="#dependencies-1">Dependencies</a></h3>
 <p>We presume Anaconda is available and installed. If not, please follow the link to <a href="https://www.anaconda.com/">Anaconda</a> first.</p>
 <pre><code class="language-bash">conda create --name bio-qc \
@@ -741,8 +743,8 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
     qualimap==2.2.2c \
     samtools==1.9 \
     fastq-screen==0.13.0 \
-    ngsderive==1.1.0 \
-    multiqc==1.9 \
+    ngsderive==2.2.0 \
+    multiqc==1.10.1 \
     -y
 
 conda activate bio-qc
@@ -759,10 +761,8 @@ conda activate bio-qc
 <li>
 <p>Use Picard's <code>ValidateSamFile</code> tool to ensure the inner contents of the BAM file are well-formed.</p>
 <pre><code class="language-bash">picard ValidateSamFile \
-    I=$BAM \                                        # specify bam file
-    MODE=SUMMARY\                                   # concise output
-    INDEX_VALIDATION_STRINGENCY=LESS_EXHAUSTIVE \   # lower stringency faster processing time
-    IGNORE=INVALID_PLATFORM_VALUE                   # Validations to ignore.
+    I=$BAM             \  # specify bam file
+    MODE=SUMMARY          # concise output
 </code></pre>
 </li>
 <li>
@@ -786,29 +786,42 @@ conda activate bio-qc
 </code></pre>
 </li>
 <li>
+<p>Run <code>ngsderive encoding</code> to infer PHRED score encoding.</p>
+<pre><code class="language-bash">ngsderive encoding \
+    -n -1          \  # parse the entire file
+    $BAM
+</code></pre>
+</li>
+<li>
 <p>Run <code>qualimap bamqc</code> to gather more in-depth statistics about read stats, coverage, mapping quality, mismatches, etc.</p>
-<pre><code class="language-bash">qualimap bamqc -bam $BAM \          # bam filename
-    -nt $NUM_THREADS \              # threads requested
-    -nw 400                         # number of windows
+<pre><code class="language-bash">qualimap bamqc -bam $BAM \  # bam filename
+    -nt $NUM_THREADS     \  # threads requested
+    -nw 400                 # number of windows
 </code></pre>
 </li>
 <li>
 <p>If WGS or WES data, run <code>fastq_screen</code>. For performance, we subsample the input BAM using <code>samtools view -s $computed_fraction</code> before running it through <code>picard SamToFastq</code>. The resulting fastqs are validated with <code>fq lint</code> provided by <code>fqlib</code>.</p>
 <pre><code class="language-bash">cat $fastq_1 $fastq_2 &gt; $combined_fastq
-fastq_screen $combined_fastq
+fastq_screen          \
+    --aligner bowtie2 \
+    $combined_fastq
 </code></pre>
 </li>
 <li>
 <p>If RNA-Seq data, run <code>ngsderive strandedness</code> to determine a backwards-computed strandedness of the RNA-Seq experiment.</p>
-<pre><code class="language-bash">ngsderive strandedness
+<pre><code class="language-bash">ngsderive strandedness $BAM
+</code></pre>
+</li>
+<li>
+<p>If RNA-Seq data, run <code>ngsderive junction-annotation</code> to calculate the number of known, novel, and partial-novel junctions.</p>
+<pre><code class="language-bash">ngsderive junction-annotation $BAM
 </code></pre>
 </li>
 <li>
 <p>If RNA-Seq data, run <code>qualimap rnaseq</code> to gather QC statistics that are tailored for RNA-Seq files.</p>
-<pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \ # memory
-   -bam $BAM \                              # bam filename
-   -gtf $GTF_REF \                          # transcript definition file
-   [-pe]                                    # specify paired end if paired end
+<pre><code class="language-bash">qualimap rnaseq --java-mem-size=$MEM_SIZE \  # memory
+   -bam $BAM                              \  # bam filename
+   [-pe]                                     # specify paired end if paired end
 </code></pre>
 </li>
 <li>
