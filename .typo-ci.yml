@@ -31,3 +31,4 @@ excluded_words:
   - fqlib
   - readlen
   - gtf
+  - Illumina

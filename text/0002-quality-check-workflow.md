@@ -60,7 +60,7 @@ In the QC pipeline, we leverage all currently available subcommands to try to de
 | --------------------- | ----------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
 | Inferred instrument   | All         | Manual | Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).        |
 | Inferred read length  | All         | Manual | Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available). |
-| Inferred encoding     | All         | Manual | Ensure that the PHRED score ASCII encoding is "PHRED+33", which is synonomous with "Sanger/Illumina 1.8+ encoding".  |
+| Inferred encoding     | All         | Manual | Ensure that the PHRED score ASCII encoding is "PHRED+33", which is synonymous with "Sanger/Illumina 1.8+ encoding".  |
 | Inferred strandedness | RNA-Seq     | Manual | Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).                   |
 | Junction Annotation   | RNA-Seq     | Manual | Ensure there is a sensible portion of novel, partial-novel, and annotated junctions.                                 |
 
