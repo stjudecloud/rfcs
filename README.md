@@ -21,7 +21,7 @@ All RFCs go through a three-stage process from draft to adoption:
 1. An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
    * Titles of pull requests in this phase are typical prefixed with `[WIP]` and should not be considered mature enough to accept comments from the community. 
    * The amount of time the RFC spends in this state is variable depending on the scope of the proposal.
-2. The RFC opens for discussion from users and stakeholders within the St. Jude community. 
+2. The RFC opens for discussion from users and stakeholders<sup>[1](#footnote1)</sup> within the St. Jude community. 
    * The beginning of this phase will be indicated by a comment on the pull request from the author.
    * The RFC will remain in this phase for **1 week**.
 3. The RFC opens for discussion from the broader community.
@@ -29,6 +29,8 @@ All RFCs go through a three-stage process from draft to adoption:
    * The RFC will remain in this phase for **2 weeks**.
 
 Each phase of the process brings about further refinement of details and hardening of the proposal.
+
+<sup><a name="footnote1">1</a></sup> St. Jude community stakeholders include the Department of Computational Biology, Center for Applied Bioinformatics, and users of St. Jude Cloud that have requested data from a `@stjude.org` e-mail address.
 
 ### Evaluation and acceptance
 
@@ -88,7 +90,7 @@ This project is [MIT](https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md
 
 ## Questions
 
-With any quetions, please [contact us][contact].
+With any questions, please [contact us][contact].
 
 [rfcs]: https://en.wikipedia.org/wiki/Request_for_Comments
 [contact]: mailto:support@stjude.cloud
