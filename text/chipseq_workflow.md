@@ -3,16 +3,7 @@
 - [Introduction](#introduction)
 - [Motivation](#motivation)
 - [Discussion](#discussion)
-  - [Aligner choice](#aligner-choice)
-    - [Open source](#open-source)
-    - [Description only](#description-only)
-  - [Multiple mapped reads](#multiple-mapped-reads)
 - [Specification](#specification)
-  - [Required Metadata](#required-metadata)
-  - [Dependencies](#dependencies)
-  - [Reference files](#reference-files)
-  - [Workflow](#workflow)
-- [Appendix](#appendix)
 
 # Introduction
 
@@ -143,7 +134,14 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                      IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
                      IGNORE=MISSING_PLATFORM_VALUE
    ```
-2. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
+
+2. Run `samtools quickcheck` on incoming BAM to ensure it is properly formatted.
+
+   ```bash
+   samtools quickcheck $INPUT_BAM
+   ```
+
+3. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
 
    ```bash
    samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
@@ -152,7 +150,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 
    If the BAM has unaccounted reads, those reads will need to be removed and the samtools split step will need to be rerun.
 
-3. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
+4. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
 
    ```bash
       picard SamToFastq \
@@ -163,52 +161,65 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
              VALIDATION_STRINGENCY=SILENT
    ```
 
-4. Run `fq lint` on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
+5. Run `fq lint` on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
    ```bash
-   fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
+   fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2. Read 2 is optional.
    ```
 
-5. Run the `BWA` alignment algorithm.
+6. Run the `BWA` alignment algorithm.
 
    ```bash
-   bwa aln $INDEX_PREFIX \
-        $ALL_FASTQ_R1 $ALL_FASTQ_READ2 \ # FastQ files, separated by comma if there are multiple files. The order of your R1 and R2 files must match!
+   bwa aln -t ${ncpu} $INDEX_PREFIX \
+        $ALL_FASTQ_R1 > sai_1 \ # FastQ files, separated by comma if there are multiple files.
+
+   # If paired end data
+   bwa aln -t ${ncpu} $INDEX_PREFIX \
+        $ALL_FASTQ_R2 > sai_2 \ # FastQ files, separated by comma if there are multiple files.
 
    # For single end data
    bwa samse \
+        -r $READ_GROUP_STRING \
         $INDEX_PREFIX \
         $SAI \
-        $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
+        $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} > $BWA_BAM
 
    # For paired end data
    bwa sampe \
+        -r $READ_GROUP_STRING \
         $INDEX_PREFIX \
         $SAI_R1 \
         $SAI_R2 \
         $ALL_FASTQ_R1 \
-        $ALL_FASTQ_READ2 | samtools view -hb --threads ${ncpu} -o $BWA_BAM
+        $ALL_FASTQ_R2 | samtools view -hb --threads ${ncpu} > $BWA_BAM
    ```
 
-6. Run `picard SortSam` on the `BWA`-aligned BAM file.
+7. Run `picard CleanSam` on the `BWA`-aligned BAM file. Fixes soft-clipping beyond the end-of-reference and sets MAPQ to 0 for unmapped reads.
 
    ```bash
-   picard SortSam I=$BWA_BAM \                   # Input BAM.
-                  O=$BWASORTED_BAM \             # Coordinate-sorted BAM.
-                  SO="coordinate" \              # Specify the output should be coordinate-sorted
-                  CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-                  CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
-                  COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-                  VALIDATION_STRINGENCY=SILENT   # Turn off validation stringency for this step.
+   picard -Xmx~{java_heap_size}g CleanSam \
+      I=~{bam} \                                # Input BAM.
+      O=~{output_filename}                      # Output cleaned BAM
    ```
 
-7. Index the coordinate-sorted BAM file.
+8. Run `picard MergeSamFiles` on aligned, cleaned BAM files.
+
+   ```bash
+      picard -Xmx~{java_heap_size}g MergeSamFiles \
+         ~{sep=' ' input_arg} \                       # Write an INPUT= argument for each input BAM file
+         OUTPUT=~{output_name} \                      # Nmae for combined BAM file
+         SORT_ORDER=~{sort_order} \                   # Set sort order (default=coordinate)
+         USE_THREADING=~{threading} \                 # Use specified number of threads
+         VALIDATION_STRINGENCY=SILENT                 # Ignore validation errors
+   ```
+
+9. Index the coordinate-sorted BAM file.
 
    ```bash
    samtools index $BWA_SORTED_BAM # BWA-aligned, coordinate-sorted BAM.
    ```
 
-8. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
+10. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
 
    ```bash
    picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
@@ -216,19 +227,7 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                   IGNORE=MISSING_PLATFORM_VALUE
    ```
 
-9. Run `picard MarkDuplicates` on the `BWA`-aligned BAM file.
-
-   ```bash
-   picard MarkDuplicates I=$BWA_SORTED_BAM \            # Input BAM.
-                         O=$MARKED_BAM \                # Duplicate-marked output BAM.
-                         VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
-                         CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-                         CREATE_MD5_FILE=false \        # Explicitly do not create an md5 checksum at this step, in case the default changes.
-                         COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-                         METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
-   ```
-
-10. Run `bamCoverage` to generate bigwig file.
+11. Run `bamCoverage` to generate bigwig file.
 
     ```bash
     bamCoverage --bam ${MARKED_BAM} \              # Input BAM file
@@ -237,5 +236,3 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
                 --numberOfProcessors "max"         # Utilize all available processors
                 --extendReads ${fragment_length}
     ```
-
-# Appendix
