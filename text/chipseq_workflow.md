@@ -164,18 +164,18 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 5. Run `fq lint` on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
    ```bash
-   fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2. Read 2 is optional.
+   fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2. Read 2 is optional.
    ```
 
 6. Run the `BWA` alignment algorithm.
 
    ```bash
    bwa aln -t ${ncpu} $INDEX_PREFIX \
-        $ALL_FASTQ_R1 > sai_1 \ # FastQ files, separated by comma if there are multiple files.
+        $ALL_FASTQ_R1 > sai_1 \           # FastQ files, separated by comma if there are multiple files.
 
    # If paired end data
    bwa aln -t ${ncpu} $INDEX_PREFIX \
-        $ALL_FASTQ_R2 > sai_2 \ # FastQ files, separated by comma if there are multiple files.
+        $ALL_FASTQ_R2 > sai_2 \           # FastQ files, separated by comma if there are multiple files.
 
    # For single end data
    bwa samse \
@@ -197,42 +197,41 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 7. Run `picard CleanSam` on the `BWA`-aligned BAM file. Fixes soft-clipping beyond the end-of-reference and sets MAPQ to 0 for unmapped reads.
 
    ```bash
-   picard -Xmx~{java_heap_size}g CleanSam \
-      I=~{bam} \                                # Input BAM.
-      O=~{output_filename}                      # Output cleaned BAM
+   picard -Xmx${JAVA_HEAP_SIZE}g CleanSam \
+      I=${BAM} \                                      # Input BAM.
+      O=${OUTPUT_FILENAME}                            # Output cleaned BAM
    ```
 
 8. Run `picard MergeSamFiles` on aligned, cleaned BAM files.
 
    ```bash
-      picard -Xmx~{java_heap_size}g MergeSamFiles \
-         ~{sep=' ' input_arg} \                       # Write an INPUT= argument for each input BAM file
-         OUTPUT=~{output_name} \                      # Nmae for combined BAM file
-         SORT_ORDER=~{sort_order} \                   # Set sort order (default=coordinate)
-         USE_THREADING=~{threading} \                 # Use specified number of threads
+      picard -Xmx${JAVA_HEAP_SIZE}g MergeSamFiles \
+         ${INPUT_ARG} \                               # Write an INPUT= argument for each input BAM file
+         OUTPUT=${OUTPUT_NAME} \                      # Nmae for combined BAM file
+         SORT_ORDER=${SORT_ORDER} \                   # Set sort order (default=coordinate)
+         USE_THREADING=${THREADING} \                 # Use specified number of threads
          VALIDATION_STRINGENCY=SILENT                 # Ignore validation errors
    ```
 
 9. Index the coordinate-sorted BAM file.
 
    ```bash
-   samtools index $BWA_SORTED_BAM # BWA-aligned, coordinate-sorted BAM.
+   samtools index $BWA_SORTED_BAM                     # BWA-aligned, coordinate-sorted BAM.
    ```
 
 10. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
 
    ```bash
-   picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
-                  IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+   picard ValidateSamFile I=$BWA_SORTED_BAM \         # BWA-aligned, coordinate-sorted BAM.
+                  IGNORE=INVALID_PLATFORM_VALUE \     # Validations to ignore.
                   IGNORE=MISSING_PLATFORM_VALUE
    ```
 
 11. Run `bamCoverage` to generate bigwig file.
 
     ```bash
-    bamCoverage --bam ${MARKED_BAM} \              # Input BAM file
-                --outFileName ${prefix}.bw \       # Output bigwig filename
-                --outFileFormat bigwig \           # Set output format to bigwig
-                --numberOfProcessors "max"         # Utilize all available processors
-                --extendReads ${fragment_length}
+    bamCoverage --bam ${MERGED_BAM} \                 # Input BAM file
+                --outFileName ${PREFIX}.bw \          # Output bigwig filename
+                --outFileFormat bigwig \              # Set output format to bigwig
+                --numberOfProcessors "max"            # Utilize all available processors
     ```
