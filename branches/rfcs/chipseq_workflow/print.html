@@ -711,17 +711,17 @@ md5sum -c GRCh38_no_alt.fa.md5
 </li>
 <li>
 <p>Run <code>fq lint</code> on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
-<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2. Read 2 is optional.
+<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2. Read 2 is optional.
 </code></pre>
 </li>
 <li>
 <p>Run the <code>BWA</code> alignment algorithm.</p>
 <pre><code class="language-bash">bwa aln -t ${ncpu} $INDEX_PREFIX \
-     $ALL_FASTQ_R1 &gt; sai_1 \ # FastQ files, separated by comma if there are multiple files.
+     $ALL_FASTQ_R1 &gt; sai_1 \           # FastQ files, separated by comma if there are multiple files.
 
 # If paired end data
 bwa aln -t ${ncpu} $INDEX_PREFIX \
-     $ALL_FASTQ_R2 &gt; sai_2 \ # FastQ files, separated by comma if there are multiple files.
+     $ALL_FASTQ_R2 &gt; sai_2 \           # FastQ files, separated by comma if there are multiple files.
 
 # For single end data
 bwa samse \
@@ -742,42 +742,41 @@ bwa sampe \
 </li>
 <li>
 <p>Run <code>picard CleanSam</code> on the <code>BWA</code>-aligned BAM file. Fixes soft-clipping beyond the end-of-reference and sets MAPQ to 0 for unmapped reads.</p>
-<pre><code class="language-bash">picard -Xmx~{java_heap_size}g CleanSam \
-   I=~{bam} \                                # Input BAM.
-   O=~{output_filename}                      # Output cleaned BAM
+<pre><code class="language-bash">picard -Xmx${JAVA_HEAP_SIZE}g CleanSam \
+   I=${BAM} \                                      # Input BAM.
+   O=${OUTPUT_FILENAME}                            # Output cleaned BAM
 </code></pre>
 </li>
 <li>
 <p>Run <code>picard MergeSamFiles</code> on aligned, cleaned BAM files.</p>
-<pre><code class="language-bash">   picard -Xmx~{java_heap_size}g MergeSamFiles \
-      ~{sep=' ' input_arg} \                       # Write an INPUT= argument for each input BAM file
-      OUTPUT=~{output_name} \                      # Nmae for combined BAM file
-      SORT_ORDER=~{sort_order} \                   # Set sort order (default=coordinate)
-      USE_THREADING=~{threading} \                 # Use specified number of threads
+<pre><code class="language-bash">   picard -Xmx${JAVA_HEAP_SIZE}g MergeSamFiles \
+      ${INPUT_ARG} \                               # Write an INPUT= argument for each input BAM file
+      OUTPUT=${OUTPUT_NAME} \                      # Nmae for combined BAM file
+      SORT_ORDER=${SORT_ORDER} \                   # Set sort order (default=coordinate)
+      USE_THREADING=${THREADING} \                 # Use specified number of threads
       VALIDATION_STRINGENCY=SILENT                 # Ignore validation errors
 </code></pre>
 </li>
 <li>
 <p>Index the coordinate-sorted BAM file.</p>
-<pre><code class="language-bash">samtools index $BWA_SORTED_BAM # BWA-aligned, coordinate-sorted BAM.
+<pre><code class="language-bash">samtools index $BWA_SORTED_BAM                     # BWA-aligned, coordinate-sorted BAM.
 </code></pre>
 </li>
 <li>
 <p>Run <code>picard ValidateSamFile</code> on the aligned and sorted BAM file.</p>
 </li>
 </ol>
-<pre><code class="language-bash">picard ValidateSamFile I=$BWA_SORTED_BAM \     # BWA-aligned, coordinate-sorted BAM.
-               IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+<pre><code class="language-bash">picard ValidateSamFile I=$BWA_SORTED_BAM \         # BWA-aligned, coordinate-sorted BAM.
+               IGNORE=INVALID_PLATFORM_VALUE \     # Validations to ignore.
                IGNORE=MISSING_PLATFORM_VALUE
 </code></pre>
 <ol start="11">
 <li>
 <p>Run <code>bamCoverage</code> to generate bigwig file.</p>
-<pre><code class="language-bash">bamCoverage --bam ${MARKED_BAM} \              # Input BAM file
-            --outFileName ${prefix}.bw \       # Output bigwig filename
-            --outFileFormat bigwig \           # Set output format to bigwig
-            --numberOfProcessors &quot;max&quot;         # Utilize all available processors
-            --extendReads ${fragment_length}
+<pre><code class="language-bash">bamCoverage --bam ${MERGED_BAM} \                 # Input BAM file
+            --outFileName ${PREFIX}.bw \          # Output bigwig filename
+            --outFileFormat bigwig \              # Set output format to bigwig
+            --numberOfProcessors &quot;max&quot;            # Utilize all available processors
 </code></pre>
 </li>
 </ol>
