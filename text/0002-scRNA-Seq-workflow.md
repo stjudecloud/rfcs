@@ -34,7 +34,7 @@ For consistency with other St. Jude Cloud datasets, we are not considering psued
 
 STARsolo is a standalone pipeline that is integrated into the STAR RNA-Seq aligner. It was developed with a goal to generate highly similar results to those of Cell Ranger. STARsolo has the advantage of typically being significantly faster than Cell Ranger on the same dataset. It reimplments the algorithms of Cell Ranger in order to produce highly similar results. [Bruning, et. al.](https://doi.org/10.1093/gigascience/giac001) (2022) provide a useful comparison of commonly used scRNA-Seq methods.
 
-<img src="../resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width=800">
+<img src="../resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
 
 ### Quantification choice
 
