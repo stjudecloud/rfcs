@@ -49,14 +49,14 @@ Using either STARsolo or Cell Ranger for analysis requires selection of referenc
 
 ### Sample-based
 
-1. Library Prep Kit
-2. Library Selection Protocol
-3. Sequencing Machine
-4. Library Layout
-5. RNA-Seq Strandedness
-6. Read Length
+1. Library Prep Kit - e.g. Illumina TruSeq RNA Library Prep Kit V2
+2. Library Selection Protocol - e.g. Total, Poly-A
+3. Sequencing Machine - e.g. Illumina HiSeq 2000, Illumina NovaSeq 6000
+4. Library Layout - Single-End, Paired-End
+5. RNA-Seq Strandedness - Unstranded, Stranded-Reverse, Stranded-Forward
+6. Read Length - Number of bp per read
 7. Tissue Preservative - e.g. FFPE, Fresh/Frozen
-8. Cell Isolation Protocol
+8. Cell Isolation Protocol - e.g. Droplet, Microfluidics
 9. Flowcell design - Multiplexed, split across flowcells, etc.
 
 ### Cell-based
