@@ -45,7 +45,57 @@ Using either STARsolo or Cell Ranger for analysis requires selection of referenc
 
 # Specification
 
+## Metadata
+
+### Sample-based
+
+1. Library Prep Kit
+2. Library Selection Protocol
+3. Sequencing Machine
+4. Library Layout
+5. RNA-Seq Strandedness
+6. Read Length
+7. Tissue Preservative - e.g. FFPE, Fresh/Frozen
+8. Cell Isolation Protocol
+9. Flowcell design - Multiplexed, split across flowcells, etc.
+
+### Cell-based
+
+TODO
 ## Dependencies
+
+If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need to install [anaconda](https://www.anaconda.com/) first.
+
+```bash
+conda create -n scrnaseq-mapping \
+    -c conda-forge \
+    -c bioconda \
+    picard==2.20.2 \
+    samtools==1.9 \
+    ngsderive==2.2.0 \
+    tabix==1.11 \
+    -y
+```
+
+Additionally, you will want to install our `fqlib` library to check that FastQ files are properly paired and have no duplicate read names. Installation of the [Rust](https://rustup.rs/) programming language is required.
+
+```bash
+cargo install --git https://github.com/stjude/fqlib.git --tag v0.8.0
+```
+
+Additionally, you will need to install `Cell Ranger` from 10x genomics to perform the alignment and feature calling.
+
+```bash
+curl -o cellranger-7.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
+
+echo '30855cb96a097c9cab6b02bdb520423f  cellranger-7.0.0.tar.gz' > cellranger-7.0.0.tar.gz.md5
+
+md5sum -c cellranger-7.0.0.tar.gz.md5
+
+tar -xzvf cellranger-7.0.0.tar.gz
+
+export PATH=$(pwd)/cellranger-7.0.0:$PATH
+```
 
 ## Reference files
 
@@ -71,7 +121,8 @@ Here are the resulting steps in the scRNA-Seq Workflow v1.0.0 pipeline. There mi
 1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
 
    ```bash
-   picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
+   picard ValidateSamFile \
+                     I=$INPUT_BAM \                     # Input BAM.
                      IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
                      IGNORE=MISSING_PLATFORM_VALUE
    ```
