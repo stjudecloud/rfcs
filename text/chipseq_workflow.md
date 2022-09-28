@@ -72,6 +72,11 @@ To reduce false positives, ChIP-Seq experiments commonly filter out reads that a
 
 # Specification
 
+With the publication of Brian Abraham's [SEAseq paper], the St. Jude Cloud team has opted to incorporate their ChIP-Seq pipeline as the core alignment method for St. Jude Cloud harmonized ChIP-Seq data. The [SEAseq repository] provides additional details on their method.
+
+[SEAseq paper]: https://doi.org/10.1186/s12859-022-04588-z
+[SEAseq repository]: https://github.com/stjude/seaseq
+
 ## Required Metadata
 
 Due to the nature of the experimental methods, ChIP-Seq requires additional metadata to be understood and used for analysis. The following information must be provided for all ChIP-Seq samples to enable their release on St. Jude Cloud.
@@ -91,7 +96,7 @@ conda create -n chipseq-mapping \
     -c bioconda \
     picard==2.20.2 \
     samtools==1.9 \
-    bwa==0.7.17 \
+    ngsderive==2.2.0 \
     deeptools==3.5.0 \
     -y
 ```
@@ -117,10 +122,39 @@ The following reference files are used as the basis of the ChIP-Seq Workflow:
   # > GRCh38_no_alt.fa: OK
   ```
 
-  - Last, the following command is used to prepare the BWA index file:
+- The bowtie reference file is preparted using SEAseq.
+  ```bash
+   bowtie-build \
+    --threads $ncpu \    # Number of threads for building index
+    $reference_file \    # FASTA file to use for index
+    $output_index
+  ```
+
+- For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz). For the exact steps to generate the gene model we use, you can run the following commands:
 
   ```bash
-  bwa index GRCh38_no_alt.fa
+  wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
+  echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" > gencode.v31.annotation.gtf.gz.md5
+  md5sum -c gencode.v31.annotation.gtf.gz.md5
+  # > gencode.v31.annotation.gtf.gz: OK
+
+  gunzip gencode.v31.annotation.gtf.gz
+  echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" > gencode.v31.annotation.gtf.md5
+  md5sum -c gencode.v31.annotation.gtf.md5
+  # > gencode.v31.annotation.gtf: OK
+  ```
+
+- A list of excluded regions are obtained from the Boyle lab. This list is based on ENCODE data and a comprehensive set of anomalous, unstructured, or high-signal regions in next generation sequencing data.
+  ```bash
+  wget -O hg38.excludelist.bed.gz https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
+  echo "83fe6bf8187a64dee8079b80f75ba289  hg38.excludelist.bed.gz" > hg38.excludelist.bed.gz.md5
+  md5sum -c hg38.excludelist.bed.gz.md5
+  # > hg38.excludelist.bed.gz: OK
+
+  gunzip hg38.excludelist.bed.gz
+  echo "766848c2a632d1b9dd12fac98ce02bd3  hg38.excludelist.bed" > hg38.excludelist.bed.md5
+  md5sum -c hg38.excludelist.bed.md5
+  # > hg38.excludelist.bed: OK
   ```
 
 ## Workflow
@@ -167,34 +201,93 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
    fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2. Read 2 is optional.
    ```
 
-6. Run the `BWA` alignment algorithm.
+6. Run the `SEAseq` alignment algorithm.
 
    ```bash
-   bwa aln -t ${ncpu} $INDEX_PREFIX \
-        $ALL_FASTQ_R1 > sai_1 \           # FastQ files, separated by comma if there are multiple files.
+           if [ -f "$fastqfile_R2" ]; then    # If paired-end reads
+            bowtie \
+                --chunkmbs=256 \                # Max MB of RAM for best-first search frames
+                -p $ncpu \                      # Number of threads to use
+                -k $good_alignments \           # report N good alignments per read (default: 2)
+                -m $limit_alignments \          # Supress all alignments if > N alignments exist (default: 2)
+                -X $insert_size \               # Maximum insert size for paired-end reads (default: 600)
+                $stranded_m \                   # Strandedness of reads (fr, rf, ff)
+                --best \                        # Hits guaranteed best stratum
+                -S \                            # write SAM format output
+                $BOWTIE_INDEXES \               # Bowtie index files
+                -1 $fastqfile \                 # Mate 1
+                -2 $fastqfile_R2 \              # Mate 2
+                > $outputfile                   # Output file name
+        else                                    # If single-end reads
+            bowtie \
+                -l $readlength \                # seed length for -n (default: input read length or 75)
+                -p $ncpu \                      # Number of threads to use
+                -k $good_alignments \           # report N good alignments per read (default: 2)
+                -m $limit_alignments \          # Supress all alignments if > N alignments exist (default: 2)
+                --best \                        # Hits guaranteed best stratum
+                -S \                            # write SAM format output
+                $BOWTIE_INDEXES \               # Bowtie index files
+                $fastqfile \                    # Fastq file containing reads
+                > $outputfile                   # Output file name
+        fi
 
-   # If paired end data
-   bwa aln -t ${ncpu} $INDEX_PREFIX \
-        $ALL_FASTQ_R2 > sai_2 \           # FastQ files, separated by comma if there are multiple files.
+         if [ "~{paired_end}" == 'true' ]; then
+            awk -F\\t 'BEGIN{j=0}{j++}{if(NF>5 && j%2==0){ \
+                printf "%s_%.0f\t", $1, j-1 } else if(NF>5 && j%2==1){ \
+                printf "%s_%.0f\t", $1, j } else { printf $1 "\t";j=0 } \
+                for(i=2;i<=NF;i++){ printf "%s\t", $i}; printf "\n" }' \
+                $samfile > $renamed_sam
 
-   # For single end data
-   bwa samse \
-        -r $READ_GROUP_STRING \
-        $INDEX_PREFIX \
-        $SAI \
-        $ALL_FASTQ_R1 | samtools view -hb --threads ${ncpu} > $BWA_BAM
+            samtools fixmate -m \
+                $renamed_sam \
+                $fixmatefile
+            samtools sort \
+                $fixmatefile \
+                -o $outputfile
+        else
+            samtools sort \
+                $samfile \
+                -o $outputfile
+        fi
 
-   # For paired end data
-   bwa sampe \
-        -r $READ_GROUP_STRING \
-        $INDEX_PREFIX \
-        $SAI_R1 \
-        $SAI_R2 \
-        $ALL_FASTQ_R1 \
-        $ALL_FASTQ_R2 | samtools view -hb --threads ${ncpu} > $BWA_BAM
+        samtools flagstat $bamfile > $flagstat
+
+        samtools index $bamfile
+
+        # Filter BAM if excluded list provided
+        intersectBed \
+            -v \
+            -a $bamfile \
+            -b $EXCLUDE_FILE \
+            > $FILTERED_BAM
+         # If paired:
+         pairToBed \
+            -abam $fixmatefile \
+            -b $EXCLUDE_FILE \
+            -type neither \
+            > $PAIRTOBED_OUTPUT_FILE
+
+         samtools sort \
+            $PAIRTOBED_OUTPUT_FILE \
+            -o $PAIRTOBED_FILE
+
+         samtools flagstat $PAIRTOBED_FILE > $PAIRTOBED_FILE_FLAGSTAT
+
+         samtools index $PAIRTOBED_FILE
+
+         samtools markdup \
+            -r -s \
+            $PAIRTOBED_FILE \
+            $exclude_markdup
+
+         samtools flagstat $exclude_markdup > $exclude_markdup_flagstat
+
+         samtools index $exclude_markdup
+
+
    ```
 
-7. Run `picard CleanSam` on the `BWA`-aligned BAM file. Fixes soft-clipping beyond the end-of-reference and sets MAPQ to 0 for unmapped reads.
+7. Run `picard CleanSam` on the `SEAseq`-aligned BAM file. Fixes soft-clipping beyond the end-of-reference and sets MAPQ to 0 for unmapped reads.
 
    ```bash
    picard -Xmx${JAVA_HEAP_SIZE}g CleanSam \
@@ -212,17 +305,25 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
          USE_THREADING=${THREADING} \                 # Use specified number of threads
          VALIDATION_STRINGENCY=SILENT                 # Ignore validation errors
    ```
-
-9. Index the coordinate-sorted BAM file.
-
+9. Run SEAseq mark duplicates.
    ```bash
-   samtools index $BWA_SORTED_BAM                     # BWA-aligned, coordinate-sorted BAM.
+        samtools markdup \
+            -r \                   # Remove duplicate reads (-r)
+            -s \                   # Report stats (-s)
+            ${bamfile} \           # SEAseq aligned BAM file
+            ${outputfile}          # Output BAM with duplicates removed
    ```
 
-10. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
+10. Index the coordinate-sorted BAM file.
 
    ```bash
-   picard ValidateSamFile I=$BWA_SORTED_BAM \         # BWA-aligned, coordinate-sorted BAM.
+   samtools index $SEASEQ_SORTED_BAM                     # SEAseq-aligned, coordinate-sorted BAM.
+   ```
+
+12. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
+
+   ```bash
+   picard ValidateSamFile I=$SEAseq_SORTED_BAM \         # SEAseq-aligned, coordinate-sorted BAM.
                   IGNORE=INVALID_PLATFORM_VALUE \     # Validations to ignore.
                   IGNORE=MISSING_PLATFORM_VALUE
    ```
