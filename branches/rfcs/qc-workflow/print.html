@@ -5,8 +5,10 @@
         <meta charset="UTF-8">
         <title>St. Jude Cloud RFCs</title>
         <meta name="robots" content="noindex" />
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -17,25 +19,29 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,7 +57,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -63,12 +69,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -84,7 +92,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -94,7 +102,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -111,6 +119,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -124,8 +133,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -145,7 +155,7 @@
 <blockquote>
 <p>This repository contains all Request for Comments (or <a href="https://en.wikipedia.org/wiki/Request_for_Comments">rfcs</a>) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.</p>
 </blockquote>
-<h3 id="-a-hrefhttpsstjudecloudgithubiorfcshomepagea"><a class="header" href="#-a-hrefhttpsstjudecloudgithubiorfcshomepagea">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
+<h3 id="-homepage"><a class="header" href="#-homepage">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
 <h2 id="process-and-evaluation"><a class="header" href="#process-and-evaluation">Process and Evaluation</a></h2>
 <p>Initiation of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please <a href="mailto:support@stjude.cloud">contact us</a> before investing a large amount of time in your proposal.</p>
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
@@ -222,7 +232,7 @@ python3 -m http.server -d book
 This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md">MIT</a> licensed.</p>
 <h2 id="questions"><a class="header" href="#questions">Questions</a></h2>
 <p>With any quetions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents----omit-in-toc---"><a class="header" href="#table-of-contents----omit-in-toc---">Table of Contents <!-- omit in toc --></a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="0001-rnaseq-workflow-v2.0.html#introduction">Introduction</a></li>
 <li><a href="0001-rnaseq-workflow-v2.0.html#motivation">Motivation</a></li>
@@ -273,11 +283,12 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 </blockquote>
 <p>As is apparent in the question, the <code>GRCh38</code> reference genome is regularly patched with non-coordinate altering, backwards compatable changes (see more information <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/">here</a>). On the other hand, each <code>GENCODE</code> gene model release is based on a particular patch of the reference genome. This may be problematic because most bioinformatics analyses use a reference genome based on the non-patched version of <code>GRCh38</code>. What follows is our discussion and investigation into the effect between mismatching nucleotide sequences in the reference genome and the gene model.</p>
 <p>First, we researched what some of the projects we respect in the community are doing:</p>
-<table><thead><tr><th>Pipeline</th><th>Reference Genome</th><th>Reference Genome Patch</th><th>Gene Model</th><th>Gene Model Patch</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Pipeline</th><th>Reference Genome</th><th>Reference Genome Patch</th><th>Gene Model</th><th>Gene Model Patch</th></tr></thead><tbody>
 <tr><td>GDC's <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">mRNA-Seq pipeline</a></td><td><a href="https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files"><code>GRCh38_no_alt</code>-based w/ decoys + viral</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a></td><td><code>GRCh38.p2</code></td></tr>
 <tr><td>ENCODE's <a href="https://www.encodeproject.org/pipelines/ENCPL002LPE/https://www.encodeproject.org/pages/pipelines/#RNA-seq">RNA-Seq pipeline</a></td><td><a href="https://www.encodeproject.org/files/ENCFF742NER/"><code>GRCh38_no_alt</code>-based w/ SpikeIns</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a></td><td><code>GRCh38.p5</code></td></tr>
 <tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-Seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
 </tbody></table>
+</div>
 <p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="0001-rnaseq-workflow-v2.0.html#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <p>Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply <a href="https://github.com/alexdobin/STAR/issues/673">here</a>. In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.</p>
 <p>Given the landscape of the community and the author's response, we considered three possible options for moving ahead:</p>
@@ -543,7 +554,7 @@ md5sum $INPUT_BAM
 <li>Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).</li>
 </ol>
 <p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
-<table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
 <tr><td>chr1</td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td>True</td></tr>
 <tr><td>chr2</td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td>True</td></tr>
 <tr><td>chr3</td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td><code>76635a41ea913a405ded820447d067b0</code></td><td>True</td></tr>
@@ -571,6 +582,7 @@ md5sum $INPUT_BAM
 <tr><td>chrM</td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td><code>c68f52674c9fb33aef52dcf399755519</code></td><td>True</td></tr>
 <tr><td>chrEBV</td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td><code>6743bd63b3ff2b5b8985d8933c53290a</code></td><td>True</td></tr>
 </tbody></table>
+</div>
 <h3 id="encode-gtf-generation"><a class="header" href="#encode-gtf-generation">ENCODE GTF generation</a></h3>
 <p>A small investigation was done to see how ENCODE's GENCODE v24 GTF was being produced (the md5sum between the original GENCODE v24 primary assembly file and ENCODE's version of the file weren't matching up). In short, they just changed the names of some of the contigs. You can verify this yourself by doing an <code>md5sum</code> without the sequence name column of the GTF (or manually download and inspect the differences like I did :)).</p>
 <pre><code class="language-bash">curl -sL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_24/gencode.v24.primary_assembly.annotation.gtf.gz | \
@@ -652,7 +664,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </code></pre>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents----omit-in-toc----1"><a class="header" href="#table-of-contents----omit-in-toc----1">Table of Contents <!-- omit in toc --></a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="0002-quality-check-workflow.html#introduction">Introduction</a></li>
 <li><a href="0002-quality-check-workflow.html#motivation">Motivation</a></li>
@@ -691,19 +703,20 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <h4 id="ngsderive"><a class="header" href="#ngsderive">ngsderive</a></h4>
 <p><code>ngsderive</code> is an in-house tool developed to backwards-derive useful information from omics data. In this RFC, <code>ngsderive</code> is used to guess which instrument was used to sequence the data, the original read length (pre-read trimming), PHRED score encoding, and RNA-Seq strandedness. <code>ngsderive</code> is also used to annotate splice junctions in RNA-Seq data. Please see <a href="https://github.com/stjudecloud/ngsderive/">the repository</a> for more information.</p>
 <p>In the QC pipeline, we leverage all currently available subcommands to try to determine read length, instrument, encoding, strandedness (if RNA-Seq), and to annotate junctions (if RNA-Seq).</p>
-<table><thead><tr><th>Name</th><th>Experiments</th><th>Check</th><th>Description</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Experiments</th><th>Check</th><th>Description</th></tr></thead><tbody>
 <tr><td>Inferred instrument</td><td>All</td><td>Manual</td><td>Ensure that the inferred instrument and confidence matches the reported instrument by the lab (if available).</td></tr>
 <tr><td>Inferred read length</td><td>All</td><td>Manual</td><td>Ensure that the inferred read length (pre read trimming) matches the reported read length by the lab (if available).</td></tr>
 <tr><td>Inferred encoding</td><td>All</td><td>Manual</td><td>Ensure that the PHRED score ASCII encoding is &quot;PHRED+33&quot;, which is synonymous with &quot;Sanger/Illumina 1.8+ encoding&quot;.</td></tr>
 <tr><td>Inferred strandedness</td><td>RNA-Seq</td><td>Manual</td><td>Ensure that the inferred strandedness matches the reported strandedness by the lab (if available).</td></tr>
 <tr><td>Junction Annotation</td><td>RNA-Seq</td><td>Manual</td><td>Ensure there is a sensible portion of novel, partial-novel, and annotated junctions.</td></tr>
 </tbody></table>
+</div>
 <h4 id="picard"><a class="header" href="#picard">picard</a></h4>
 <p><code>picard</code> is used for several operations, including validating BAM files with <code>ValidateSamFile</code> and converting SAM to FastQ files with <code>SamToFastq</code>.</p>
 <h4 id="fastq-screen"><a class="header" href="#fastq-screen">fastq-screen</a></h4>
 <p><code>fastq_screen</code> is used to estimate the percentage of material derived from different sources (human, mouse, PhiX, etc).</p>
 <h3 id="automated-metrics-comparison"><a class="header" href="#automated-metrics-comparison">Automated metrics comparison</a></h3>
-<table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Produced By</th><th>Description</th></tr></thead><tbody>
 <tr><td>% Aligned</td><td><a href="http://www.htslib.org/doc/samtools.html">Samtools</a></td><td>Also known as mapping percentage, this indicator of quality, when high, verifies the mapping process/genome was correct and is consistent with sample purity.</td></tr>
 <tr><td>Per Base Sequence Quality</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Per Base Sequence Quality&quot; module from FastQC shows the distribution of quality scores across all bases at each position in the reads. In our case, this is to inform our end users -- the quality of the sequencing run has already been assessed by the lab upstream.</td></tr>
 <tr><td>Overrepresented Sequences</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The &quot;Overrepresented Sequences&quot; module from FastQC displays sequences (at least 20bp) that occur in more than 0.1% of the total number of sequences and will help identify contamination (vector, adapter sequences, etc.).</td></tr>
@@ -714,6 +727,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <tr><td>Strand Specificity</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>Verification/sanity check of how reads were stranded for the RNA sequencing (stranded or unstranded protocol).</td></tr>
 <tr><td>GC Content Bias</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">Qualimap</a> and <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>GC profiles are typically remarkably stable. Even small/minor deviations could indicate a problem with the library used (or bacterial contamination).</td></tr>
 </tbody></table>
+</div>
 <h4 id="thresholds-and-metrics-for-specific-applications"><a class="header" href="#thresholds-and-metrics-for-specific-applications">Thresholds and Metrics for Specific Applications</a></h4>
 <p>To apply quality control metrics to vet data, we need reasonable thresholds that are practically achievable and neither too lax nor too strict. Our preference is for statistically or empirically determined thresholds, rather than arbitrary estimates. By statistical thresholds, we are referring to distributional tests that formally define outliers. By empirical thresholds, we are referring to standards below which data analysis or interpretation are degraded. Statistical tests can be performed on large populations of QC data. We are already in a position to do that today. Empirical tests, however, require foreknowledge of the correct results. This requires experimental design and implementation through a laboratory at some cost.</p>
 <h4 id="metrics-for-wgs"><a class="header" href="#metrics-for-wgs">Metrics for WGS</a></h4>
@@ -847,31 +861,43 @@ Useful metadata from various stages (sample collection, laboratory, pre-sequenci
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
+    </div>
     </body>
 </html>

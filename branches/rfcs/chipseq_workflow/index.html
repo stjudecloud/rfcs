@@ -4,8 +4,10 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Introduction - St. Jude Cloud RFCs</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -16,25 +18,29 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,12 +68,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -75,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="chipseq_workflow.html"><strong aria-hidden="true">2.</strong> chipseq_workflow</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="0002-scRNA-Seq-workflow.html"><strong aria-hidden="true">2.</strong> 0002-scRNA-Seq-workflow</a></li><li class="chapter-item expanded "><a href="chipseq_workflow.html"><strong aria-hidden="true">3.</strong> chipseq_workflow</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -83,7 +91,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -93,7 +101,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -110,6 +118,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -123,8 +132,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -144,7 +154,7 @@
 <blockquote>
 <p>This repository contains all Request for Comments (or <a href="https://en.wikipedia.org/wiki/Request_for_Comments">rfcs</a>) for the St. Jude Cloud project. Currently, RFCs on the St. Jude Cloud project are focused on outlining changes to the genomic analysis pipelines. However, we may expand to other areas over time.</p>
 </blockquote>
-<h3 id="-a-hrefhttpsstjudecloudgithubiorfcshomepagea"><a class="header" href="#-a-hrefhttpsstjudecloudgithubiorfcshomepagea">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
+<h3 id="-homepage"><a class="header" href="#-homepage">🏠 <a href="https://stjudecloud.github.io/rfcs/">Homepage</a></a></h3>
 <h2 id="process-and-evaluation"><a class="header" href="#process-and-evaluation">Process and Evaluation</a></h2>
 <p>Initiation of an RFC for the St. Jude Cloud project is currently limited to members of the St. Jude Cloud team. If you are a member of our community and have an idea you would like us to consider (or if you would like to propose your own RFC), please <a href="mailto:support@stjude.cloud">contact us</a> before investing a large amount of time in your proposal.</p>
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
@@ -156,7 +166,7 @@
 <li>The amount of time the RFC spends in this state is variable depending on the scope of the proposal.</li>
 </ul>
 </li>
-<li>The RFC opens for discussion from users and stakeholders within the St. Jude community. 
+<li>The RFC opens for discussion from users and stakeholders<sup><a href="#footnote1">1</a></sup> within the St. Jude community. 
 <ul>
 <li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
 <li>The RFC will remain in this phase for <strong>1 week</strong>.</li>
@@ -170,6 +180,7 @@
 </li>
 </ol>
 <p>Each phase of the process brings about further refinement of details and hardening of the proposal.</p>
+<p><sup><a name="footnote1">1</a></sup> St. Jude community stakeholders include the Department of Computational Biology, Center for Applied Bioinformatics, and users of St. Jude Cloud that have requested data from a <code>@stjude.org</code> e-mail address.</p>
 <h3 id="evaluation-and-acceptance"><a class="header" href="#evaluation-and-acceptance">Evaluation and acceptance</a></h3>
 <p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. </p>
 <p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. </p>
@@ -220,21 +231,24 @@ python3 -m http.server -d book
 <p>Copyright © 2020 <a href="https://github.com/stjudecloud">St. Jude Cloud Team</a>.<br />
 This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md">MIT</a> licensed.</p>
 <h2 id="questions"><a class="header" href="#questions">Questions</a></h2>
-<p>With any quetions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
+<p>With any questions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
                             <a rel="next" href="0001-rnaseq-workflow-v2.0.0.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
                     <a rel="next" href="0001-rnaseq-workflow-v2.0.0.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
@@ -242,16 +256,25 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
+
+
+    </div>
     </body>
 </html>
