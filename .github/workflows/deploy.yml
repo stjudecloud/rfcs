@@ -8,18 +8,25 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      # (1) Check out the repository
+      - uses: actions/checkout@v3
+
+      # (2) Install `mdbook`
       - name: Install Dependencies
         uses: peaceiris/actions-mdbook@v1
         with:
           mdbook-version: "latest"
+
+      # (3) Build the documentation
       - run: bash bin/ci-build.sh
+
+      # (4) Deploy the documentation to GitHub pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./book
           user_name: "St. Jude Cloud"
           user_email: support@stjude.cloud
