@@ -8,34 +8,29 @@
 
 # Introduction
 
-This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/1).
+This RFC lays out the specification for the RNA-Seq mapping pipeline v2.0.0. The improvements contained within are largely based on (a) new version of tools/reference files and (b) feedback from the community. You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/1).
 
 # Motivation
 
-- **Tool additions and updates.** The tools we use are woefully out of date (2 years old). We should reap the benefits of new tools if possible. Additionally, there is some new functionality in the area of QC and validation that I'd like to add. See the [section below](#Tool-additions-updates) for more details.
-  - Note that all of the tools used in the RNA-Seq Workflow v1.0 were the latest available version.
-- **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set FASTA. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow ([GENCODE v31](https://www.gencodegenes.org/human/release_31.html) is now out).
-- **QC and quality of life improvements based on feedback from the community.** Many interactions with the community have impacted the thoughts in this release:
-  - A primary driver for the rewrite of the pipeline is the feedback we heard about the `ERCC SpikeIn` sequences.
+- **Tool additions and updates.** The tools used in the first version of the RNA-seq pipeline are now woefully out of date (~2 years old). We desire to upgrade the tools to their latest published versions available so we can enjoy the benefits they provide. Furthermore, we'd like to explore adding many more tools to begin publishing QC results (probably a different QC pipeline in the future). See the [section below on tool additions and updates](#tool-additions-updates) for more details.
+- **Updated reference files.** No changes have really been made to the `GRCh38_no_alt` analysis set reference genome. However, three major releases of the GENCODE gene model have transpired since we released the first revision of the RNA-Seq workflow. [GENCODE v31](https://www.gencodegenes.org/human/release_31.html) is the latest at the time of writing, so we'd like to utilize the new information contained there as well.
+- **Quality of life improvements based on feedback from the community.** Input from the community has greatly informed our thoughts on what can be improved in this release. Some ideas that come to mind are:
+  - Removal of the `ERCC SpikeIn` sequences to ensure consistent sequence dictionaries between DNA and RNA data.
     - Popular tools such as `GATK` and `picard` are generally unhappy if the sequence dictionaries don't match perfectly.
     - The inclusion of the External RNA Controls Consortium (ERCC) Spike-in Control RNA sequences in the alignment reference file we used for RNA-Seq mapping was hence causing issues when using mapped RNA-Seq BAM files in conjunction with other non-RNA-Seq BAM files in downstream analysis using these tools.
-    - Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences.
-    - After some discussion internally, we decided the best thing to do was to remove the ERCC genome by default. We are considering providing an ERCC version of the BAM for samples containing these sequences, but there is no consensus on whether it's worth it yet.
-  - One of the most important themes in the RNA-Seq Workflow v2.0 proposal is the emphasis on QC and quality of life improvements (e.g. `fq lint`, generation and publication of md5sums).
+    - Last, many of our RNA-Seq samples were not generated using 'ERCC' spike-in control sequences, so the benefit its inclusion provides is minimal.
 
 # Discussion
 
 ## Tool additions and upgrades
 
-As part of the RNA-Seq workflow v2, multiple tools will be added and upgraded:
+As part of the RNA-Seq workflow v2.0.0, multiple tools will be added and upgraded:
 
 - `fq v0.2.0` ([Released](https://github.com/stjude/fqlib/releases/tag/v0.2.0) November 28, 2018) will be added. This tool will be used to validate the output of `picard SamToFastq`. `picard SamToFastq` does not currently catch all of the errors we wish to catch at this stage (such as duplicate read names in the FastQ file). Thus, we will leverage this tool to independently validate that the data is well-formed by our definition of that phrase.
-- `rseqc v3.0.0` ([Source](http://rseqc.sourceforge.net/#download-rseqc)) will be added. We have started using `infer_experiment.py` to infer strandedness from the data and ensure that the data matches what information we get from the lab.
-- Added `qualimap v.2.2.2` ([Source](https://bitbucket.org/kokonech/qualimap/)). Although we have been using `qualimap` quite heavily in our QC pipeline, we are formally adding this to the end of the RNA-Seq alignment workflow. The `bamqc` and `rnaseq` subcommands are both used.
+- `ngsderive v1.0.2` ([Released](https://github.com/claymcleod/ngsderive/releases/tag/v1.0.2) March 3, 2020) will be added. This tool will be used to empirically infer strandedness of RNA-seq experiments.
 - Update `STAR 2.5.3a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.5.3a) March 17, 2017) to `STAR 2.7.1a` ([Released](https://github.com/alexdobin/STAR/releases/tag/2.7.1a) May 15, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
 - Update `samtools 1.4.0` ([Released](https://github.com/samtools/samtools/releases/tag/1.4) March 13, 2017) to `samtools 1.9` ([Released](https://github.com/samtools/samtools/releases/tag/1.9) July 18, 2018). Updating the samtools version whenever possible is of particular interest to me due to the historical fragility of the samtools code (although it has seemed to get better over the last year or so).
 - Update `picard 2.9.4` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.9.4) June 15, 2017) to `picard 2.20.2` ([Released](https://github.com/broadinstitute/picard/releases/tag/2.20.2) May 28, 2019). Upgraded to receive the benefits of bug fixes and software optimizations.
-- Added `deeptools 3.3.1` ([Released](https://github.com/deeptools/deepTools/releases/tag/3.3.1) September 10, 2019). Using `bamCoverage` to generate bigwig coverage information.
 
 ## GENCODE compatability
 
@@ -63,7 +58,7 @@ First, we researched what some of the projects we respect in the community are d
 [gencode-v24]: https://www.gencodegenes.org/human/release_24.html
 [gencode-v26]: https://www.gencodegenes.org/human/release_26.html
 
-**Note:** You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on `GRCh38_no_alt` takes a little bit more elbow grease: if you're interested, you can check out the comparison table [in the appendix](#reference-genome-comparison). If you are _really_ interested, you can recapitulate those results by running [the associated Jupyter notebook](https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
+**Note:** You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on `GRCh38_no_alt` takes a little bit more elbow grease: if you're interested, you can check out the comparison table [in the appendix](#reference-genome-comparison). If you are _really_ interested, you can recapitulate those results by running [the associated Jupyter notebook](https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb).
 
 Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply [here](https://github.com/alexdobin/STAR/issues/673). In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.
 
@@ -72,15 +67,14 @@ Given the landscape of the community and the author's response, we considered th
 1. We could try using the reference FASTA supplied with the respective GENCODE release as suggested by Dr. Dobin. This was the most undesirable approach from our groups perspective:
    - The main reason was that this reference genome did not mirror the sequence dictionary or characteristics of the reference genome we use in our DNA-Seq pipeline out of the box. As outlined in [the motivation section](#Motivation) of this document, this incongruency was a major driving factor for the creation of this RFC.
    - We agreed it would require too large an amount of postprocessing of the GENCODE reference genome to convert to apply all of the no alt analysis set changes (e.g. converting to UCSC names, masking regions of the genome, inserting the EBV chromosome).
-   - Additionally, this could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason no one applies the patches to their no alt analysis set :)).
+   - Additionally, this could leave room for the introduction of lots of strange errors, and there was no interest in getting into the business of genome generation (there is a reason no one applies the patches to their no alt analysis set).
 2. We could downgrade the GENCODE gene model to the latest release that was still based on `GRCh38.p0` ([GENCODE v21](https://www.gencodegenes.org/human/release_21.html) would the correct version to use in this case).
-   - The concordance of the reference sequences obviously made this choice an attractive option. However, `GENCODE v21` was released over 5 years ago (06.2014) and there were many valuable updates over that time. In particular, a quick look showed that there were many more transcripts and that the number of lncRNAs more than doubled (see appendix). We did not want to lose all of this forward progress if we could avoid it.
-   - To see what we looked at, you can see [the relevant section in the appendix](#GENCODE-feature-comparisons).
+   - The concordance of the reference sequences obviously made this choice an attractive option. However, `GENCODE v21` was released over 5 years ago (06.2014) and there were many valuable updates over that time. In particular, a quick look showed that there were many more transcripts and that the number of lncRNAs more than doubled (see appendix). We did not want to lose all of this forward progress if we could avoid it. To see what we looked at, you can see [the relevant section in the appendix](#GENCODE-feature-comparisons).
 3. We could use the latest GENCODE release despite the mismatches outlined above as it appears most other projects have done.
-   - The general consensus was that, after filtering the gene model for only known features (`level 1` and `level 2`), the effect of this discordance would be small enough to tolerate so that we could gain all of the knowledge accumulated since the older release.
-   - To quantify this, we measured the differences in gene expression (as measured by the `R^2` value between `GENCODE v21` and `GENCODE v31`) and splice junction detection (as measured by the number of splice junctions detected and the relative proportions of novel/partially novel/known junctions). In the current version of this RFC, I have not outlined the results, but I plan to in the future (see TODOs).
+   - The general consensus was that the effect of this discordance would be small enough to tolerate so that we could gain all of the knowledge accumulated since the older release.
+   - To quantify this, we measured the differences in gene expression (as measured by the `R^2` value between `GENCODE v21` and `GENCODE v31`) and splice junction detection (as measured by the number of splice junctions detected and the relative proportions of novel/partially novel/known junctions).
 
-Given that there was no perfect option, we decided to stick with option #3.
+After discussion with the group, we decided to stick with option #3.
 
 ## Gene model post-processing
 
@@ -96,21 +90,18 @@ Originally, I had posed this question to the group:
 
 After discussion internally, we decided to discontinue removing `level 3` annotations by default. This is more consistent with what is being done in the community and it was decided that this was the most straightforward method with little associated risk. Therefore we are no longer performing any post-processing of the gene model.
 
-## Quality control inclusion
-
-Previously, our QC pipeline was broken out into a separate workflow. Moving forward, we will include the parts of our pipeline which pertain to QC within this specification. There are really no noteworthy changes to the QC pipeline for this release other than updating the command line tools we use there to the latest versions.
-
 ## Quality of life improvements
 
-- Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard MarkDuplicates` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
+- Add `picard ValidateSamFile` to the checks after the `STAR` alignment and `picard SortSam` steps. The criticism internally is that `ValidateSamFile` is quite stringent and often errors with concerns we don't care about. I'm testing this out as I develop the pipeline, and so far, I've found the following warnings to be ignore-worthy:
   - `INVALID_PLATFORM_VALUE` is pretty annoying. It just complains if a read group doesn't contain a `PL` attribute. I'm not sure it's worth going back and fixing these.
+  - `MISSING_PLATFORM_VALUE`. Similar to `INVALID_PLATFORM_VALUE`, some of our samples have read groups with missing platform values and so we ignore those errors for now.
 - For dependency management, we have moved to using `conda` within standard docker images. All packages should be available within the `defaults`, `conda-forge`, and `bioconda` repositories.
-- Add a checksum algorithm and publish the results in the data browser. Currently, I'm proposing we generate the `md5sum` checksum. However, we should consider the use of a non-broken hashing algorithm (see [the related question below](#Outstanding-Questions)).
+- Add a checksum algorithm and publish the results in the data browser. After consideration internally, we decided to use the `md5sum` checksum because of its ubiquity.
 
 ## Various other changes
 
 - Removed a section of the pipeline that reformatted the header of the BAM to be cleaner. `STAR` outputs a header that is formatted fine already, and I found this code to just be an area where an error could be introduced for little benefit.
-- I removed a section of custom code that checks for duplicate read groups. `picard ValidateSamFile` does this for you (see [the documentation](https://software.broadinstitute.org/gatk/documentation/article.php?id=7571) for this tool. Specifically, the `DUPLICATE_READ_GROUP_ID` error).
+- Removed a section of custom code that checks for duplicate read groups. `picard ValidateSamFile` does this for you (see [the documentation](https://software.broadinstitute.org/gatk/documentation/article.php?id=7571) for this tool. Specifically, the `DUPLICATE_READ_GROUP_ID` error).
 
 # Specification
 
@@ -125,12 +116,8 @@ conda create -n star-mapping \
     picard==2.20.2 \
     samtools==1.9 \
     star==2.7.1a \
-    qualimap==2.2.2c \
-    multiqc==1.7 \
-    rseqc==3.0.0 \
-    fastqc==0.11.8 \
     htseq==0.11.2 \
-    deeptools==3.3.1 \
+    ngsderive==1.0.2 \
     -y
 ```
 
@@ -142,7 +129,7 @@ cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
 
 ## Reference files
 
-The following reference files are used as the basis of the RNA-Seq Workflow v2.0:
+The following reference files are used as the basis of the RNA-Seq Workflow v2.0.0:
 
 - Similarly to all analysis pipelines in St. Jude Cloud, we use the `GRCh38_no_alt` analysis set for our reference genome. You can get a copy of the file [here](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz). Additionally, you can get the file by running the following commands:
 
@@ -176,15 +163,21 @@ The following reference files are used as the basis of the RNA-Seq Workflow v2.0
        --genomeDir $OUTPUT_DIR \                     # Specify an output directory.
        --runThreadN $NCPU \                          # Number of threads to use to build genome database.
        --genomeFastaFiles $FASTA \                   # A path to the GRCh38_no_alt.fa FASTA file.
-       --sjdbGTFfile $GENCODE_GTF_V31 \     # GENCODE v31 gene model file. 
+       --sjdbGTFfile $GENCODE_GTF_V31 \              # GENCODE v31 gene model file.
        --sjdbOverhang 125                            # Splice junction database overhang parameter, the optimal value is (Max length of RNA-Seq read-1).
   ```
 
 ## Workflow
 
-Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
+Here are the resulting steps in the RNA-Seq Workflow v2.0.0 pipeline. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/rnaseq/rnaseq-standard.wdl).
 
-1. Run `samtools quickcheck` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+
+   ```bash
+   picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
+                     IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                     IGNORE=MISSING_PLATFORM_VALUE
+   ```
 2. Split BAM file into multiple BAMs on the different read groups using `samtools split`. See [the samtools documentation](http://www.htslib.org/doc/samtools.html) for more information.
 
    ```bash
@@ -194,9 +187,14 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
 
    If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.
 
-3. Run Picard `SamToFastq` on each of the bams generated in the previous step.
+3. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
    ```bash
-      picard SamToFastq INPUT=$INPUT_BAM FASTQ=$FASTQ_R1 SECOND_END_FASTQ=$FASTQ_R2 RE_REVERSE=true
+      picard SamToFastq \
+             INPUT=$INPUT_BAM \
+             FASTQ=$FASTQ_R1 \
+             SECOND_END_FASTQ=$FASTQ_R2 \
+             RE_REVERSE=true \
+             VALIDATION_STRINGENCY=SILENT
    ```
 4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
@@ -213,7 +211,6 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
         --runThreadN $NCPU \                           # Number of threads to use. You must request the correct amount from HPCF first!
         --outSAMunmapped Within \                      # Keep unmapped reads in the final BAM file.
         --outSAMstrandField intronMotif \              # Preserve compatibility with Cufflinks by including the XS attribute (strand derived from intron motif).
-        --outSAMtype BAM SortedByCoordinate \          # Output a BAM file that is coordinate sorted.
         --outSAMattributes NH HI AS nM NM MD XS \      # Recommended SAM attributes to include for compatibility. Refer to manual for specifics.
         --outFilterMultimapScoreRange 1 \              # Ensures that all multi-mapped reads will need to share the mapping score.
         --outFilterMultimapNmax 20 \                   # Max number of multi-mapped SAM entries for each read.
@@ -229,94 +226,53 @@ Here are the resulting steps in the RNA-Seq Workflow v2.0 pipeline.
         --twopassMode Basic                            # Use STAR two-pass mapping technique (refer to manual).
    ```
 
-6. Run `picard MarkDuplicates` on the `STAR`-aligned BAM file.
+6. Run `picard SortSam` on the `STAR`-aligned BAM file. Note that this is much more memory efficient than using `STAR`'s built-in sorting (which often takes 100GB+ of RAM).
 
    ```bash
-   picard MarkDuplicates I=$STAR_BAM \                  # Input BAM.
-                         O=$MARKED_BAM \                # Duplicate-marked output BAM.
-                         VALIDATION_STRINGENCY=SILENT \ # Turn of validation stringency for this step.
-                         CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
-                         CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
-                         COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
-                         METRICS_FILE=$METRICS_FILE \   # Location for the metrics file produced by MarkDuplicates.
+   picard SortSam I=$STAR_BAM \                  # Input BAM.
+                  O=$SORTED_BAM \                # Coordinate-sorted BAM.
+                  SO="coordinate" \              # Specify the output should be coordinate-sorted
+                  CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
+                  CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
+                  COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
+                  VALIDATION_STRINGENCY=SILENT   # Turn of validation stringency for this step.
    ```
 
-7. Run `picard ValidateSamFile` on the aligned and marked BAM file.
+7. Index the coordinate-sorted BAM file.
 
    ```bash
-   picard ValidateSamFile I=$INPUT_BAM \                # Input BAM.
-                          IGNORE=INVALID_PLATFORM_VALUE # Validations to ignore.
+   samtools index $STAR_SORTED_BAM # STAR-aligned, coordinate-sorted BAM.
    ```
 
-8. Run `fastqc` on the data for convenience of end users.
-   ```bash
-   fastqc -f bam \     # Specify that we are working on a BAM file.
-          -o $OUTDIR \ # Specify an out directory.
-          -t $NCPU \   # Specify number of threads.
-          $INPUT_BAM   # Input BAM we are QC'ing.
-   ```
-9. Run `rseqc`'s `infer_experiment.py` to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any descrepencies. This is particularly useful for historical samples.
+8. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
 
    ```bash
-   infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
-
-   # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
-   #   - If proportion of forward orientation evidence fraction is >= 0.8, assign "strand-specific-forward".
-   #   - If proportion of reverse orientation evidence fraction is >= 0.8, assign "strand-specific-reverse".
-   #   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
-   #   - Else flag for manual triage.
+   picard ValidateSamFile I=$STAR_SORTED_BAM \    # STAR-aligned, coordinate-sorted BAM.
+                  IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+                  IGNORE=MISSING_PLATFORM_VALUE
    ```
 
-10. Run `qualimap bamqc` and `qualimap rnaseq` QC for assistance in post-processing QC. Note that for the `rnaseq` tool, we will need to include the strandedness for best results. The value received from the lab can generally be confirmed by the `infer_experiment.py` step above.
+9. Run `ngsderive`'s `strandedness` subcommand to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any discrepancies. This is particularly useful for historical samples. Additionally,
+if the value for strandedness isn't known at run time, we can use the inferred value (if reported).
 
-    ```bash
-    qualimap bamqc -bam $INPUT_BAM \     # Input BAM.
-                   -outdir $OUTPUT_DIR \ # Output directory.
-                   -nt $NCPUS            # Number of CPUs to use.
-    ```
+   ```bash
+   ngsderive strandedness $STAR_SORTED_BAM \     # STAR-aligned, coordinate-sorted BAM.
+                          -g $GENCODE_GTF_V31_GZ # GENCODE v31 GTF (gzipped)
+   ```
 
-    and
+10. Next, `htseq-count` is run for the final counts file to be delivered.
 
-    ```bash
-    qualimap rnaseq -bam $INPUT_BAM \                  # Input BAM.
-                    -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
-                    -outdir $OUTPUT_DIR \              # Output directory.
-                    -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
-                    -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
-                    -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
-    ```
-
-11. Next, `htseq-count` is run for the final counts file to be delivered:
     ```bash
     htseq-count -f bam \                            # Specify input file as BAM.
                -r pos \                             # Specify the BAM is position sorted.
-               -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
-               -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+               -s $PROVIDED_OR_INFERRED \           # Strandedness as specified by the lab and confirmed by `ngsderive strandedness` above. Typically `reverse` for St. Jude Cloud data.
+               -m union \                           # For reference, GDC uses "intersection-nonempty".
                -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
                --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
                --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
-               $INPUT_BAM                           # Input BAM file.
+               $STAR_SORTED_BAM \                   # STAR-aligned, coordinate-sorted BAM.
+               $GENCODE_GTF_V31                     # GENCODE v31 GTF
     ```
-12. Generate the remaining files generally desired as output for the RNA-Seq Workflow.
-    ```bash
-    samtools flagstat $INPUT_BAM
-    samtools index $INPUT_BAM
-    md5sum $INPUT_BAM
-    ```
-13. Run `bamCoverage` to generate bigwig file.
-    ```bash
-    bamCoverage --bam ${bam} \                     # Input BAM file
-                --outFileName ${prefix}.bw \       # Output bigwig filename
-                --outFileFormat bigwig \           # Set output format to bigwig
-                --numberOfProcessors "max"         # Utilize all available processors
-    ```
-14. Run `multiqc` across the following files for all samples in the cohort:
-
-    - `STAR`
-    - `picard MarkDuplicates` and `picard ValidateSamFile`
-    - `qualimap bamqc` and `qualimap rnaseq`
-    - `fastqc`
-    - `samtools flagstat`
 
 # Appendix
 
@@ -329,7 +285,7 @@ Below are the results of an analysis of each pipeline's `GRCh38`-based reference
 3. Use `picard CreateSequenceDictionary` to get the md5sums for each sequence in the dictionary.
 4. Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).
 
-If you are interested in seeing the _full_ comparison table or in regenerating these results, you can see [the associated Jupyter notebook](https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0/GenomeComparison.ipynb).
+If you are interested in seeing the _full_ comparison table or in regenerating these results, you can see [the associated Jupyter notebook](https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb).
 
 | Sequence Name | NCBI (baseline)                    | ENCODE                             | GDC                                | TOPMed                             | Concordant |
 | ------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------- |

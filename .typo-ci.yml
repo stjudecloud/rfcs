@@ -3,6 +3,7 @@ dictionaries:
   - en_GB
 
 excluded_words:
+  - stjude
   - rnaseq
   - ipynb
   - bamqc
