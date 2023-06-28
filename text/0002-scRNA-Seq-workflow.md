@@ -1,4 +1,4 @@
-# Table of Contents <!-- omit in toc -->
+# scRNA-Seq Pipeline <!-- omit in toc -->
 
 - [Introduction](#introduction)
 - [Motivation](#motivation)

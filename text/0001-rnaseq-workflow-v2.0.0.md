@@ -1,4 +1,4 @@
-# Table of Contents <!-- omit in toc -->
+# RNA-Seq v2 Pipeline <!-- omit in toc -->
 
 - [Introduction](#introduction)
 - [Motivation](#motivation)
