@@ -1,4 +1,4 @@
-# Table of Contents <!-- omit in toc -->
+# QC Pipeline for Whole Genome, Whole Exome, and RNA Sequencing <!-- omit in toc -->
 
 - [Introduction](#introduction)
 - [Motivation](#motivation)
