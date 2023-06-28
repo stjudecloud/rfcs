@@ -146,7 +146,7 @@
                 <div id="content" class="content">
                     <main>
                         <p align="center">
-  <a href="https://github.com/stjudecloud/rfcs"><img src="https://github.com/stjudecloud/rfcs/raw/master/docs/rfcs-banner-blueprint.jpg" width="800" title="St. Jude Cloud RFCs"></a>
+  <a href="https://github.com/stjudecloud/rfcs"><img src="https://github.com/stjudecloud/rfcs/raw/main/docs/rfcs-banner-blueprint.jpg" width="800" title="St. Jude Cloud RFCs"></a>
   <a href="https://actions-badge.atrox.dev/stjudecloud/rfcs/goto"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fstjudecloud%2Frfcs%2Fbadge&style=flat" /></a>
   <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
     <img alt="Gitter: RFCs" src="https://badges.gitter.im/stjudecloud/rfcs.svg" />
@@ -227,10 +227,10 @@ python3 -m http.server -d book
 <li>Twitter: <a href="https://twitter.com/StJudeResearch">@StJudeResearch</a></li>
 </ul>
 <h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
-<p>Contributions, issues and feature requests are welcome!<br />Feel free to check <a href="https://github.com/stjudecloud/rfcs/issues">issues page</a>. You can also take a look at the <a href="https://github.com/stjudecloud/rfcs/blob/master/CONTRIBUTING.md">contributing guide</a>.</p>
+<p>Contributions, issues and feature requests are welcome!<br />Feel free to check <a href="https://github.com/stjudecloud/rfcs/issues">issues page</a>. You can also take a look at the <a href="https://github.com/stjudecloud/rfcs/blob/main/CONTRIBUTING.md">contributing guide</a>.</p>
 <h2 id="-license"><a class="header" href="#-license">📝 License</a></h2>
 <p>Copyright © 2020 <a href="https://github.com/stjudecloud">St. Jude Cloud Team</a>.<br />
-This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md">MIT</a> licensed.</p>
+This project is <a href="https://github.com/stjudecloud/rfcs/blob/main/LICENSE.md">MIT</a> licensed.</p>
 <h2 id="questions"><a class="header" href="#questions">Questions</a></h2>
 <p>With any questions, please <a href="mailto:support@stjude.cloud">contact us</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents <!-- omit in toc --></a></h1>
@@ -282,7 +282,7 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-Seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
 </tbody></table>
 </div>
-<p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="0001-rnaseq-workflow-v2.0.0.html#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="0001-rnaseq-workflow-v2.0.0.html#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/main/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <p>Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply <a href="https://github.com/alexdobin/STAR/issues/673">here</a>. In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.</p>
 <p>Given the landscape of the community and the author's response, we considered three possible options for moving ahead:</p>
 <ol>
@@ -503,7 +503,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <li>Use <code>picard CreateSequenceDictionary</code> to get the md5sums for each sequence in the dictionary.</li>
 <li>Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).</li>
 </ol>
-<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/main/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <div class="table-wrapper"><table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
 <tr><td>chr1</td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td>True</td></tr>
 <tr><td>chr2</td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td>True</td></tr>
