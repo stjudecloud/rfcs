@@ -42,7 +42,7 @@ git fetch --all
 BRANCHES=()
 while IFS= read -r line; do
     BRANCHES+=( "$line" )
-done < <( git branch --list --all | sed 's,\*,,g' | xargs -n1 | grep "remotes/origin" | sed 's,remotes/origin/,,g' | sort | uniq | grep -e 'master' -e 'rfcs/' )
+done < <( git branch --list --all | sed 's,\*,,g' | xargs -n1 | grep "remotes/origin" | sed 's,remotes/origin/,,g' | sort | uniq | grep -e 'main' -e 'rfcs/' )
 
 echo "== Creating Drafts File =="
 printf "# Drafts\n\n" > "${DRAFTS_FILE}"
@@ -50,7 +50,7 @@ echo "The following are _candidate_ RFCs that are being rendered for easy review
 printf "\n\n" >> "${DRAFTS_FILE}"
 
 for CURRENT_BRANCH in "${BRANCHES[@]}"; do
-  if [[ "${CURRENT_BRANCH}" != "master" ]]; then
+  if [[ "${CURRENT_BRANCH}" != "main" ]]; then
     echo "- [${CURRENT_BRANCH}](https://stjudecloud.github.io/rfcs/branches/$CURRENT_BRANCH)" >> "${DRAFTS_FILE}"
   fi
 done
@@ -59,7 +59,7 @@ done
 echo "== Build RFC Branches =="
 for CURRENT_BRANCH in "${BRANCHES[@]}"; do 
   BRANCH_DIR="${BOOK_DIR}/branches/${CURRENT_BRANCH}"
-  if [[ "${CURRENT_BRANCH}" == "master" ]]; then
+  if [[ "${CURRENT_BRANCH}" == "main" ]]; then
     BRANCH_DIR="${BOOK_DIR}/"
   fi
   build "${CURRENT_BRANCH}" "${BRANCH_DIR}" "${DRAFTS_FILE}"
