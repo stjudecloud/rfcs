@@ -620,14 +620,17 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <li><a href="0002-quality-check-workflow.html#motivation">Motivation</a></li>
 <li><a href="0002-quality-check-workflow.html#discussion">Discussion</a></li>
 <li><a href="0002-quality-check-workflow.html#specification">Specification</a></li>
-<li><a href="0002-quality-check-workflow.html#items-still-in-progress">Items Still In-Progress</a></li>
-<li><a href="0002-quality-check-workflow.html#outstanding-questions">Outstanding Questions</a></li>
 </ul>
 <h2 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h2>
-<p>This RFC documents an automated workflow for assessing the integrity and quality of St. Jude Cloud genomics data. The goal of this RFC is two-fold.</p>
+<p>This RFC documents an automated workflow for assessing the integrity and quality of St. Jude Cloud omics data. The goal of this RFC is two-fold.</p>
 <ol>
-<li>Establish state of the art method for comprehensively evaluating genomics data quality at scale, both at time of receipt and after processing.</li>
-<li>Publish a collection of metrics that end-users of St. Jude Cloud can leverage to assess the quality of the data available. This context should save users time computing the information themselves while also informing appropriate use of the data.</li>
+<li>Establish state of the art method for comprehensively evaluating genomics
+data quality at scale, both at time of receipt and after processing, for
+whole genome, whole exome, and transcriptome sequencing.</li>
+<li>Publish a collection of metrics that end-users of St. Jude Cloud can leverage
+to assess the quality of the data available. This context should save users
+time computing the information themselves while also informing appropriate
+use of the data.</li>
 </ol>
 <p>You can find the relevant discussion on the <a href="https://github.com/stjudecloud/rfcs/pull/3">associated pull request</a>.</p>
 <h2 id="motivation-1"><a class="header" href="#motivation-1">Motivation</a></h2>
@@ -661,21 +664,28 @@ QC—this is in recognition of the fact that the data, while not always perfect,
 is extremely valuable due to its relative scarcity. We hope that the inclusion
 of these results will save end-users time and aid in decision-making about
 downstream analysis approaches.</p>
-<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th><th>ChIP-Seq</th></tr></thead><tbody>
-<tr><td>M Reads Mapped (<a href="0002-quality-check-workflow.html#m-reads-mapped">link</a>)</td><td><a href="http://www.htslib.org/doc/samtools.html">samtools</a></td><td>Number of reads mapped in millions. This metric is useful</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Percentage of Reads Aligned (<a href="0002-quality-check-workflow.html#percentage-of-reads-aligned">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Number of mapped reads divided by the total number of reads as a percentage.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
-<tr><td>Median Insert Size (<a href="0002-quality-check-workflow.html#median-insert-size">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Median size of the fragment that is inserted between the sequencing adapters (estimated in silico).</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
-<tr><td>Percentage Duplication (<a href="0002-quality-check-workflow.html#percentage-duplication">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Percentage of the reads that are marked as PCR or optical duplicates.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>≥ 30X Coverage (<a href="0002-quality-check-workflow.html#-30x-coverage">link</a>)</td><td><a href="https://github.com/brentp/mosdepth">mosdepth</a></td><td>The percentage of locations that are covered by at least 30 reads for the whole genome, the exonic regions, and the coding sequence regions specifically.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
-<tr><td>Predicted Instrument (<a href="0002-quality-check-workflow.html#predicted-instrument">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted sequencing machine that produced this data. This should match your expectations for what machine sequenced the data.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Predicted Read Length (<a href="0002-quality-check-workflow.html#predicted-read-length">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted read length for the sequencing experiment. This should match your expectations for how the library was prepared. A value of -1 indicates that a stable read length could not be predicted.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Probable Encoding (<a href="0002-quality-check-workflow.html#probable-encoding">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted encoding of the <em>original</em> FASTQ file. For this, all modern data should match <code>Sanger/Illumina 1.8</code>.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Percentage of Reads attributed to Homo sapiens (<a href="0002-quality-check-workflow.html#percentage-of-reads-attributed-to-homo-sapiens">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were assigned as originating from Homo sapiens from <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Percentage of Reads attributed to top 5 species (<a href="0002-quality-check-workflow.html#percentage-of-reads-attributed-to-top-5-species">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were assigned to the top 5 reported species from <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
-<tr><td>Percentage of Reads Unclassified (<a href="0002-quality-check-workflow.html#percentage-of-reads-unclassified">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were not classified by <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-green" alt="Yes" /></td></tr>
+<h2 id="general-statistics"><a class="header" href="#general-statistics">General Statistics</a></h2>
+<p>General statistics are contained within the summary table at the top of the
+MultiQC reports. These statistics give a quick overview of the cohort of
+interest with respect to the defined metrics. Generally, they are summary
+statistics rather than being comprehensive in nature (those statistics are
+included in the sections that follow after).</p>
+<h3 id="summary-table"><a class="header" href="#summary-table">Summary Table</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>M Reads Mapped (<a href="0002-quality-check-workflow.html#m-reads-mapped">link</a>)</td><td><a href="http://www.htslib.org/doc/samtools.html">samtools</a></td><td>Number of reads mapped in millions. This metric is useful</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Validation Status (<a href="0002-quality-check-workflow.html#validation-status">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>The validation status of the file as determined by <code>picard ValidateSamFile</code>.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Percentage of Reads Aligned (<a href="0002-quality-check-workflow.html#percentage-of-reads-aligned">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Number of mapped reads divided by the total number of reads as a percentage.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Median Insert Size (<a href="0002-quality-check-workflow.html#median-insert-size">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Median size of the fragment that is inserted between the sequencing adapters (estimated in silico).</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
+<tr><td>Percentage Duplication (<a href="0002-quality-check-workflow.html#percentage-duplication">link</a>)</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Percentage of the reads that are marked as PCR or optical duplicates.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
+<tr><td>≥ 30X Coverage (<a href="0002-quality-check-workflow.html#-30x-coverage">link</a>)</td><td><a href="https://github.com/brentp/mosdepth">mosdepth</a></td><td>The percentage of locations that are covered by at least 30 reads for the whole genome, the exonic regions, and the coding sequence regions specifically.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/no-red" alt="No" /></td></tr>
+<tr><td>Predicted Instrument (<a href="0002-quality-check-workflow.html#predicted-instrument">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted sequencing machine that produced this data. This should match your expectations for what machine sequenced the data.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Predicted Read Length (<a href="0002-quality-check-workflow.html#predicted-read-length">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted read length for the sequencing experiment. This should match your expectations for how the library was prepared. A value of -1 indicates that a stable read length could not be predicted.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Probable Encoding (<a href="0002-quality-check-workflow.html#probable-encoding">link</a>)</td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted encoding of the <em>original</em> FASTQ file. For this, all modern data should match <code>Sanger/Illumina 1.8</code>.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Percentage of Reads attributed to Homo sapiens (<a href="0002-quality-check-workflow.html#percentage-of-reads-attributed-to-homo-sapiens">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were assigned as originating from Homo sapiens from <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Percentage of Reads attributed to top 5 species (<a href="0002-quality-check-workflow.html#percentage-of-reads-attributed-to-top-5-species">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were assigned to the top 5 reported species from <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
+<tr><td>Percentage of Reads Unclassified (<a href="0002-quality-check-workflow.html#percentage-of-reads-unclassified">link</a>)</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>The percentage of reads that were not classified by <a href="https://github.com/DerrickWood/kraken2">kraken</a>.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="Yes" /></td></tr>
 </tbody></table>
 </div>
-<h2 id="general-statistics"><a class="header" href="#general-statistics">General statistics</a></h2>
 <h3 id="m-reads-mapped"><a class="header" href="#m-reads-mapped"><strong>M Reads Mapped</strong></a></h3>
 <p><em>Produced by <a href="http://www.htslib.org/doc/samtools.html">samtools</a></em></p>
 <p>Number of reads mapped in millions. The number of reads in a whole genome
@@ -777,6 +787,218 @@ within a cohort.</li>
 <li>If either of the above assumptions do not hold true, probable sources of
 variance include library preparation abnormalities or contamination issues.</li>
 </ul>
+<h2 id="detailed-charts"><a class="header" href="#detailed-charts">Detailed Charts</a></h2>
+<h3 id="mosdepth"><a class="header" href="#mosdepth">mosdepth</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>Cumulative coverage distribution</td><td><a href="https://github.com/brentp/mosdepth">mosdepth</a></td><td>The proportion of bases within the genome with at least <code>X</code> coverage.</td><td><img src="https://img.shields.io/badge/all-brightgreen" alt="all" /></td><td><img src="https://img.shields.io/badge/exonic/cds-orange" alt="exonic/cds" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>Coverage distribution</td><td><a href="https://github.com/brentp/mosdepth">mosdepth</a></td><td>The proportion of bases within the genome with <em>exactly</em> <code>X</code> coverage.</td><td><img src="https://img.shields.io/badge/all-brightgreen" alt="all" /></td><td><img src="https://img.shields.io/badge/exonic/cds-orange" alt="exonic/cds" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>Average coverage per contig</td><td><a href="https://github.com/brentp/mosdepth">mosdepth</a></td><td>Average coverage per contig or chromosome.</td><td><img src="https://img.shields.io/badge/all-brightgreen" alt="all" /></td><td><img src="https://img.shields.io/badge/all-brightgreen" alt="all" /></td><td><img src="https://img.shields.io/badge/all-brightgreen" alt="all" /></td></tr>
+</tbody></table>
+</div>
+<p>For all target types, the <code>mosdepth</code> will produce various charts for
+the whole genome, exonic, and coding sequence ranges. The most important chart
+to examine is the &quot;cumulative coverage distribution&quot; chart, which shows the
+burndown chart of what percentage of the specified region is covered by a
+particular read depth. In this way, you can assess how much of the specified
+region is covered by a particular read depth.</p>
+<p>When interpreting this chart, the most important thing to examine is (a) the
+chart's behavior with respect to the sequencing modality you are reviewing and
+(b) the relative similarities of the plots within a cohort. For (a), you can
+expect that</p>
+<ul>
+<li>Whole genome data will show a significant cliff for which all places in the
+genome meet a particular coverage metric. There should be a pronounced
+downward curve that signifies the cliff of &quot;normal&quot; sites across the genome
+being separated from highly-covered sites of the genome.</li>
+<li>Whole exome data will quickly drop off from left to right, as only about 3% of
+the genome is targetted (the exonic regions). For those regions, however, you
+can expect upwards of 1000x coverage.</li>
+<li>For RNA-Seq, this plot is not as useful. As such, you can ignore it for this
+sequencing modality.</li>
+</ul>
+<h3 id="ngsderive"><a class="header" href="#ngsderive">ngsderive</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td><code>ngsderive instrument</code></td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted sequencing instrument for this file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td><code>ngsderive readlen</code></td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted read length for the file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td><code>ngsderive encoding</code></td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted FASTQ quality score encoding scheme for the file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td><code>ngsderive strandedness</code></td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted strandedness of the RNA-Seq protocol for the file.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td><code>ngsderive junction-annotation</code></td><td><a href="https://github.com/stjudecloud/ngsderive/">ngsderive</a></td><td>The predicted breakdown of novel, partially novel, and known splice junctions.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+</tbody></table>
+</div>
+<p><code>ngsderive</code> is a tool written by the St. Jude Cloud team to provide forensic
+analysis techniques for evaluating next-generation sequencing data. The
+following subcommands are particularly useful in the context of these QC
+reports:</p>
+<ul>
+<li><strong><code>ngsderive instrument</code>.</strong> Gives an estimate of which sequencing instrument
+was used for a particular file. You should check to ensure the result you
+receive from this subcommand matches your expectations of the data.</li>
+<li><strong><code>ngsderive readlen</code>.</strong> Gives an estimate of the pre-trimmed read length. For
+files with significant adapter trimming, this may not provide conclusive
+results (giving a result of <code>-1</code>). You should check to ensure the result you
+receive from this subcommand matches your expectations of the data.</li>
+<li><strong><code>ngsderive encoding</code>.</strong> Guesses which <a href="https://en.wikipedia.org/wiki/FASTQ_format#Encoding">FASTQ
+encoding</a> was used for
+the original FASTQ file. For most modern data, this should be <code>Sanger/Illumina 1.8</code>.</li>
+<li><strong><code>ngsderive strandedness</code>.</strong> For RNA-Seq data, derives the strandedness of
+the sequencing protocol. This is useful to understand the effectiveness of the
+assay and also how strong downstream results will be (if you believe your data
+is <code>Reverse-stranded</code>, but your data appears to be somewhere between 
+<code>Reverse-stranded</code> and <code>Unstranded</code>, then you may have issues with your
+analysis).</li>
+<li><strong><code>ngsderive junction-annotation</code>.</strong> For RNA-Seq data, reports the number of
+novel junctions, partially novel junctions, and known junctions. This is
+incredibly helpful when comparing with other samples within the same cohort.
+Unless you have reason to suspect otherwise, you should expect the majority of
+junctions to be known, followed by novel, and then partially novel junctions.
+An abundance of novel junctions can indicate issues with the sample.</li>
+</ul>
+<p>For each of these, we recommend you view the graphs provided to pull out any
+outliers in the data. In particular, the quantitative measures like percent
+strandedness and junction saturation can give you strong indications if your
+library preparation acted as you expected. For any outliers, you should contact
+your lab to report the issue and determine if they noted any quality control
+issues from their side.</p>
+<h3 id="qualimap-rna-seq"><a class="header" href="#qualimap-rna-seq">Qualimap RNA-Seq</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>Genomic Origin of Reads</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">qualimap</a></td><td>The proportion of intronic, exonic, and intergenic reads from RNA-Seq data.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Gene Coverage Profile</td><td><a href="http://qualimap.bioinfo.cipf.es/doc_html/command_line.html">qualimap</a></td><td>The distribution of read coverage across gene transcripts.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+</tbody></table>
+</div>
+<p>Qualimap RNA-Seq provides specific tools evaluating more straightforward metrics
+from RNA-Seq data. In our QC pipeline, we use two graphs: (a) the genomic origin
+of reads graph and (b) the gene coverage profile graph.</p>
+<ul>
+<li>The <strong>genomic origin of reads</strong> graph shows the breakdown of reads from
+intronic, intergenic, and exonic regions. Particularly for PolyA selected
+data, you should expect to see exonic regions dominate the distribution. For
+Total or ribosomal depletion methods, you can expect to see more intronic
+regions (as pre-mRNA are typically captured with these library preparation
+protocols). Note that a high proportion of intergenic reads is often a sign
+that your library selection has gone awry.</li>
+<li>The <strong>gene coverage profile</strong> graph demonstrates the coverage across different
+positions of gene transcripts. You should expect to see a gentle slope with a
+peak towards the middle of each gene. With respect to the ends, the 3' end of
+the gene typically drops off more quickly than the 5' end of the gene. If you
+see irregular coverage of gene transcripts, such as erradict patterns in
+coverage, this can indicate some bias or selection in the fragment selection
+of the sequencing experiment.</li>
+</ul>
+<h3 id="picard"><a class="header" href="#picard">Picard</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>Alignment Summary</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Number of aligned versus unaligned reads for a given file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Mean Read Length Distribution</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Mean read length of the file.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>GC Coverage Bias</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Picard's interpretation of a GC bias distribution.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>Insert Size Distribution</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>The distribution of computed insert sizes for the file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Deduplication stats</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Overview of duplication from reads within the file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/warn-orange" alt="warn" /></td></tr>
+<tr><td>Base quality distribution</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>The count of bases with each quality score.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>SAM/BAM validation</td><td><a href="https://broadinstitute.github.io/picard/">picard</a></td><td>Validation of the SAM/BAM files.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+</tbody></table>
+</div>
+<p><a href="https://broadinstitute.github.io/picard/">Picard</a> provides a variety of important tools for our QC workflow, including:</p>
+<ul>
+<li>An <strong>alignment summary</strong> chart, which illustrates the number of reads and the
+relative breakdown of mapped versus unmapped reads. This is useful when
+determining which files are over/under sequenced within a particular cohort
+and for visually identifying samples with lower mapping rates (an indication
+of a problem).</li>
+<li>The <strong>mean read length</strong> chart, which we typically ignore in favor of
+<code>ngsderive</code>'s <code>readlen</code> command (note that <code>ngsderive</code> will give a result of
+<code>-1</code> if a result cannot be determined, whereas Picard gives you the median
+read length).</li>
+<li>The <strong>GC coverage bias</strong> chart, which we typically ignore in favor of the &quot;Per
+Sequence GC Bias&quot; plot from FastQC.</li>
+<li>The <strong>insert size distribution</strong> chart, which is <em>incredibly</em> helpful when
+determining problems in your data. For example, if you have bacteria
+contamination in your data, the bacterial reads will map with low quality
+using <code>bwa mem</code> (and default parameters). This will result in a bimodal
+distrbution of the insert size estimate, which is highly indicate of some
+issue in the data. For these plots, (a) ensure that all of the insert size
+distributions match each other within a cohort and (b) watch out for bimodal
+distributions with a small (or large) peak around ~20bp, which is an
+indication of contamination.</li>
+<li>The <strong>deduplication stats</strong> chart, which give an indication of duplication within
+the sample (note that, for RNA-Seq data, if this plot is shown, biological
+duplicates cannot be ruled out!).</li>
+<li>The <strong>base quality distribution</strong> chart, which we do not use and instead use
+FastQC's &quot;Per Sequence Quality Scores&quot; plot.</li>
+<li>The <strong>file validation</strong> chart, all of which should be green.</li>
+</ul>
+<h3 id="samtools"><a class="header" href="#samtools">Samtools</a></h3>
+<p>Samtools also outputs various distributions as a beeswarm plot. In our
+experience, these are not as useful expect in the case of examining a particular
+sample to see where it lies for all metrics at once—otherwise, the summary
+statistics in the &quot;General Statistics&quot; section at the top do just as well.</p>
+<h3 id="kraken"><a class="header" href="#kraken">Kraken</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>Top Taxa</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>Proportion of reads which are assigned to the indicated species.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+</tbody></table>
+</div>
+<p><a href="https://github.com/DerrickWood/kraken2">Kraken</a> is useful for determining the origin of reads within your sample of
+interest. Since we mainly are sequencing human subjects, we typically use kraken
+to give an indication of the level of contamination from various species within
+our data. You should look to ensure that the vast majority (80% or higher) of
+your sample originates from humans (<em>Homo sapiens</em>). If you are sequencing a
+xenograft, pay close attention to the proportion of mouse (<em>Mus musculus</em>) reads
+in the sample.</p>
+<h3 id="fastqc"><a class="header" href="#fastqc">FastQC</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
+<tr><td>Sequencing Counts</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>Unique and duplicate sequences in the file.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>Sequencing Quality Histogram</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>Mean quality for every position in a read.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Per Sequence Quality Scores</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The number of reads with the indicated average quality score.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Per Base Sequence Content</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The bias towards a particular nucleotide at a given position of a read.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Per Sequence GC Content</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The GC content distribution.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Per Base N Content</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The percentile of base calls at each position which contained an N.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Sequence Length Distribution</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The distribution of read lengths in the file.</td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td><td><img src="https://img.shields.io/badge/no-red" alt="no" /></td></tr>
+<tr><td>Sequence Duplication Levels</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The relative level of duplication for each sequence.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Overrepresented Sequences</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The sequences which may be overrepresented in your file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Adapter Content</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>The presence or absence of adapter contamination in your file.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+<tr><td>Status Checks</td><td><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a></td><td>An overview of the pass/warn/fail status for all FastQC checks.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
+</tbody></table>
+</div>
+<p><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> rounds out the list of important tools to interrogate the quality of
+the sequencing data itself. We leverage many of the plots produced by FastQC,
+using it as the authority on most sequencing quality metrics, including:</p>
+<ul>
+<li>The <strong>sequencing counts</strong> chart, which we typically ignore in favor of
+<a href="https://broadinstitute.github.io/picard/">picard</a>'s mark duplicates plot.</li>
+<li>The <strong>sequence quality histogram</strong>, which gives an indication of the
+sequencing quality across reads. Look for anything that fails FastQC's quite
+stringent check to see if that correlates with any other failing metrics.</li>
+<li>The <strong>per sequence quality scores</strong> chart, which shows the mean sequence
+quality scores across the sample (peaks for lower scores in the orange or red
+areas of the graph are cause for concern).</li>
+<li>The <strong>per base sequence content</strong>, which shows is there are any biases in what
+nucleotides are showing up at particular locations in the reads. For whole
+genome and whole exome data, there should be relatively few biases. However,
+for RNA-Seq, you will see a bias at the 5' region of the reads.</li>
+<li>The <strong>per sequence GC content</strong> chart, which is highly informative of
+contamination in whole genome and whole exome sequencing data. In those two
+sequencing modalities, you should check to ensure that all of the
+distributions are tightly following one another—any derivation from the
+expected distribution is a sign of contamination. Note that sometimes tools
+like FastQC plot an &quot;expected&quot; distribution of the GC content; this is usually
+the expectation of WGS data, but not WXS data, which has a different expected
+distribution. For RNA-Seq, this graph is generally not used except to examine
+extreme biases at particular positions.</li>
+<li>The <strong>per base N content</strong> chart, which should generally report very low
+levels of Ns in modern data.</li>
+<li>The <strong>sequence length distribution</strong> chart, which we typically ignore in favor
+of <code>ngsderive</code>'s <code>readlen</code> plot.</li>
+<li>The <strong>sequence duplication level</strong> chart, which gives an indication of the
+percentage of sequences that are duplicated and by what factor (though this is
+a graph that we find, often, even good data fails FastQC's stringent test).</li>
+<li>The <strong>overrepresented sequences</strong> chart, which gives an indication if you're
+sequencing the same sequence over and over.</li>
+<li>The <strong>adapter content</strong> chart, which we use to ensure there are minimal to no
+signs of adapters in the data we receive.</li>
+<li>And finally, the <strong>status checks</strong> view, which gives you an overview of which
+samples passed/warned/failed different checks. Generally, this is a good
+overview of the quality of the data, though we find that many of the charts
+are often marked as &quot;failed&quot; for good data (in particular, the &quot;Per Base
+Sequence Content&quot; [for RNA-Seq], the &quot;Per Sequence GC Content&quot;, and the
+&quot;Sequence Length Distribution&quot; graphs).</li>
+</ul>
 <h2 id="specification-1"><a class="header" href="#specification-1">Specification</a></h2>
 <p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline as a <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/qc/quality-check-standard.wdl">WDL workflow</a>. We have supplied examples of the commands used for each package. For the typical memory requirements of each command, please see our <a href="https://github.com/stjudecloud/workflows">WDL repository</a>.</p>
 <h3 id="dependencies-1"><a class="header" href="#dependencies-1">Dependencies</a></h3>
@@ -876,20 +1098,6 @@ fastq_screen          \
 </code></pre>
 </li>
 </ol>
-<h2 id="items-still-in-progress"><a class="header" href="#items-still-in-progress">Items Still In-Progress</a></h2>
-<ul>
-<li><input disabled="" type="checkbox"/>
-Analysis tools for other types of sequencing (ChIP-seq)</li>
-<li><input disabled="" type="checkbox"/>
-Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)</li>
-</ul>
-<h2 id="outstanding-questions"><a class="header" href="#outstanding-questions">Outstanding Questions</a></h2>
-<ul>
-<li>What thresholds or metrics differentiate a poor-quality sample from a high-quality one?</li>
-<li>What other metrics or properties would be valuable?</li>
-<li>What is the best way to define and handle outliers?</li>
-<li>What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone. Outliers in this case may indicate classification errors or rare biological conditions. Which metrics are best tested here?</li>
-</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of Contents <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="0002-scRNA-Seq-workflow.html#introduction">Introduction</a></li>
