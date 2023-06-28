@@ -4,15 +4,18 @@
 - [Motivation](#motivation)
 - [Discussion](#discussion)
 - [Specification](#specification)
-- [Items Still In-Progress](#items-still-in-progress)
-- [Outstanding Questions](#outstanding-questions)
 
 ## Introduction
 
-This RFC documents an automated workflow for assessing the integrity and quality of St. Jude Cloud genomics data. The goal of this RFC is two-fold.
+This RFC documents an automated workflow for assessing the integrity and quality of St. Jude Cloud omics data. The goal of this RFC is two-fold.
 
-1. Establish state of the art method for comprehensively evaluating genomics data quality at scale, both at time of receipt and after processing.
-2. Publish a collection of metrics that end-users of St. Jude Cloud can leverage to assess the quality of the data available. This context should save users time computing the information themselves while also informing appropriate use of the data.
+1. Establish state of the art method for comprehensively evaluating genomics
+   data quality at scale, both at time of receipt and after processing, for
+   whole genome, whole exome, and transcriptome sequencing.
+2. Publish a collection of metrics that end-users of St. Jude Cloud can leverage
+   to assess the quality of the data available. This context should save users
+   time computing the information themselves while also informing appropriate
+   use of the data.
 
 You can find the relevant discussion on the [associated pull request](https://github.com/stjudecloud/rfcs/pull/3).
 
@@ -53,23 +56,33 @@ is extremely valuable due to its relative scarcity. We hope that the inclusion
 of these results will save end-users time and aid in decision-making about
 downstream analysis approaches.
 
-| Name                                                                                                       | Tool        | Description                                                                                                                                                                                              | WGS                                            | WXS                                            | RNA-Seq                                        | ChIP-Seq                                       |
-| ---------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| M Reads Mapped ([link](#m-reads-mapped))                                                                   | [samtools]  | Number of reads mapped in millions. This metric is useful                                                                                                                                                | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Percentage of Reads Aligned ([link](#percentage-of-reads-aligned))                                         | [picard]    | Number of mapped reads divided by the total number of reads as a percentage.                                                                                                                             | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![No](https://img.shields.io/badge/no-red)     |
-| Median Insert Size ([link](#median-insert-size))                                                           | [picard]    | Median size of the fragment that is inserted between the sequencing adapters (estimated in silico).                                                                                                      | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![No](https://img.shields.io/badge/no-red)     | ![No](https://img.shields.io/badge/no-red)     |
-| Percentage Duplication ([link](#percentage-duplication))                                                   | [picard]    | Percentage of the reads that are marked as PCR or optical duplicates.                                                                                                                                    | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![No](https://img.shields.io/badge/no-red)     | ![Yes](https://img.shields.io/badge/yes-green) |
-| ≥ 30X Coverage ([link](#-30x-coverage))                                                                    | [mosdepth]  | The percentage of locations that are covered by at least 30 reads for the whole genome, the exonic regions, and the coding sequence regions specifically.                                                | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![No](https://img.shields.io/badge/no-red)     | ![No](https://img.shields.io/badge/no-red)     |
-| Predicted Instrument ([link](#predicted-instrument))                                                       | [ngsderive] | The predicted sequencing machine that produced this data. This should match your expectations for what machine sequenced the data.                                                                       | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Predicted Read Length ([link](#predicted-read-length))                                                     | [ngsderive] | The predicted read length for the sequencing experiment. This should match your expectations for how the library was prepared. A value of -1 indicates that a stable read length could not be predicted. | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Probable Encoding ([link](#probable-encoding))                                                             | [ngsderive] | The predicted encoding of the _original_ FASTQ file. For this, all modern data should match `Sanger/Illumina 1.8`.                                                                                       | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Percentage of Reads attributed to Homo sapiens ([link](#percentage-of-reads-attributed-to-homo-sapiens))   | [kraken]    | The percentage of reads that were assigned as originating from Homo sapiens from [kraken].                                                                                                               | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Percentage of Reads attributed to top 5 species ([link](#percentage-of-reads-attributed-to-top-5-species)) | [kraken]    | The percentage of reads that were assigned to the top 5 reported species from [kraken].                                                                                                                  | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
-| Percentage of Reads Unclassified ([link](#percentage-of-reads-unclassified))                               | [kraken]    | The percentage of reads that were not classified by [kraken].                                                                                                                                            | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) | ![Yes](https://img.shields.io/badge/yes-green) |
+## General Statistics
+
+General statistics are contained within the summary table at the top of the
+MultiQC reports. These statistics give a quick overview of the cohort of
+interest with respect to the defined metrics. Generally, they are summary
+statistics rather than being comprehensive in nature (those statistics are
+included in the sections that follow after).
+
+### Summary Table
+
+| Name                                                                                                       | Tool        | Description                                                                                                                                                                                              | WGS                                                  | WXS                                                  | RNA-Seq                                              |
+| ---------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| M Reads Mapped ([link](#m-reads-mapped))                                                                   | [samtools]  | Number of reads mapped in millions. This metric is useful                                                                                                                                                | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Validation Status ([link](#validation-status))                                                             | [picard]    | The validation status of the file as determined by `picard ValidateSamFile`.                                                                                                                             | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Percentage of Reads Aligned ([link](#percentage-of-reads-aligned))                                         | [picard]    | Number of mapped reads divided by the total number of reads as a percentage.                                                                                                                             | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Median Insert Size ([link](#median-insert-size))                                                           | [picard]    | Median size of the fragment that is inserted between the sequencing adapters (estimated in silico).                                                                                                      | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![No](https://img.shields.io/badge/no-red)           |
+| Percentage Duplication ([link](#percentage-duplication))                                                   | [picard]    | Percentage of the reads that are marked as PCR or optical duplicates.                                                                                                                                    | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![No](https://img.shields.io/badge/no-red)           |
+| ≥ 30X Coverage ([link](#-30x-coverage))                                                                    | [mosdepth]  | The percentage of locations that are covered by at least 30 reads for the whole genome, the exonic regions, and the coding sequence regions specifically.                                                | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![No](https://img.shields.io/badge/no-red)           |
+| Predicted Instrument ([link](#predicted-instrument))                                                       | [ngsderive] | The predicted sequencing machine that produced this data. This should match your expectations for what machine sequenced the data.                                                                       | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Predicted Read Length ([link](#predicted-read-length))                                                     | [ngsderive] | The predicted read length for the sequencing experiment. This should match your expectations for how the library was prepared. A value of -1 indicates that a stable read length could not be predicted. | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Probable Encoding ([link](#probable-encoding))                                                             | [ngsderive] | The predicted encoding of the _original_ FASTQ file. For this, all modern data should match `Sanger/Illumina 1.8`.                                                                                       | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Percentage of Reads attributed to Homo sapiens ([link](#percentage-of-reads-attributed-to-homo-sapiens))   | [kraken]    | The percentage of reads that were assigned as originating from Homo sapiens from [kraken].                                                                                                               | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Percentage of Reads attributed to top 5 species ([link](#percentage-of-reads-attributed-to-top-5-species)) | [kraken]    | The percentage of reads that were assigned to the top 5 reported species from [kraken].                                                                                                                  | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
+| Percentage of Reads Unclassified ([link](#percentage-of-reads-unclassified))                               | [kraken]    | The percentage of reads that were not classified by [kraken].                                                                                                                                            | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) | ![Yes](https://img.shields.io/badge/yes-brightgreen) |
 
 
 
-## General statistics
 
 ### **M Reads Mapped** 
 
@@ -176,6 +189,231 @@ a defining characteristic of different genomes. GC content for humans is
     within a cohort.
   * If either of the above assumptions do not hold true, probable sources of
     variance include library preparation abnormalities or contamination issues.
+
+## Detailed Charts
+
+### mosdepth
+
+| Name                             | Tool       | Description                                                            | WGS                                                  | WXS                                                           | RNA-Seq                                              |
+| -------------------------------- | ---------- | ---------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------- |
+| Cumulative coverage distribution | [mosdepth] | The proportion of bases within the genome with at least `X` coverage.  | ![all](https://img.shields.io/badge/all-brightgreen) | ![exonic/cds](https://img.shields.io/badge/exonic/cds-orange) | ![no](https://img.shields.io/badge/no-red)           |
+| Coverage distribution            | [mosdepth] | The proportion of bases within the genome with _exactly_ `X` coverage. | ![all](https://img.shields.io/badge/all-brightgreen) | ![exonic/cds](https://img.shields.io/badge/exonic/cds-orange) | ![no](https://img.shields.io/badge/no-red)           |
+| Average coverage per contig      | [mosdepth] | Average coverage per contig or chromosome.                             | ![all](https://img.shields.io/badge/all-brightgreen) | ![all](https://img.shields.io/badge/all-brightgreen)          | ![all](https://img.shields.io/badge/all-brightgreen) |
+
+For all target types, the `mosdepth` will produce various charts for
+the whole genome, exonic, and coding sequence ranges. The most important chart
+to examine is the "cumulative coverage distribution" chart, which shows the
+burndown chart of what percentage of the specified region is covered by a
+particular read depth. In this way, you can assess how much of the specified
+region is covered by a particular read depth.
+
+When interpreting this chart, the most important thing to examine is (a) the
+chart's behavior with respect to the sequencing modality you are reviewing and
+(b) the relative similarities of the plots within a cohort. For (a), you can
+expect that
+
+- Whole genome data will show a significant cliff for which all places in the
+  genome meet a particular coverage metric. There should be a pronounced
+  downward curve that signifies the cliff of "normal" sites across the genome
+  being separated from highly-covered sites of the genome.
+- Whole exome data will quickly drop off from left to right, as only about 3% of
+  the genome is targetted (the exonic regions). For those regions, however, you
+  can expect upwards of 1000x coverage.
+- For RNA-Seq, this plot is not as useful. As such, you can ignore it for this
+  sequencing modality.
+
+### ngsderive
+
+| Name                            | Tool        | Description                                                                    | WGS                                                  | WXS                                                  | RNA-Seq                                              |
+| ------------------------------- | ----------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| `ngsderive instrument`          | [ngsderive] | The predicted sequencing instrument for this file.                             | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| `ngsderive readlen`             | [ngsderive] | The predicted read length for the file.                                        | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| `ngsderive encoding`            | [ngsderive] | The predicted FASTQ quality score encoding scheme for the file.                | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| `ngsderive strandedness`        | [ngsderive] | The predicted strandedness of the RNA-Seq protocol for the file.               | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| `ngsderive junction-annotation` | [ngsderive] | The predicted breakdown of novel, partially novel, and known splice junctions. | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+
+`ngsderive` is a tool written by the St. Jude Cloud team to provide forensic
+analysis techniques for evaluating next-generation sequencing data. The
+following subcommands are particularly useful in the context of these QC
+reports:
+
+- **`ngsderive instrument`.** Gives an estimate of which sequencing instrument
+  was used for a particular file. You should check to ensure the result you
+  receive from this subcommand matches your expectations of the data.
+- **`ngsderive readlen`.** Gives an estimate of the pre-trimmed read length. For
+  files with significant adapter trimming, this may not provide conclusive
+  results (giving a result of `-1`). You should check to ensure the result you
+  receive from this subcommand matches your expectations of the data.
+- **`ngsderive encoding`.** Guesses which [FASTQ
+  encoding](https://en.wikipedia.org/wiki/FASTQ_format#Encoding) was used for
+  the original FASTQ file. For most modern data, this should be `Sanger/Illumina
+  1.8`.
+- **`ngsderive strandedness`.** For RNA-Seq data, derives the strandedness of
+  the sequencing protocol. This is useful to understand the effectiveness of the
+  assay and also how strong downstream results will be (if you believe your data
+  is `Reverse-stranded`, but your data appears to be somewhere between 
+  `Reverse-stranded` and `Unstranded`, then you may have issues with your
+  analysis).
+- **`ngsderive junction-annotation`.** For RNA-Seq data, reports the number of
+  novel junctions, partially novel junctions, and known junctions. This is
+  incredibly helpful when comparing with other samples within the same cohort.
+  Unless you have reason to suspect otherwise, you should expect the majority of
+  junctions to be known, followed by novel, and then partially novel junctions.
+  An abundance of novel junctions can indicate issues with the sample.
+  
+For each of these, we recommend you view the graphs provided to pull out any
+outliers in the data. In particular, the quantitative measures like percent
+strandedness and junction saturation can give you strong indications if your
+library preparation acted as you expected. For any outliers, you should contact
+your lab to report the issue and determine if they noted any quality control
+issues from their side.
+
+### Qualimap RNA-Seq
+
+| Name                    | Tool       | Description                                                                 | WGS                                        | WXS                                        | RNA-Seq                                              |
+| ----------------------- | ---------- | --------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------ | ---------------------------------------------------- |
+| Genomic Origin of Reads | [qualimap] | The proportion of intronic, exonic, and intergenic reads from RNA-Seq data. | ![no](https://img.shields.io/badge/no-red) | ![no](https://img.shields.io/badge/no-red) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Gene Coverage Profile   | [qualimap] | The distribution of read coverage across gene transcripts.                  | ![no](https://img.shields.io/badge/no-red) | ![no](https://img.shields.io/badge/no-red) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+
+Qualimap RNA-Seq provides specific tools evaluating more straightforward metrics
+from RNA-Seq data. In our QC pipeline, we use two graphs: (a) the genomic origin
+of reads graph and (b) the gene coverage profile graph.
+
+- The **genomic origin of reads** graph shows the breakdown of reads from
+  intronic, intergenic, and exonic regions. Particularly for PolyA selected
+  data, you should expect to see exonic regions dominate the distribution. For
+  Total or ribosomal depletion methods, you can expect to see more intronic
+  regions (as pre-mRNA are typically captured with these library preparation
+  protocols). Note that a high proportion of intergenic reads is often a sign
+  that your library selection has gone awry.
+- The **gene coverage profile** graph demonstrates the coverage across different
+  positions of gene transcripts. You should expect to see a gentle slope with a
+  peak towards the middle of each gene. With respect to the ends, the 3' end of
+  the gene typically drops off more quickly than the 5' end of the gene. If you
+  see irregular coverage of gene transcripts, such as erradict patterns in
+  coverage, this can indicate some bias or selection in the fragment selection
+  of the sequencing experiment.
+
+### Picard
+
+| Name                          | Tool     | Description                                                | WGS                                                  | WXS                                                  | RNA-Seq                                              |
+| ----------------------------- | -------- | ---------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| Alignment Summary             | [picard] | Number of aligned versus unaligned reads for a given file. | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Mean Read Length Distribution | [picard] | Mean read length of the file.                              | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           |
+| GC Coverage Bias              | [picard] | Picard's interpretation of a GC bias distribution.         | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           |
+| Insert Size Distribution      | [picard] | The distribution of computed insert sizes for the file.    | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Deduplication stats           | [picard] | Overview of duplication from reads within the file.        | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![warn](https://img.shields.io/badge/warn-orange)    |
+| Base quality distribution     | [picard] | The count of bases with each quality score.                | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           |
+| SAM/BAM validation            | [picard] | Validation of the SAM/BAM files.                           | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+
+[Picard] provides a variety of important tools for our QC workflow, including:
+
+- An **alignment summary** chart, which illustrates the number of reads and the
+  relative breakdown of mapped versus unmapped reads. This is useful when
+  determining which files are over/under sequenced within a particular cohort
+  and for visually identifying samples with lower mapping rates (an indication
+  of a problem).
+- The **mean read length** chart, which we typically ignore in favor of
+  `ngsderive`'s `readlen` command (note that `ngsderive` will give a result of
+  `-1` if a result cannot be determined, whereas Picard gives you the median
+  read length).
+- The **GC coverage bias** chart, which we typically ignore in favor of the "Per
+  Sequence GC Bias" plot from FastQC.
+- The **insert size distribution** chart, which is _incredibly_ helpful when
+  determining problems in your data. For example, if you have bacteria
+  contamination in your data, the bacterial reads will map with low quality
+  using `bwa mem` (and default parameters). This will result in a bimodal
+  distrbution of the insert size estimate, which is highly indicate of some
+  issue in the data. For these plots, (a) ensure that all of the insert size
+  distributions match each other within a cohort and (b) watch out for bimodal
+  distributions with a small (or large) peak around ~20bp, which is an
+  indication of contamination.
+- The **deduplication stats** chart, which give an indication of duplication within
+  the sample (note that, for RNA-Seq data, if this plot is shown, biological
+  duplicates cannot be ruled out!).
+- The **base quality distribution** chart, which we do not use and instead use
+  FastQC's "Per Sequence Quality Scores" plot.
+- The **file validation** chart, all of which should be green.
+
+### Samtools
+
+Samtools also outputs various distributions as a beeswarm plot. In our
+experience, these are not as useful expect in the case of examining a particular
+sample to see where it lies for all metrics at once—otherwise, the summary
+statistics in the "General Statistics" section at the top do just as well.
+
+### Kraken
+
+| Name     | Tool     | Description                                                      | WGS                                                  | WXS                                                  | RNA-Seq                                              |
+| -------- | -------- | ---------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| Top Taxa | [kraken] | Proportion of reads which are assigned to the indicated species. | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+
+[Kraken] is useful for determining the origin of reads within your sample of
+interest. Since we mainly are sequencing human subjects, we typically use kraken
+to give an indication of the level of contamination from various species within
+our data. You should look to ensure that the vast majority (80% or higher) of
+your sample originates from humans (_Homo sapiens_). If you are sequencing a
+xenograft, pay close attention to the proportion of mouse (_Mus musculus_) reads
+in the sample.
+
+### FastQC
+
+| Name                         | Tool     | Description                                                             | WGS                                                  | WXS                                                  | RNA-Seq                                              |
+| ---------------------------- | -------- | ----------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| Sequencing Counts            | [FastQC] | Unique and duplicate sequences in the file.                             | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           |
+| Sequencing Quality Histogram | [FastQC] | Mean quality for every position in a read.                              | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Per Sequence Quality Scores  | [FastQC] | The number of reads with the indicated average quality score.           | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Per Base Sequence Content    | [FastQC] | The bias towards a particular nucleotide at a given position of a read. | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Per Sequence GC Content      | [FastQC] | The GC content distribution.                                            | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Per Base N Content           | [FastQC] | The percentile of base calls at each position which contained an N.     | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Sequence Length Distribution | [FastQC] | The distribution of read lengths in the file.                           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           | ![no](https://img.shields.io/badge/no-red)           |
+| Sequence Duplication Levels  | [FastQC] | The relative level of duplication for each sequence.                    | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Overrepresented Sequences    | [FastQC] | The sequences which may be overrepresented in your file.                | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Adapter Content              | [FastQC] | The presence or absence of adapter contamination in your file.          | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+| Status Checks                | [FastQC] | An overview of the pass/warn/fail status for all FastQC checks.         | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) | ![yes](https://img.shields.io/badge/yes-brightgreen) |
+
+[FastQC] rounds out the list of important tools to interrogate the quality of
+the sequencing data itself. We leverage many of the plots produced by FastQC,
+using it as the authority on most sequencing quality metrics, including:
+
+- The **sequencing counts** chart, which we typically ignore in favor of
+  [picard]'s mark duplicates plot.
+- The **sequence quality histogram**, which gives an indication of the
+  sequencing quality across reads. Look for anything that fails FastQC's quite
+  stringent check to see if that correlates with any other failing metrics.
+- The **per sequence quality scores** chart, which shows the mean sequence
+  quality scores across the sample (peaks for lower scores in the orange or red
+  areas of the graph are cause for concern).
+- The **per base sequence content**, which shows is there are any biases in what
+  nucleotides are showing up at particular locations in the reads. For whole
+  genome and whole exome data, there should be relatively few biases. However,
+  for RNA-Seq, you will see a bias at the 5' region of the reads.
+- The **per sequence GC content** chart, which is highly informative of
+  contamination in whole genome and whole exome sequencing data. In those two
+  sequencing modalities, you should check to ensure that all of the
+  distributions are tightly following one another—any derivation from the
+  expected distribution is a sign of contamination. Note that sometimes tools
+  like FastQC plot an "expected" distribution of the GC content; this is usually
+  the expectation of WGS data, but not WXS data, which has a different expected
+  distribution. For RNA-Seq, this graph is generally not used except to examine
+  extreme biases at particular positions.
+- The **per base N content** chart, which should generally report very low
+  levels of Ns in modern data.
+- The **sequence length distribution** chart, which we typically ignore in favor
+  of `ngsderive`'s `readlen` plot.
+- The **sequence duplication level** chart, which gives an indication of the
+  percentage of sequences that are duplicated and by what factor (though this is
+  a graph that we find, often, even good data fails FastQC's stringent test).
+- The **overrepresented sequences** chart, which gives an indication if you're
+  sequencing the same sequence over and over.
+- The **adapter content** chart, which we use to ensure there are minimal to no
+  signs of adapters in the data we receive.
+- And finally, the **status checks** view, which gives you an overview of which
+  samples passed/warned/failed different checks. Generally, this is a good
+  overview of the quality of the data, though we find that many of the charts
+  are often marked as "failed" for good data (in particular, the "Per Base
+  Sequence Content" [for RNA-Seq], the "Per Sequence GC Content", and the
+  "Sequence Length Distribution" graphs).
 
 ## Specification
 
@@ -295,18 +533,6 @@ The workflow specification is as follows. Note that arguments that are not integ
       ```bash
       multiqc . # recurse all files in '.'
       ```
-
-## Items Still In-Progress
-
-- [ ] Analysis tools for other types of sequencing (ChIP-seq)
-- [ ] Useful metadata from various stages (sample collection, laboratory, pre-sequencing, sequencing, post-sequencing)
-
-## Outstanding Questions
-
-- What thresholds or metrics differentiate a poor-quality sample from a high-quality one?
-- What other metrics or properties would be valuable?
-- What is the best way to define and handle outliers?
-- What is the best way to examine cohort integrity? This means experimental category-based tests of samples to find outliers that are of sufficient quality if examined alone. Outliers in this case may indicate classification errors or rare biological conditions. Which metrics are best tested here?
 
 [FastQC]: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 [multiqc]: https://multiqc.info/
