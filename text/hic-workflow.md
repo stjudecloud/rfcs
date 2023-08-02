@@ -32,7 +32,7 @@ There are no reference files for the Hi-C harmonization workflow.
 
 Here are the resulting steps in the Hi-C workflow. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/hic/hic-standard.wdl).
 
-1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to strip alignment information.
 
     ```bash
     picard ValidateSamFile \
@@ -41,7 +41,7 @@ Here are the resulting steps in the Hi-C workflow. There might be slight alterat
                         IGNORE=MISSING_PLATFORM_VALUE
     ```
 
-2. Run Picard `RevertSam` on each of the BAMs generated in the previous step.
+2. Run Picard `RevertSam` on the validated BAM file.
 
     ```bash
         picard RevertSam \
