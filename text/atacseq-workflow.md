@@ -84,12 +84,16 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 3. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
 
     ```bash
-    picard SamToFastq \
-        INPUT=$INPUT_BAM \
-        FASTQ=$FASTQ_R1 \
-        SECOND_END_FASTQ=$FASTQ_R2 \
-        RE_REVERSE=true \
-        VALIDATION_STRINGENCY=SILENT
+        samtools collate \
+            -u \  # Use the `-u` flag to skip compression (and decompression)
+            -f \  # enable "fast mode"
+            -O \
+            $INPUT_BUM \
+            | samtools fastq \
+                -1 $FASTQ_R1 \
+                -2 $FASTQ_R2 \
+                -s /dev/null \
+                -0 /dev/null
     ```
 
 4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
