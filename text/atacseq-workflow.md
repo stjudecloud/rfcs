@@ -63,7 +63,7 @@ The following reference files are used as the basis of the ATAC-Seq Workflow:
 
 Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/atacseq/atacseq-standard.wdl).
 
-1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
+1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FASTQ.
 
     ```bash
     picard ValidateSamFile \
@@ -102,7 +102,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
     fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
     ```
 
-5. Run `BWA-MEM`.
+5. Run `BWA-MEM` to align reads to the reference genome.
 
     ```bash
     bwa mem \
@@ -124,7 +124,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
         IGNORE=MISSING_PLATFORM_VALUE
     ```
 
-7. Find reads overlapping ENCODE exclude list sites
+7. Find reads overlapping ENCODE exclude list sites and remove them.
 
     ```bash
     bedtools intersect \                   # Report reads overlapping excluded intervals
@@ -138,7 +138,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
         -o $ENCODE_REMOVED.bam
     ```
 
-8. Remove mitochondrial genome
+8. Remove reads aligned to the mitochondrial genome.
 
     ```bash
     samtools view $ENCODE_REMOVED.bam chrM |
@@ -150,7 +150,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
             -o $MITO_REMOVED.bam
     ```
 
-9. Remove supplemental alignments
+9. Remove reads marked as supplemental alignments.
 
     ```bash
     samtools view 
@@ -165,7 +165,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
     ```
 
 
-10. Remove duplicate reads
+10. Remove duplicate reads.
    
     ```bash
     picard MarkDuplicates
@@ -174,13 +174,13 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
         --REMOVE_DUPLICATES false
     ```
 
-11. Shift alignments to account for 9-bp duplication due to Tn5 treatment
+11. Shift alignments to account for 9-bp duplication due to Tn5 treatment.
     BAM must be sorted and indexed
     ```bash
     alignmentSieve --ATACshift --bam $DUP_MARKED.bam --outFile $SHIFTED.bam
     ```
 
-12. Generate coverage track
+12. Generate coverage track.
 
     ```bash
     bamCoverage --bam $SHIFTED.bam -o $SAMPLE.bw
