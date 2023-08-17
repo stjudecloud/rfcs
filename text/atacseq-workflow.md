@@ -9,15 +9,15 @@
 
 # Introduction
 
-This RFC lays out the specification for the ATAC-Seq mapping pipeline. 
+This RFC lays out the specification for the ATAC-Seq mapping pipeline. ATAC-Seq (Assay for Transposase-Accessible Chromatin using Sequencing) investigates chromatin accessibility regions in the genome, similar to earlier techniques such as DNase-seq, MNase-seq, or FAIRE-seq. This high-throughput sequencing technique offers a powerful method to investigate genome-wide chromatin accessibility and regulatory elements.
+
+As an epigenetic technique, the goals of a typical ATAC-Seq experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as "the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence" ([Dupont, 2009](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696)). The latter part of this definition (_"that do not entail a change in DNA sequence"_) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.
 
 # Motivation
 
 To provide the  community access to data from ATAC-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ATAC-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.
 
 # Discussion
-
-ATAC-Seq (Assay for Transposase-Accessible Chromatin using Sequencing) investigates chromatin accessibility regions in the genome, similar to earlier techniques such as DNase-seq, MNase-seq, or FAIRE-seq. This high-throughput sequencing technique offers a powerful method to investigate genome-wide chromatin accessibility and regulatory elements.
 
 The ATAC-Seq protocol introduces a genetically engineered Tn5 transposase. Tn5 cuts open chromatin and then ligates sequencing adapters to these regions. While doing this, the Tn5 occupies a 9bp region leading to an offset of 4bp on the positive strand and 5bp on the negative strand.[1](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8191135) In order to identify the center of the interaction locus, the reads will need to be shifted to account for this gap.
 
@@ -52,7 +52,7 @@ The following reference files are used as the basis of the ATAC-Seq Workflow:
   # > GRCh38_no_alt.fa.gz: OK
   ```
 
-- ENCODE list of excluded regions:
+- The ENCODE list of excluded regions is acquired for exclusion of these regions from our harmonized data. The background on the list can be read [here](https://www.nature.com/articles/s41598-019-45839-z). The list is used to filter noise from functional genomics experiments. The creators identified regions that are high signal, independent of the cell line or experiment.
 
   ```bash
   wget -o "GRCh38_no_alt.exclude.bed.gz" https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
@@ -85,15 +85,15 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 
     ```bash
         samtools collate \
-            -u \  # Use the `-u` flag to skip compression (and decompression)
-            -f \  # enable "fast mode"
-            -O \
+            -u \                 # Use the `-u` flag to skip compression (and decompression)
+            -f \                 # Enable "fast mode"
+            -O \                 # Output to STDOUT
             $INPUT_BUM \
             | samtools fastq \
-                -1 $FASTQ_R1 \
-                -2 $FASTQ_R2 \
-                -s /dev/null \
-                -0 /dev/null
+                -1 $FASTQ_R1 \   # Read 1 fastq file
+                -2 $FASTQ_R2 \   # Read 2 fastq file
+                -s /dev/null \   # Remove singleton reads
+                -0 /dev/null     # Remove reads that are not read 1 or read 2
     ```
 
 4. Run `fq lint` on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
@@ -106,12 +106,16 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 
     ```bash
     bwa mem \
-        -t "$n_cores" \
-        -R $READ_GROUP \
-        $DB_PREFIX \
-        $fastq \
-        $fastq2 \
-        | samtools view -@ "$n_cores" -hb - \
+        -t "$n_cores" \      # Number of cores
+        -R $READ_GROUP \     # Read group string to include in BAM
+        $DB_PREFIX \         # Reference DB for BWA
+        $fastq \             # FASTQ for read 1
+        $fastq2 \            # FASTQ for read 2
+        | samtools view \  
+            -@ "$n_cores" \  # Number of cores
+            -h \             # Include BAM header in output
+            -b \             # Output in BAM format
+             - \          
         > ~{output_bam}
     ```
 
@@ -119,7 +123,7 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 
     ```bash
     picard ValidateSamFile \
-        I=$BAM \     # Aligned, coordinate-sorted BAM.
+        I=$BAM \                        # Aligned, coordinate-sorted BAM.
         IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
         IGNORE=MISSING_PLATFORM_VALUE
     ```
@@ -127,26 +131,28 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 7. Find reads overlapping ENCODE exclude list sites and remove them.
 
     ```bash
-    bedtools intersect \                   # Report reads overlapping excluded intervals
-        -abam $BAM \
-        -b GRCh38_no_alt.exclude.bed.gz |
+    bedtools intersect \                      # Report reads overlapping excluded intervals
+        -abam $BAM \                          # Use BAM as file A
+        -b GRCh38_no_alt.exclude.bed.gz |     # Use BED file as file B
         samtools view - | cut -f 1 >          # Retain only read names
         $ENCODE_READS.txt
         
-    java.sh org.stjude.compbio.sam.TweakSam -i $BAM
-        -u $ENCODE_READS.txt
+    java.sh org.stjude.compbio.sam.TweakSam \
+        -i $BAM \
+        -u $ENCODE_READS.txt \                # Set reads listed in the file to unmapped
         -o $ENCODE_REMOVED.bam
     ```
 
 8. Remove reads aligned to the mitochondrial genome.
 
     ```bash
-    samtools view $ENCODE_REMOVED.bam chrM |
+    samtools view $ENCODE_REMOVED.bam chrM |  # Report reads aligned to chrM
         cut -f 1 > 
         $MITO_READS.txt
 
-    java.sh org.stjude.compbio.sam.TweakSam -i $ENCODE_REMOVED.bam
-            -u $MITO_READS.txt
+    java.sh org.stjude.compbio.sam.TweakSam \
+            -i $ENCODE_REMOVED.bam \
+            -u $MITO_READS.txt \              # Set reads listed in the file to unmapped
             -o $MITO_REMOVED.bam
     ```
 
@@ -154,13 +160,14 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 
     ```bash
     samtools view 
-        -f 2048 
+        -f 2048                                # Report reads with the supplemental flag set
         $MITO_REMOVED.bam |
         cut -f 1 >
         $SUPPLEMENTAL_READS.txt
 
-    java.sh org.stjude.compbio.sam.TweakSam -i $MITO_REMOVED.bam
-            -u $SUPPLEMENTAL_READS.txt
+    java.sh org.stjude.compbio.sam.TweakSam \
+            -i $MITO_REMOVED.bam \
+            -u $SUPPLEMENTAL_READS.txt \       # Set reads listed in the file to unmapped
             -o $SUPPLEMENTAL_REMOVED.bam
     ```
 
@@ -168,9 +175,9 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
 10. Remove duplicate reads.
    
     ```bash
-    picard MarkDuplicates
-        -I $SUPPLEMENTAL_REMOVED.bam
-        -O $DUP_MARKED.bam
+    picard MarkDuplicates \
+        -I $SUPPLEMENTAL_REMOVED.bam \
+        -O $DUP_MARKED.bam \
         --REMOVE_DUPLICATES false
     ```
 
