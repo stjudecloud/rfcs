@@ -1,0 +1,363 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>0002-scRNA-Seq-workflow - St. Jude Cloud RFCs</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="0002-scRNA-Seq-workflow.html" class="active"><strong aria-hidden="true">2.</strong> 0002-scRNA-Seq-workflow</a></li><li class="chapter-item expanded "><a href="hic-workflow.html"><strong aria-hidden="true">3.</strong> hic-workflow</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="scrna-seq-pipeline"><a class="header" href="#scrna-seq-pipeline">scRNA-Seq Pipeline <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+</ul>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the scRNA-Seq mapping pipeline.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>To provide the  community access to data from scRNA-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for scRNA-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
+<h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
+<p>The development of bulk RNA-Seq enabled efficient profiling of transcripts in a sample. The ability to interrogate the transcriptome in an unbiased manner, largely replaced previous methods such as microarrays or RT-qPCR. A bulk RNA-Seq experiment sample is a mixture of cells. This method is useful for analyses such as comparing expression between tumor and normal samples. However, this limits the analysis to the average expression over a population of cells and is unable to capture the heterogeneity of gene expression across individual cells. Newer methods have enabled RNA-Seq to be applied to single cells. This enables new questions about cell-specific transcriptome changes. This methodology has been employed in large projects such as the <a href="https://www.humancellatlas.org/">Human Cell Atlas</a> to capture the cellular diversity within organisms.</p>
+<h2 id="scrna-seq-methodology"><a class="header" href="#scrna-seq-methodology">scRNA-Seq methodology</a></h2>
+<p>Generally, scRNA-Seq differs somewhat from bulk RNA-Seq. Most approaches generate three key pieces of information: 1. cDNA fragment from the RNA transcript, 2. a cell barcode that identifies in which cell the RNA was expressed, and 3. a unique molecular identifier (UMI) to enable collapse of PCR duplicates.</p>
+<p>There are several commerical options for performing scRNA-Seq. One such option is the 10x Chromium platform. In their approach using paired-end reads, the celluar barcode and UMI are found in read 1 and the transcript sequence is found in read 2. The 10x method is the most popular commercially available method, so handling data for that platform will be the priority.</p>
+<p>The canonical tool for processing 10x Chromium scRNA-Seq data is their <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">Cell Ranger</a> tool. This tool uses STAR to perform alignment. It then uses the transcriptome annotation GTF to label reads as exonic, intronic, or intergenic. It then performs some additional refinement on the alignments to determine which reads are transcriptomic. These reads are then carried into UMI counting. The UMI counting step produces a raw gene by cell matrix of counts.</p>
+<h2 id="processing-pipeline"><a class="header" href="#processing-pipeline">Processing Pipeline</a></h2>
+<p>For processing of bulk RNA-Seq data, a common standard workflow is to align against the genome using <a href="https://github.com/alexdobin/STAR">STAR</a>. Quantification is then done using a package such as <a href="https://htseq.readthedocs.io/en/release_0.11.1/count.html">HTSeq-count</a>. An example of a bulk RNA-Seq pipeline is the <a href="0001-rnaseq-workflow-v2.0.0.html">St. Jude Cloud RNA-Seq standard workflow v2.0.0</a>.</p>
+<h3 id="aligner-choice"><a class="header" href="#aligner-choice">Aligner choice</a></h3>
+<p>For consistency with other St. Jude Cloud datasets, we are not considering psuedoalignment methods such as <a href="https://www.kallistobus.tools/">kallisto</a> and <a href="https://salmon.readthedocs.io/en/latest/alevin.html">Alevin</a>. This leaves the previously described Cell Ranger method and STARsolo as the primary candidates for use in St. Jude Cloud.</p>
+<p><a href="https://doi.org/10.1093/gigascience/giac001">Bruning, et. al.</a> (2022) provide a useful comparison of commonly used scRNA-Seq methods. However due to our preference for an alignment-based method, we will choose between Cell Ranger and STARsolo. Cell Ranger is the most commonly used method for processing data generated from the 10x protocol. Downstream analysis tools have been developed to directly ingest data in the formats produced by Cell Ranger. The tool is an integrated system that performs alignment, feature counting, and quality control.</p>
+<img src="/rfcs/resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
+<h3 id="quantification-choice"><a class="header" href="#quantification-choice">Quantification choice</a></h3>
+<p>Quantification is a product of both the Cell Ranger and STARsolo packages. Quantification could also be accomplished using a pseudoalignment method, such as Kallisto or Alevin, if there was no desire to share the raw data in BAM format. However that would be a departure from the normal St. Jude Cloud methodology, so that will not be discussed here. Therefore, there is no additional quantification choice to be made beyond that of the aligner package.</p>
+<p>Using either STARsolo or Cell Ranger for analysis requires selection of reference files. For the genome, we will continue using GRCh38_no_alt. The transcript annotation GTF is more complicated. 10x <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest">provides</a> several versions of the annotation files used in Cell Ranger. For simplicity, we will use the Cell Ranger reference files version 2020-A which incorporates GENCODE v32.</p>
+<h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
+<h2 id="metadata"><a class="header" href="#metadata">Metadata</a></h2>
+<h3 id="sample-based"><a class="header" href="#sample-based">Sample-based</a></h3>
+<ol>
+<li>Library Prep Kit - e.g. Illumina TruSeq RNA Library Prep Kit V2</li>
+<li>Library Selection Protocol - e.g. Total, Poly-A</li>
+<li>Sequencing Machine - e.g. Illumina HiSeq 2000, Illumina NovaSeq 6000</li>
+<li>Library Layout - Single-End, Paired-End</li>
+<li>RNA-Seq Strandedness - Unstranded, Stranded-Reverse, Stranded-Forward</li>
+<li>Read Length - Number of bp per read</li>
+<li>Tissue Preservative - e.g. FFPE, Fresh/Frozen</li>
+<li>Cell Isolation Protocol - e.g. Droplet, Microfluidics</li>
+<li>Flowcell design - Multiplexed, split across flowcells, etc.</li>
+</ol>
+<h3 id="cell-based"><a class="header" href="#cell-based">Cell-based</a></h3>
+<p>TODO</p>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
+<pre><code class="language-bash">conda create -n scrnaseq-mapping \
+    -c conda-forge \
+    -c bioconda \
+    picard==2.20.2 \
+    samtools==1.9 \
+    ngsderive==2.2.0 \
+    tabix==1.11 \
+    -y
+</code></pre>
+<p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
+<pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.8.0
+</code></pre>
+<p>Additionally, you will need to install <code>Cell Ranger</code> from 10x genomics to perform the alignment and feature calling.</p>
+<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz &quot;https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&quot;
+
+echo '30855cb96a097c9cab6b02bdb520423f  cellranger-7.0.0.tar.gz' &gt; cellranger-7.0.0.tar.gz.md5
+
+md5sum -c cellranger-7.0.0.tar.gz.md5
+
+tar -xzvf cellranger-7.0.0.tar.gz
+
+export PATH=$(pwd)/cellranger-7.0.0:$PATH
+</code></pre>
+<h2 id="reference-files"><a class="header" href="#reference-files">Reference files</a></h2>
+<p>The following reference files are used as the basis of the scRNA-Seq Workflow v1.0.0:</p>
+<ul>
+<li>
+<p>We will use the 10x provided reference files version 2020-A. You can get the file by running the following commands:</p>
+<pre><code class="language-bash">wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz -O 10x-GRCh38-2020-A.tar.gz
+
+echo &quot;dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz&quot; &gt; 10x-GRCh38-2020-A.tar.gz.md5
+md5sum -c 10x-GRCh38-2020-A.tar.gz.md5
+# &gt; 10x-GRCh38-2020-A.tar.gz: OK
+
+tar -zxf 10x-GRCh38-2020-A.tar.gz
+mv refdata-gex-GRCh38-2020-A 10x-GRCh38-2020-A
+</code></pre>
+</li>
+</ul>
+<h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
+<p>Here are the resulting steps in the scRNA-Seq Workflow v1.0.0 pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/scrnaseq/scrnaseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
+<ol>
+<li>
+<p>Run <code>picard ValidateSam</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+                  I=$INPUT_BAM \                     # Input BAM.
+                  IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                  IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Split BAM file into multiple BAMs on the different read groups using <code>samtools split</code>. See <a href="http://www.htslib.org/doc/samtools.html">the samtools documentation</a> for more information.</p>
+<pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
+               -f '%*_%!.%.'              # Format of output BAM file names.
+</code></pre>
+<p>If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.</p>
+</li>
+<li>
+<p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
+<pre><code class="language-bash">   picard SamToFastq \
+          INPUT=$INPUT_BAM \
+          FASTQ=$FASTQ_R1 \
+          SECOND_END_FASTQ=$FASTQ_R2 \
+          RE_REVERSE=true \
+          VALIDATION_STRINGENCY=SILENT
+</code></pre>
+</li>
+<li>
+<p>Run <code>fq lint</code> on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
+<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
+</code></pre>
+</li>
+<li>
+<p>Run <code>Cell Ranger</code>.</p>
+<pre><code class="language-bash">     cellranger count \
+                --id=$OUTPUT_DIR_NAME \      # A unique run id and output folder name [a-zA-Z0-9_-]+
+                --transcriptome=$REFERENCE \ # Path of folder containing 10x-compatible transcriptome reference
+                --fastqs=$FASTQ_DIR \        # Path to input FASTQ data
+                --sample=$FASTQ_PREFIX \     # Prefix of the filenames of FASTQs to select
+                --localcores=$N_CORES \      # Maximum number of cores to use
+                --localmem=$MEM_GB           # Maximum memory (GB) to use
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard ValidateSamFile</code> on the aligned and sorted BAM file.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+               I=$CELL_RANGER_SORTED_BAM \     # Cell Ranger-aligned, coordinate-sorted BAM.
+               IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+               IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Run <code>ngsderive</code>'s <code>strandedness</code> subcommand to confirm that the lab's information on strandedness reflects what was is computed. Manually triage any discrepancies. This is particularly useful for historical samples. Additionally,
+if the value for strandedness isn't known at run time, we can use the inferred value (if reported).</p>
+<pre><code class="language-bash">ngsderive strandedness $CELL_RANGER_SORTED_BAM \  # Cell Ranger-aligned, coordinate-sorted BAM.
+                       -g $GENCODE_GTF_V32_GZ     # GENCODE v32 GTF (gzipped)
+</code></pre>
+</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0001-rnaseq-workflow-v2.0.0.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="hic-workflow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0001-rnaseq-workflow-v2.0.0.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="hic-workflow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>atacseq-workflow - St. Jude Cloud RFCs</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="0002-scRNA-Seq-workflow.html"><strong aria-hidden="true">2.</strong> 0002-scRNA-Seq-workflow</a></li><li class="chapter-item expanded "><a href="atacseq-workflow.html" class="active"><strong aria-hidden="true">3.</strong> atacseq-workflow</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">St. Jude Cloud RFCs</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="atac-seq-pipeline"><a class="header" href="#atac-seq-pipeline">ATAC-Seq Pipeline <!-- omit in toc --></a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#specification">Specification</a></li>
+<li><a href="#further-reading">Further Reading</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>This RFC lays out the specification for the ATAC-Seq mapping pipeline. ATAC-Seq (Assay for Transposase-Accessible Chromatin using Sequencing) investigates chromatin accessibility regions in the genome, similar to earlier techniques such as DNase-seq, MNase-seq, or FAIRE-seq. This high-throughput sequencing technique offers a powerful method to investigate genome-wide chromatin accessibility and regulatory elements.</p>
+<p>As an epigenetic technique, the goals of a typical ATAC-Seq experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as &quot;the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence&quot; (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>&quot;that do not entail a change in DNA sequence&quot;</em>) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>To provide the  community access to data from ATAC-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ATAC-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
+<h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
+<p>The ATAC-Seq protocol introduces a genetically engineered Tn5 transposase. Tn5 cuts open chromatin and then ligates sequencing adapters to these regions. While doing this, the Tn5 occupies a 9bp region leading to an offset of 4bp on the positive strand and 5bp on the negative strand.<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8191135">1</a> In order to identify the center of the interaction locus, the reads will need to be shifted to account for this gap.</p>
+<p><img src="../resources/atacseq-workflow/tn5.jpeg" alt="Library preparation schematic" /> <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374986/">2</a></p>
+<p>ATAC-Seq libraries are prone to contamination with mitochondrial DNA, typical analyses ignore or remove reads from mitochondria. In addition, duplicate reads, low-quality, multi-mapping, and unmapped reads are typically removed from analysis.</p>
+<h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<ul>
+<li>Picard Tools</li>
+<li>Samtools</li>
+<li>fq</li>
+<li>BWA</li>
+<li>bedtools</li>
+<li>deeptools</li>
+<li>TweakSam</li>
+</ul>
+<h2 id="reference-files"><a class="header" href="#reference-files">Reference Files</a></h2>
+<p>The following reference files are used as the basis of the ATAC-Seq Workflow:</p>
+<ul>
+<li>
+<p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
+<pre><code class="language-bash">wget -o &quot;GRCh38_no_alt.fa.gz&quot; ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+
+echo &quot;a08035b6a6e31780e96a34008ff21bd6  GRCh38_no_alt.fa.gz&quot; &gt; GRCh38_no_alt.fa.gz.md5
+md5sum -c GRCh38_no_alt.fa.gz.md5
+# &gt; GRCh38_no_alt.fa.gz: OK
+</code></pre>
+</li>
+<li>
+<p>The ENCODE list of excluded regions is acquired for exclusion of these regions from our harmonized data. The background on the list can be read <a href="https://www.nature.com/articles/s41598-019-45839-z">here</a>. The list is used to filter noise from functional genomics experiments. The creators identified regions that are high signal, independent of the cell line or experiment.</p>
+<pre><code class="language-bash">wget -o &quot;GRCh38_no_alt.exclude.bed.gz&quot; https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
+</code></pre>
+</li>
+</ul>
+<h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
+<p>Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/atacseq/atacseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
+<ol>
+<li>
+<p>Run <code>picard ValidateSam</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FASTQ.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+    I=$INPUT_BAM \                     # Input BAM.
+    IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+    IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Split BAM file into multiple BAMs on the different read groups using <code>samtools split</code>. See <a href="http://www.htslib.org/doc/samtools.html">the samtools documentation</a> for more information.</p>
+<pre><code class="language-bash">samtools split -u $UNACCOUNTED_BAM_NAME \ # Reads that do not belong to a read group or the read group is unrecognized go here.
+    -f '%*_%!.%.'              # Format of output BAM file names.
+</code></pre>
+<p>If the BAM has unaccounted reads, those will need to be triaged and this step will need to be rerun.</p>
+</li>
+<li>
+<p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
+<pre><code class="language-bash">    samtools collate \
+        -u \                 # Use the `-u` flag to skip compression (and decompression)
+        -f \                 # Enable &quot;fast mode&quot;
+        -O \                 # Output to STDOUT
+        $INPUT_BUM \
+        | samtools fastq \
+            -1 $FASTQ_R1 \   # Read 1 fastq file
+            -2 $FASTQ_R2 \   # Read 2 fastq file
+            -s /dev/null \   # Remove singleton reads
+            -0 /dev/null     # Remove reads that are not read 1 or read 2
+</code></pre>
+</li>
+<li>
+<p>Run <code>fq lint</code> on each of the FastQ pairs that was generated in the previous step as a sanity check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
+<pre><code class="language-bash">fq lint $FASTQ_R1 $FASTQ_R2 # Files for read 1 and read 2.
+</code></pre>
+</li>
+<li>
+<p>Run <code>BWA-MEM</code> to align reads to the reference genome.</p>
+<pre><code class="language-bash">bwa mem \
+    -t &quot;$n_cores&quot; \      # Number of cores
+    -R $READ_GROUP \     # Read group string to include in BAM
+    $DB_PREFIX \         # Reference DB for BWA
+    $fastq \             # FASTQ for read 1
+    $fastq2 \            # FASTQ for read 2
+    | samtools view \  
+        -@ &quot;$n_cores&quot; \  # Number of cores
+        -h \             # Include BAM header in output
+        -b \             # Output in BAM format
+         - \          
+    &gt; ~{output_bam}
+</code></pre>
+</li>
+<li>
+<p>Run <code>picard ValidateSamFile</code> on the aligned and sorted BAM file.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+    I=$BAM \                        # Aligned, coordinate-sorted BAM.
+    IGNORE=INVALID_PLATFORM_VALUE \ # Validations to ignore.
+    IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
+<li>
+<p>Find reads overlapping ENCODE exclude list sites and remove them.</p>
+<pre><code class="language-bash">bedtools intersect \                      # Report reads overlapping excluded intervals
+    -abam $BAM \                          # Use BAM as file A
+    -b GRCh38_no_alt.exclude.bed.gz |     # Use BED file as file B
+    samtools view - | cut -f 1 &gt;          # Retain only read names
+    $ENCODE_READS.txt
+    
+java.sh org.stjude.compbio.sam.TweakSam \
+    -i $BAM \
+    -u $ENCODE_READS.txt \                # Set reads listed in the file to unmapped
+    -o $ENCODE_REMOVED.bam
+</code></pre>
+</li>
+<li>
+<p>Remove reads aligned to the mitochondrial genome.</p>
+<pre><code class="language-bash">samtools view $ENCODE_REMOVED.bam chrM |  # Report reads aligned to chrM
+    cut -f 1 &gt; 
+    $MITO_READS.txt
+
+java.sh org.stjude.compbio.sam.TweakSam \
+        -i $ENCODE_REMOVED.bam \
+        -u $MITO_READS.txt \              # Set reads listed in the file to unmapped
+        -o $MITO_REMOVED.bam
+</code></pre>
+</li>
+<li>
+<p>Remove reads marked as supplemental alignments.</p>
+<pre><code class="language-bash">samtools view 
+    -f 2048                                # Report reads with the supplemental flag set
+    $MITO_REMOVED.bam |
+    cut -f 1 &gt;
+    $SUPPLEMENTAL_READS.txt
+
+java.sh org.stjude.compbio.sam.TweakSam \
+        -i $MITO_REMOVED.bam \
+        -u $SUPPLEMENTAL_READS.txt \       # Set reads listed in the file to unmapped
+        -o $SUPPLEMENTAL_REMOVED.bam
+</code></pre>
+</li>
+<li>
+<p>Remove duplicate reads.</p>
+<pre><code class="language-bash">picard MarkDuplicates \
+    -I $SUPPLEMENTAL_REMOVED.bam \
+    -O $DUP_MARKED.bam \
+    --REMOVE_DUPLICATES false
+</code></pre>
+</li>
+<li>
+<p>Shift alignments to account for 9-bp duplication due to Tn5 treatment.
+BAM must be sorted and indexed</p>
+<pre><code class="language-bash">alignmentSieve --ATACshift --bam $DUP_MARKED.bam --outFile $SHIFTED.bam
+</code></pre>
+</li>
+<li>
+<p>Generate coverage track.</p>
+<pre><code class="language-bash">bamCoverage --bam $SHIFTED.bam -o $SAMPLE.bw
+</code></pre>
+</li>
+</ol>
+<h1 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h1>
+<ul>
+<li><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-1929-3">From reads to insight: a hitchhiker’s guide to ATAC-seq data analysis</a></li>
+<li><a href="https://informatics.fas.harvard.edu/atac-seq-guidelines.html">ATAC-Seq Guidelines - Harvard FAS</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374986/">ATAC-seq: A Method for Assaying Chromatin Accessibility Genome-Wide
+</a></li>
+<li><a href="https://www.activemotif.com/blog-atac-seq">Complete Guide to Understanding and Using ATAC-Seq</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8191135/">Analytical Approaches for ATAC-seq Data Analysis</a></li>
+</ul>
+<h1 id="references"><a class="header" href="#references">References</a></h1>
+<ol>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8191135">Analytical Approaches for ATAC-seq Data Analysis</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374986/">ATAC-seq: A Method for Assaying Chromatin Accessibility Genome-Wide</a></li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="0002-scRNA-Seq-workflow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="drafts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="0002-scRNA-Seq-workflow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="drafts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
