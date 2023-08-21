@@ -794,7 +794,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <h1 id="discussion-2"><a class="header" href="#discussion-2">Discussion</a></h1>
 <p>The ATAC-Seq protocol introduces a genetically engineered Tn5 transposase. Tn5 cuts open chromatin and then ligates sequencing adapters to these regions. While doing this, the Tn5 occupies a 9bp region leading to an offset of 4bp on the positive strand and 5bp on the negative strand.<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8191135">1</a> In order to identify the center of the interaction locus, the reads will need to be shifted to account for this gap.</p>
 <p><img src="../resources/atacseq-workflow/tn5.jpeg" alt="Library preparation schematic" /> <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374986/">2</a></p>
-<p>ATAC-Seq libraries are prone to contamination with mitochondrial DNA, typical analyses ignore or remove reads from mitochondria. In addition, duplicate reads, low-quality, multi-mapping, and unmapped reads are typically removed from analysis.</p>
+<p>ATAC-Seq libraries are prone to contamination with mitochondrial DNA, typical analyses ignore or remove reads from mitochondria. This is due to there being no peaks of interest in the mitochondrial genome. In addition, duplicate reads, low-quality, multi-mapping, and unmapped reads are typically removed from analysis.</p>
 <h1 id="specification-2"><a class="header" href="#specification-2">Specification</a></h1>
 <h2 id="dependencies-2"><a class="header" href="#dependencies-2">Dependencies</a></h2>
 <ul>
