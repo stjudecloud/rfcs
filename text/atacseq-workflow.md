@@ -23,7 +23,7 @@ The ATAC-Seq protocol introduces a genetically engineered Tn5 transposase. Tn5 c
 
 ![Library preparation schematic](../resources/atacseq-workflow/tn5.jpeg) [2](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374986/)
 
-ATAC-Seq libraries are prone to contamination with mitochondrial DNA, typical analyses ignore or remove reads from mitochondria. In addition, duplicate reads, low-quality, multi-mapping, and unmapped reads are typically removed from analysis.
+ATAC-Seq libraries are prone to contamination with mitochondrial DNA, typical analyses ignore or remove reads from mitochondria. This is due to there being no peaks of interest in the mitochondrial genome. In addition, duplicate reads, low-quality, multi-mapping, and unmapped reads are typically removed from analysis.
 
 
 # Specification
