@@ -329,8 +329,23 @@ BAM must be sorted and indexed</p>
 </code></pre>
 </li>
 <li>
+<p>Sort the final BAM file and index</p>
+<pre><code class="language-bash">picard SortSam \
+    --INPUT $SHIFTED.bam \
+    --OUTPUT final.bam \
+    --SORT_ORDER coordinate \ # Coordinate sort BAM file
+    --CREATE_INDEX true \     # Create a BAM index
+    --CREATE_MD5_FILE true    # Create an md5 checksum file
+</code></pre>
+</li>
+<li>
 <p>Generate coverage track.</p>
-<pre><code class="language-bash">bamCoverage --bam $SHIFTED.bam -o $SAMPLE.bw
+<pre><code class="language-bash">bamCoverage --bam final.bam -o final.bw # Create BigWig coverage track
+</code></pre>
+</li>
+<li>
+<p>Generate BED file</p>
+<pre><code class="language-bash">bedtools bamtobed -i final.bam &gt; final.bed # Generate BED file from BAM alignments
 </code></pre>
 </li>
 </ol>
