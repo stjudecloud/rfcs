@@ -172,13 +172,18 @@
 <li><a href="#motivation">Motivation</a></li>
 <li><a href="#discussion">Discussion</a></li>
 <li><a href="#specification">Specification</a></li>
+<li><a href="#further-reading">Further Reading</a></li>
 </ul>
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>This RFC lays out the specification for the Hi-C harmonization pipeline. </p>
+<p>This RFC lays out the specification for the Hi-C harmonization pipeline. Hi-C is a high-throughput epigenetic technique to investigate chromatin conformation.</p>
+<p>As an epigenetic technique, the goals of a typical Hi-C experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as &quot;the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence&quot; (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>&quot;that do not entail a change in DNA sequence&quot;</em>) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
 <h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
 <p>To provide the  community access to data from Hi-C experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized files for Hi-C data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
 <h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
-<p>Hi-C investigates chromatin conformation. </p>
+<p>Hi-C investigates the three dimensional structure of the chromosomes. Chromosome Conformation Capture (3C) was the first molecular method to enable investigation of physical chromatin interactions. Other subsequent methods include 4C and 5C. Hi-C combines the 3C technique with next-generation sequencing. </p>
+<p><img src="../resources/hic-workflow/chromatin-confirmation-capture-wikipedia-60percent.png" alt="Chromatin conformation techniques schematic" /> <a href="https://dnatech.genomecenter.ucdavis.edu/hi-c-library-preparations-and-sequencing/">source</a></p>
+<p>The Hi-C method measures the frequency at which two fragments physically associate. Chromosomes in physical proximity are crosslinked (typically, with formaldehyde). The chromatin are then fragmented into crosslinked pairs. The ends of the fragments are then repaired and ligated together. The tagged fragments are then selected and sequenced. The hybrid fragments are then used to identify DNA interactions.</p>
+<p><img src="../resources/hic-workflow/Hi-C_Workflow_hi-def.png" alt="Hi-C schematic" /> <a href="https://www.activemotif.com/catalog/1317/hi-c-service">source</a></p>
 <h1 id="specification"><a class="header" href="#specification">Specification</a></h1>
 <h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
 <ul>
@@ -209,6 +214,11 @@
 </code></pre>
 </li>
 </ol>
+<h1 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h1>
+<ul>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347522/">The Hitchhiker's Guide to Hi-C Analysis: Practical guidelines</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hi-C_(genomic_analysis_technique)">Hi-C (genomic analysis technique) [Wikipedia]</a></li>
+</ul>
 
                     </main>
 
