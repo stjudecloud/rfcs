@@ -45,9 +45,10 @@ Here are the resulting steps in the Hi-C workflow. There might be slight alterat
 
     ```bash
         picard RevertSam \
-                INPUT=$INPUT_BAM \
-                OUTPUT=$REVERTED_BAM \
-                REMOVE_ALIGNMENT_INFORMATION=true \
-                REMOVE_DUPLICATE_INFORMATION=true \
-                VALIDATION_STRINGENCY=SILENT
+                INPUT=$INPUT_BAM \                        # Input BMA to revert
+                OUTPUT=$REVERTED_BAM \                    # Output unaligned BAM name
+                REMOVE_ALIGNMENT_INFORMATION=true \       # Remove alignments
+                REMOVE_DUPLICATE_INFORMATION=true \       # Remove duplicate flags
+                VALIDATION_STRINGENCY=SILENT \            # Ignore some validation warnings
+                SORT_ORDER=queryname                      # Sort by queryname
     ```
