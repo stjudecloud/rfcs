@@ -4,10 +4,14 @@
 - [Motivation](#motivation)
 - [Discussion](#discussion)
 - [Specification](#specification)
+- [Further Reading](#further-reading)
 
 # Introduction
 
-This RFC lays out the specification for the Hi-C harmonization pipeline. 
+This RFC lays out the specification for the Hi-C harmonization pipeline. Hi-C is a high-throughput epigenetic technique to investigate chromatin conformation.
+
+As an epigenetic technique, the goals of a typical Hi-C experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as "the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence" ([Dupont, 2009](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696)). The latter part of this definition (_"that do not entail a change in DNA sequence"_) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.
+
 
 # Motivation
 
@@ -15,7 +19,13 @@ To provide the  community access to data from Hi-C experiments performed at St. 
 
 # Discussion
 
-Hi-C investigates chromatin conformation. 
+Hi-C investigates the three dimensional structure of the chromosomes. Chromosome Conformation Capture (3C) was the first molecular method to enable investigation of physical chromatin interactions. Other subsequent methods include 4C and 5C. Hi-C combines the 3C technique with next-generation sequencing. 
+
+![Chromatin conformation techniques schematic](../resources/hic-workflow/chromatin-confirmation-capture-wikipedia-60percent.png) [source](https://dnatech.genomecenter.ucdavis.edu/hi-c-library-preparations-and-sequencing/)
+
+The Hi-C method measures the frequency at which two fragments physically associate. Chromosomes in physical proximity are crosslinked (typically, with formaldehyde). The chromatin are then fragmented into crosslinked pairs. The ends of the fragments are then repaired and ligated together. The tagged fragments are then selected and sequenced. The hybrid fragments are then used to identify DNA interactions.
+
+![Hi-C schematic](../resources/hic-workflow/Hi-C_Workflow_hi-def.png) [source](https://www.activemotif.com/catalog/1317/hi-c-service)
 
 # Specification
 
@@ -52,3 +62,8 @@ Here are the resulting steps in the Hi-C workflow. There might be slight alterat
                 VALIDATION_STRINGENCY=SILENT \            # Ignore some validation warnings
                 SORT_ORDER=queryname                      # Sort by queryname
     ```
+
+
+# Further Reading
+- [The Hitchhiker's Guide to Hi-C Analysis: Practical guidelines](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347522/)
+- [Hi-C (genomic analysis technique) [Wikipedia]](https://en.wikipedia.org/wiki/Hi-C_(genomic_analysis_technique))
