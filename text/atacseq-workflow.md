@@ -187,10 +187,27 @@ Here are the resulting steps in the ATAC-Seq Workflow pipeline. There might be s
     alignmentSieve --ATACshift --bam $DUP_MARKED.bam --outFile $SHIFTED.bam
     ```
 
-12. Generate coverage track.
+12. Sort the final BAM file and index
 
     ```bash
-    bamCoverage --bam $SHIFTED.bam -o $SAMPLE.bw
+    picard SortSam \
+        --INPUT $SHIFTED.bam \
+        --OUTPUT final.bam \
+        --SORT_ORDER coordinate \ # Coordinate sort BAM file
+        --CREATE_INDEX true \     # Create a BAM index
+        --CREATE_MD5_FILE true    # Create an md5 checksum file
+    ```
+
+13. Generate coverage track.
+
+    ```bash
+    bamCoverage --bam final.bam -o final.bw # Create BigWig coverage track
+    ```
+
+14. Generate BED file
+
+    ```bash
+    bedtools bamtobed -i final.bam > final.bed # Generate BED file from BAM alignments
     ```
 
 # Further Reading
