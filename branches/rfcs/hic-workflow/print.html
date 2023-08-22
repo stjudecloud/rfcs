@@ -811,11 +811,12 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <li>
 <p>Run Picard <code>RevertSam</code> on the validated BAM file.</p>
 <pre><code class="language-bash">    picard RevertSam \
-            INPUT=$INPUT_BAM \
-            OUTPUT=$REVERTED_BAM \
-            REMOVE_ALIGNMENT_INFORMATION=true \
-            REMOVE_DUPLICATE_INFORMATION=true \
-            VALIDATION_STRINGENCY=SILENT
+            INPUT=$INPUT_BAM \                        # Input BMA to revert
+            OUTPUT=$REVERTED_BAM \                    # Output unaligned BAM name
+            REMOVE_ALIGNMENT_INFORMATION=true \       # Remove alignments
+            REMOVE_DUPLICATE_INFORMATION=true \       # Remove duplicate flags
+            VALIDATION_STRINGENCY=SILENT \            # Ignore some validation warnings
+            SORT_ORDER=queryname                      # Sort by queryname
 </code></pre>
 </li>
 </ol>
