@@ -66,6 +66,15 @@ Here are the resulting steps in the Hi-C workflow. There might be slight alterat
                 SORT_ORDER=queryname                      # Sort by queryname
     ```
 
+3. Run `picard ValidateSam` on the reverted BAM to ensure that it is well-formed.
+
+    ```bash
+    picard ValidateSamFile \
+                        I=$REVERTED_BAM \                  # Input BAM.
+                        IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                        IGNORE=MISSING_PLATFORM_VALUE
+    ```
+
 
 # Further Reading
 - [The Hitchhiker's Guide to Hi-C Analysis: Practical guidelines](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347522/)
