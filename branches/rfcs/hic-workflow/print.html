@@ -826,6 +826,14 @@ if the value for strandedness isn't known at run time, we can use the inferred v
             SORT_ORDER=queryname                      # Sort by queryname
 </code></pre>
 </li>
+<li>
+<p>Run <code>picard ValidateSam</code> on the reverted BAM to ensure that it is well-formed.</p>
+<pre><code class="language-bash">picard ValidateSamFile \
+                    I=$REVERTED_BAM \                  # Input BAM.
+                    IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
+                    IGNORE=MISSING_PLATFORM_VALUE
+</code></pre>
+</li>
 </ol>
 <h1 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h1>
 <ul>
