@@ -166,7 +166,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents <!-- omit in toc --></a></h1>
+                        <h1 id="rna-seq-v2-pipeline"><a class="header" href="#rna-seq-v2-pipeline">RNA-Seq v2 Pipeline <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#motivation">Motivation</a></li>
@@ -215,7 +215,7 @@
 <tr><td>Broad Institute's <a href="https://github.com/broadinstitute/gtex-pipeline/tree/master/rnaseq#reference-genome-and-annotation">GTEx + TOPMed RNA-Seq pipeline</a></td><td><a href="https://software.broadinstitute.org/gatk/download/bundle">Broad's <code>GRCh38</code> w/ ERCC SpikeIn</a></td><td><code>GRCh38.p0</code></td><td><a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a></td><td><code>GRCh38.p10</code></td></tr>
 </tbody></table>
 </div>
-<p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p><strong>Note:</strong> You can confirm which patch the GENCODE genesets is based on just by clicking on the hyperlink. Verifying that each of these reference genomes is really based on <code>GRCh38_no_alt</code> takes a little bit more elbow grease: if you're interested, you can check out the comparison table <a href="#reference-genome-comparison">in the appendix</a>. If you are <em>really</em> interested, you can recapitulate those results by running <a href="https://github.com/stjudecloud/rfcs/tree/main/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <p>Based on the results of the above investigation, I reached out to the author of STAR, Alex Dobin, to get his opinion on whether the differences might affect some results. You can read my question and his reply <a href="https://github.com/alexdobin/STAR/issues/673">here</a>. In short, he confirms that, yes, this may alter results for the various analysis types we were interested in.</p>
 <p>Given the landscape of the community and the author's response, we considered three possible options for moving ahead:</p>
 <ol>
@@ -436,7 +436,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <li>Use <code>picard CreateSequenceDictionary</code> to get the md5sums for each sequence in the dictionary.</li>
 <li>Compare for the common chromosomes in each reference (the autosomes, the sex chromosomes, and the EBV decoy).</li>
 </ol>
-<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/master/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
+<p>If you are interested in seeing the <em>full</em> comparison table or in regenerating these results, you can see <a href="https://github.com/stjudecloud/rfcs/tree/main/resources/0001-rnaseq-workflow-v2.0.0/GenomeComparison.ipynb">the associated Jupyter notebook</a>.</p>
 <div class="table-wrapper"><table><thead><tr><th>Sequence Name</th><th>NCBI (baseline)</th><th>ENCODE</th><th>GDC</th><th>TOPMed</th><th>Concordant</th></tr></thead><tbody>
 <tr><td>chr1</td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td><code>6aef897c3d6ff0c78aff06ac189178dd</code></td><td>True</td></tr>
 <tr><td>chr2</td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td><code>f98db672eb0993dcfdabafe2a882905c</code></td><td>True</td></tr>

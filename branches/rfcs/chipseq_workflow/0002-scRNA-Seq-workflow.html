@@ -166,7 +166,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents <!-- omit in toc --></a></h1>
+                        <h1 id="scrna-seq-pipeline"><a class="header" href="#scrna-seq-pipeline">scRNA-Seq Pipeline <!-- omit in toc --></a></h1>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#motivation">Motivation</a></li>
@@ -188,7 +188,7 @@
 <h3 id="aligner-choice"><a class="header" href="#aligner-choice">Aligner choice</a></h3>
 <p>For consistency with other St. Jude Cloud datasets, we are not considering psuedoalignment methods such as <a href="https://www.kallistobus.tools/">kallisto</a> and <a href="https://salmon.readthedocs.io/en/latest/alevin.html">Alevin</a>. This leaves the previously described Cell Ranger method and STARsolo as the primary candidates for use in St. Jude Cloud.</p>
 <p><a href="https://doi.org/10.1093/gigascience/giac001">Bruning, et. al.</a> (2022) provide a useful comparison of commonly used scRNA-Seq methods. However due to our preference for an alignment-based method, we will choose between Cell Ranger and STARsolo. Cell Ranger is the most commonly used method for processing data generated from the 10x protocol. Downstream analysis tools have been developed to directly ingest data in the formats produced by Cell Ranger. The tool is an integrated system that performs alignment, feature counting, and quality control.</p>
-<img src="../resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
+<img src="/rfcs/resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
 <h3 id="quantification-choice"><a class="header" href="#quantification-choice">Quantification choice</a></h3>
 <p>Quantification is a product of both the Cell Ranger and STARsolo packages. Quantification could also be accomplished using a pseudoalignment method, such as Kallisto or Alevin, if there was no desire to share the raw data in BAM format. However that would be a departure from the normal St. Jude Cloud methodology, so that will not be discussed here. Therefore, there is no additional quantification choice to be made beyond that of the aligner package.</p>
 <p>Using either STARsolo or Cell Ranger for analysis requires selection of reference files. For the genome, we will continue using GRCh38_no_alt. The transcript annotation GTF is more complicated. 10x <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest">provides</a> several versions of the annotation files used in Cell Ranger. For simplicity, we will use the Cell Ranger reference files version 2020-A which incorporates GENCODE v32.</p>
