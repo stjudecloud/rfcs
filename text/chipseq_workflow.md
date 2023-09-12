@@ -187,21 +187,35 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 4. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
 
    ```bash
-      picard SamToFastq \
+      if [ "~{paired_end}" == 'true' ]
+      then
+         picard SamToFastq \
              INPUT=$INPUT_BAM \
              FASTQ=$FASTQ_R1 \
              SECOND_END_FASTQ=$FASTQ_R2 \
              RE_REVERSE=true \
              VALIDATION_STRINGENCY=SILENT
+      else
+         picard SamToFastq \
+             INPUT=$INPUT_BAM \
+             FASTQ=$FASTQ_R1 \
+             RE_REVERSE=true \
+             VALIDATION_STRINGENCY=SILENT
+      fi
    ```
 
 5. Run `fq lint` on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the `fq` tool performs [here](https://github.com/stjude/fqlib/blob/master/README.md#validators).
 
    ```bash
-   fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2. Read 2 is optional.
+   if [ "~{paired_end}" == 'true' ]
+   then
+      fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2.
+   else
+      fq lint $FASTQ_R1                      # Files for read 1.
+   fi
    ```
 
-6. Run the `SEAseq` alignment algorithm.
+6. Run the `SEAseq` alignment algorithm. The following is the SEAseq method written out. We will use the implementation at https://github.com/stjude/seaseq/blob/master/workflows/workflows/mapping.wdl. 
 
    ```bash
            if [ -f "$fastqfile_R2" ]; then    # If paired-end reads
@@ -295,40 +309,15 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
       O=${OUTPUT_FILENAME}                            # Output cleaned BAM
    ```
 
-8. Run `picard MergeSamFiles` on aligned, cleaned BAM files.
+8.  Run `picard ValidateSamFile` on the aligned and sorted BAM file.
 
-   ```bash
-      picard -Xmx${JAVA_HEAP_SIZE}g MergeSamFiles \
-         ${INPUT_ARG} \                               # Write an INPUT= argument for each input BAM file
-         OUTPUT=${OUTPUT_NAME} \                      # Nmae for combined BAM file
-         SORT_ORDER=${SORT_ORDER} \                   # Set sort order (default=coordinate)
-         USE_THREADING=${THREADING} \                 # Use specified number of threads
-         VALIDATION_STRINGENCY=SILENT                 # Ignore validation errors
-   ```
-9. Run SEAseq mark duplicates.
-   ```bash
-        samtools markdup \
-            -r \                   # Remove duplicate reads (-r)
-            -s \                   # Report stats (-s)
-            ${bamfile} \           # SEAseq aligned BAM file
-            ${outputfile}          # Output BAM with duplicates removed
-   ```
+      ```bash
+      picard ValidateSamFile I=$SEAseq_SORTED_BAM \         # SEAseq-aligned coordinate-sorted BAM.
+                     IGNORE=INVALID_PLATFORM_VALUE \        # Validations to ignore.
+                     IGNORE=MISSING_PLATFORM_VALUE
+      ```
 
-10. Index the coordinate-sorted BAM file.
-
-   ```bash
-   samtools index $SEASEQ_SORTED_BAM                     # SEAseq-aligned, coordinate-sorted BAM.
-   ```
-
-12. Run `picard ValidateSamFile` on the aligned and sorted BAM file.
-
-   ```bash
-   picard ValidateSamFile I=$SEAseq_SORTED_BAM \         # SEAseq-aligned, coordinate-sorted BAM.
-                  IGNORE=INVALID_PLATFORM_VALUE \     # Validations to ignore.
-                  IGNORE=MISSING_PLATFORM_VALUE
-   ```
-
-11. Run `bamCoverage` to generate bigwig file.
+9.  Run `bamCoverage` to generate bigwig file.
 
     ```bash
     bamCoverage --bam ${MERGED_BAM} \                 # Input BAM file
