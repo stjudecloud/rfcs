@@ -1,4 +1,4 @@
-# Table of Contents <!-- omit in toc -->
+# scRNA-Seq Pipeline <!-- omit in toc -->
 
 - [Introduction](#introduction)
 - [Motivation](#motivation)
@@ -35,7 +35,7 @@ For consistency with other St. Jude Cloud datasets, we are not considering psued
 
 [Bruning, et. al.](https://doi.org/10.1093/gigascience/giac001) (2022) provide a useful comparison of commonly used scRNA-Seq methods. However due to our preference for an alignment-based method, we will choose between Cell Ranger and STARsolo. Cell Ranger is the most commonly used method for processing data generated from the 10x protocol. Downstream analysis tools have been developed to directly ingest data in the formats produced by Cell Ranger. The tool is an integrated system that performs alignment, feature counting, and quality control.
 
-<img src="../resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
+<img src="/rfcs/resources/0002-scRNA-Seq-workflow/aligner_comparison.jpeg" width="800">
 
 ### Quantification choice
 

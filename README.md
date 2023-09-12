@@ -1,8 +1,6 @@
 <p align="center">
-  <a href="https://github.com/stjudecloud/rfcs"><img src="https://github.com/stjudecloud/rfcs/raw/master/docs/rfcs-banner-blueprint.jpg" width="800" title="St. Jude Cloud RFCs"></a>
-  <a href="https://actions-badge.atrox.dev/stjudecloud/rfcs/goto"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fstjudecloud%2Frfcs%2Fbadge&style=flat" /></a>
-  <a href="https://gitter.im/stjudecloud/rfcs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank">
-    <img alt="Gitter: RFCs" src="https://badges.gitter.im/stjudecloud/rfcs.svg" />
+  <a href="https://github.com/stjudecloud/rfcs"><img src="https://github.com/stjudecloud/rfcs/raw/main/docs/rfcs-banner-blueprint.jpg" width="800" title="St. Jude Cloud RFCs"></a>
+  <a href="https://github.com/stjudecloud/rfcs/actions/workflows/deploy.yml"><img alt="Build Status" src="https://github.com/stjudecloud/rfcs/actions/workflows/deploy.yml/badge.svg" /></a>
   </a>
 </p>
 
@@ -80,13 +78,13 @@ python3 -m http.server -d book
 
 ## Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/stjudecloud/rfcs/issues). You can also take a look at the [contributing guide](https://github.com/stjudecloud/rfcs/blob/master/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/stjudecloud/rfcs/issues). You can also take a look at the [contributing guide](https://github.com/stjudecloud/rfcs/blob/main/CONTRIBUTING.md).
 
 
 ## 📝 License
 
 Copyright © 2020 [St. Jude Cloud Team](https://github.com/stjudecloud).<br />
-This project is [MIT](https://github.com/stjudecloud/rfcs/blob/master/LICENSE.md) licensed.
+This project is [MIT](https://github.com/stjudecloud/rfcs/blob/main/LICENSE.md) licensed.
 
 ## Questions
 
