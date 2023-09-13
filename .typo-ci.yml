@@ -1,3 +1,18 @@
 excluded_words:
+  - bwa
+  - Epigenomics
+  - Cistrome
+  - conda
+  - conda-forge
+  - bioconda
+  - ngsderive
+  - fqlib
+  - SamToFastq
+  - aln
+  - samse
+  - ncpu
+  - sampe
+  - Bowtie
   - stjude
+  - chipsummitdb-
   - epigenetic
