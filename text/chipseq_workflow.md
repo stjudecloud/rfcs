@@ -88,24 +88,12 @@ Due to the nature of the experimental methods, ChIP-Seq requires additional meta
 
 ## Dependencies
 
-If you'd like the full `conda` environment, you can install it using the following command. Obviously, you'll need to install [anaconda](https://www.anaconda.com/) first.
+Dependencies are managed via Docker images. Where possible, community maintained (Biocontainers) images are utilized. These will be updated over time.
 
-```bash
-conda create -n chipseq-mapping \
-    -c conda-forge \
-    -c bioconda \
-    picard==2.20.2 \
-    samtools==1.9 \
-    ngsderive==2.2.0 \
-    deeptools==3.5.0 \
-    -y
-```
-
-Additionally, you will want to install our `fqlib` library to check that FastQ files are properly paired and have no duplicate read names. Installation of the [Rust](https://rustup.rs/) programming language is required.
-
-```bash
-cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
-```
+- [picard](https://github.com/broadinstitute/picard)
+- [samtools](http://www.htslib.org/)
+- [deeptools](https://github.com/deeptools/deepTools)
+- [fq](https://github.com/stjude-rust-labs/fq)
 
 ## Reference files
 
@@ -159,7 +147,7 @@ The following reference files are used as the basis of the ChIP-Seq Workflow:
 
 ## Workflow
 
-Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/chipseq/chipseq-standard.wdl).
+Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/main/workflows/chipseq/chipseq-standard.wdl).
 
 1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.
 
@@ -184,23 +172,21 @@ Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be s
 
    If the BAM has unaccounted reads, those reads will need to be removed and the samtools split step will need to be rerun.
 
-4. Run Picard `SamToFastq` on each of the BAMs generated in the previous step.
+4. Run samtools `collate` and `fastq` on each of the BAMs generated in the previous step.
 
    ```bash
       if [ "~{paired_end}" == 'true' ]
       then
-         picard SamToFastq \
-             INPUT=$INPUT_BAM \
-             FASTQ=$FASTQ_R1 \
-             SECOND_END_FASTQ=$FASTQ_R2 \
-             RE_REVERSE=true \
-             VALIDATION_STRINGENCY=SILENT
+         samtools collate \
+             INPUT_BAM \
+         | samtools fastq
+             -1 sample_R1.fastq.gz
+             -2 sample_R2.fastq.gz
       else
-         picard SamToFastq \
-             INPUT=$INPUT_BAM \
-             FASTQ=$FASTQ_R1 \
-             RE_REVERSE=true \
-             VALIDATION_STRINGENCY=SILENT
+         samtools collate \
+             INPUT_BAM \
+         | samtools fastq
+             -1 sample.fastq.gz
       fi
    ```
 
