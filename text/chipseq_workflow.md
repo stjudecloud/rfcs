@@ -94,6 +94,7 @@ Dependencies are managed via Docker images. Where possible, community maintained
 - [samtools](http://www.htslib.org/)
 - [deeptools](https://github.com/deeptools/deepTools)
 - [fq](https://github.com/stjude-rust-labs/fq)
+- [SEAseq](https://github.com/stjude/seaseq)
 
 ## Reference files
 
