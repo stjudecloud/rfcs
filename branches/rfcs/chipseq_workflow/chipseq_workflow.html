@@ -213,19 +213,13 @@
 <li>Antibody target/mark</li>
 </ul>
 <h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
-<p>If you'd like the full <code>conda</code> environment, you can install it using the following command. Obviously, you'll need to install <a href="https://www.anaconda.com/">anaconda</a> first.</p>
-<pre><code class="language-bash">conda create -n chipseq-mapping \
-    -c conda-forge \
-    -c bioconda \
-    picard==2.20.2 \
-    samtools==1.9 \
-    ngsderive==2.2.0 \
-    deeptools==3.5.0 \
-    -y
-</code></pre>
-<p>Additionally, you will want to install our <code>fqlib</code> library to check that FastQ files are properly paired and have no duplicate read names. Installation of the <a href="https://rustup.rs/">Rust</a> programming language is required.</p>
-<pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.3.1
-</code></pre>
+<p>Dependencies are managed via Docker images. Where possible, community maintained (Biocontainers) images are utilized. These will be updated over time.</p>
+<ul>
+<li><a href="https://github.com/broadinstitute/picard">picard</a></li>
+<li><a href="http://www.htslib.org/">samtools</a></li>
+<li><a href="https://github.com/deeptools/deepTools">deeptools</a></li>
+<li><a href="https://github.com/stjude-rust-labs/fq">fq</a></li>
+</ul>
 <h2 id="reference-files"><a class="header" href="#reference-files">Reference files</a></h2>
 <p>The following reference files are used as the basis of the ChIP-Seq Workflow:</p>
 <ul>
@@ -275,7 +269,7 @@ md5sum -c hg38.excludelist.bed.md5
 </li>
 </ul>
 <h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
-<p>Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/chipseq/chipseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
+<p>Here are the resulting steps in the ChIP-Seq Workflow pipeline. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/main/workflows/chipseq/chipseq-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
 <ol>
 <li>
 <p>Run <code>picard ValidateSam</code> on the incoming BAM to ensure that it is well-formed enough to convert back to FastQ.</p>
@@ -297,21 +291,19 @@ md5sum -c hg38.excludelist.bed.md5
 <p>If the BAM has unaccounted reads, those reads will need to be removed and the samtools split step will need to be rerun.</p>
 </li>
 <li>
-<p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
+<p>Run samtools <code>collate</code> and <code>fastq</code> on each of the BAMs generated in the previous step.</p>
 <pre><code class="language-bash">   if [ &quot;~{paired_end}&quot; == 'true' ]
    then
-      picard SamToFastq \
-          INPUT=$INPUT_BAM \
-          FASTQ=$FASTQ_R1 \
-          SECOND_END_FASTQ=$FASTQ_R2 \
-          RE_REVERSE=true \
-          VALIDATION_STRINGENCY=SILENT
+      samtools collate \
+          INPUT_BAM \
+      | samtools fastq
+          -1 sample_R1.fastq.gz
+          -2 sample_R2.fastq.gz
    else
-      picard SamToFastq \
-          INPUT=$INPUT_BAM \
-          FASTQ=$FASTQ_R1 \
-          RE_REVERSE=true \
-          VALIDATION_STRINGENCY=SILENT
+      samtools collate \
+          INPUT_BAM \
+      | samtools fastq
+          -1 sample.fastq.gz
    fi
 </code></pre>
 </li>
