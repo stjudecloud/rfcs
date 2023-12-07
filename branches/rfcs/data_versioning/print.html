@@ -91,7 +91,9 @@
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="0001-rnaseq-workflow-v2.0.0.html"><strong aria-hidden="true">1.</strong> 0001-rnaseq-workflow-v2.0.0</a></li><li class="chapter-item expanded "><a href="0002-scRNA-Seq-workflow.html"><strong aria-hidden="true">2.</strong> 0002-scRNA-Seq-workflow</a></li><li class="chapter-item expanded "><a href="data_versioning.html"><strong aria-hidden="true">3.</strong> data_versioning</a></li><li class="chapter-item expanded affix "><a href="drafts.html">RFC Drafts</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -787,6 +789,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <li><a href="data_versioning.html#introduction">Introduction</a></li>
 <li><a href="data_versioning.html#motivation">Motivation</a></li>
 <li><a href="data_versioning.html#pre-discussion">Pre-Discussion</a></li>
+<li><a href="data_versioning.html#discussion">Discussion</a></li>
 </ul>
 <h1 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h1>
 <p>This RFC lays out the Data Versioning process for St. Jude Cloud.</p>
@@ -798,6 +801,116 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <p>Currently we have the RNA-Seq workflow v2.0.0 in use for St. Jude Cloud. We have subsequently released improvements, including the integration of XenoCP. This is not in use for production work as we include the pipeline version with the data files in St. Jude Cloud. Creation of a data versioning standard will enable us to roll out bug fixes and new features on an appropriate timeline and provide confidence to ourselves and our users that data is consistent, hopefully, without requiring complete reruns of all data for any change.</p>
 <p>We also have issues with the <code>msgen</code> pipeline that is used for WGS and WES. Microsoft has made changes to the pipeline and process throughout the time that we have been using it for production data releases. We have not incremented any versions in that time. So as it stands, we are trusting, without any verification, that any changes introduced are acceptable. </p>
 <p>A data versioning process should help us find a reasonable balance that doesn't stop us from making any changes, ever, but also we want to avoid incorporating any and all changes without any assurances, or insight in <code>msgen</code>'s case, that those changes are reasonable and not meaningfully impactful to the data results.</p>
+<h1 id="discussion-2"><a class="header" href="#discussion-2">Discussion</a></h1>
+<h2 id="whole-genome-and-whole-exome-sequencing"><a class="header" href="#whole-genome-and-whole-exome-sequencing">Whole-Genome and Whole-Exome Sequencing</a></h2>
+<p>We propose to evaluate whole-genome (WGS) and whole-exome (WES) sequencing by running well characterized samples through each iteration of the analysis pipeline. The resulting variant calls (gVCFs) will be compared to existing high-quality variant calls. This comparison will be conducted using Illumina's <code>hap.py</code> <a href="https://github.com/Illumina/hap.py">comparison tool</a> as <a href="https://www.biorxiv.org/content/10.1101/270157v3">recommended</a> by the Global Alliance for Genomics and Health (GA4GH) Benchmarking Team. Specifically, we propose to run samples from the National Institute for Standards and Technology (NIST)'s Genome in a Bottle (GIAB) project. We will  perform analysis using samples HG002, HG003, HG004, HG005, HG006, and HG007 for WGS. For WES, we will use samples HG002, HG003, HG004, and HG005. The results from prior iterations of the pipeline will be supplied as the truth set. The confident call sets from GIAB will be provided as the gold standard dataset. The variant calls from the new workflow version will be treated as the query.</p>
+<h2 id="rna-seq"><a class="header" href="#rna-seq">RNA-Seq</a></h2>
+<p>We propose to evaluate RNA sequencing (RNA-Seq) by running well characterized samples through each iteration of the analysis pipeline. Specifically, we propose to run samples from the National Institute for Standards and Technology (NIST)'s Genome in a Bottle (GIAB) project. We will use RNA-Seq data from HG002, HG004, and HG005 samples. These three samples will be run through new iterations of the <a href="https://stjudecloud.github.io/rfcs/0001-rnaseq-workflow-v2.0.0.html">St. Jude Cloud RNA-Seq harmonization workflow</a>. The pipelines will output aligned BAMs and feature count files for each sample. We will then generate variant calls using the <a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-">GATK RNA-Seq short variant discovery best practices workflow</a>. We will use Illumina's hap.py comparison tool, along with the high confidence variant calls from GIAB to compare output from prior versions of the RNA-Seq pipeline to the proposed version.</p>
+<h3 id="gatk-rna-seq-short-variant-discovery-best-practices-workflow"><a class="header" href="#gatk-rna-seq-short-variant-discovery-best-practices-workflow">GATK RNA-Seq short variant discovery best practices workflow</a></h3>
+<p>The GATK best practices workflows are de facto standards for data processing in bioinformatics. Therefore we will reuse their existing workflow for generating variant calls from RNA-Seq data. The workflow accepts a STAR-aligned BAM file, such as those produced by our RNA-Seq alignment harmonization workflow, and produces a set of variant calls by running a number of GATK steps.</p>
+<p><img src="../resources/data_versioning/rnaseq-variant-workflow.png" alt="GATK RNA-Seq short variant discovery workflow diagram" /></p>
+<h4 id="workflow-2"><a class="header" href="#workflow-2">Workflow</a></h4>
+<ol>
+<li>
+<p>Run Picard <code>MarkDuplicates</code></p>
+<pre><code class="language-bash">    picard -Xmx~{java_heap_size}g MarkDuplicates \
+        -I ~{bam} \
+        -O ~{if create_bam then prefix + &quot;.bam&quot; else &quot;/dev/null&quot;} \
+        --VALIDATION_STRINGENCY SILENT \
+        --CREATE_INDEX ~{create_bam} \
+        --CREATE_MD5_FILE ~{create_bam} \
+        --COMPRESSION_LEVEL 5 \
+        --METRICS_FILE ~{prefix}.metrics.txt
+</code></pre>
+</li>
+<li>
+<p>Run GATK <code>SplitNCigarReads</code></p>
+<pre><code class="language-bash">    gatk \
+        SplitNCigarReads \
+        -R ~{fasta} \
+        -I ~{bam} \
+        -O ~{prefix}.bam \
+        -OBM true
+   # GATK is unreasonable and uses the plain &quot;.bai&quot; suffix.
+   mv ~{prefix}.bai ~{prefix}.bam.bai
+</code></pre>
+</li>
+<li>
+<p>Run GATK Spark-enabled <code>BaseRecalibrator</code> (<code>BaseRecalibratorSpark</code>).</p>
+<pre><code class="language-bash">     gatk \
+         --java-options &quot;-Xms4000m&quot; \
+         BaseRecalibratorSpark \
+         -R ~{fasta} \
+         -I ~{bam} \
+         ~{if use_original_quality_scores then &quot;--use-original-qualities&quot; else &quot;&quot; } \
+         -O ~{prefix}.txt \
+         -known-sites ~{dbSNP_vcf} \
+         -known-sites ~{sep=&quot; --known-sites &quot; known_indels_sites_VCFs} \
+         --spark-master local[4]
+</code></pre>
+</li>
+<li>
+<p>Run GATK Spark-enabled <code>ApplyBQSR</code> (<code>ApplyBQSRSpark</code>).</p>
+<pre><code class="language-bash">        gatk \
+        --java-options &quot;-Xms3000m&quot; \
+        ApplyBQSRSpark \
+        --spark-master local[4] \
+        -I ~{bam} \
+        ~{if use_original_quality_scores then &quot;--use-original-qualities&quot; else &quot;&quot; } \
+        -O ~{prefix}.bam \
+        --bqsr-recal-file ~{recalibration_report}
+</code></pre>
+</li>
+<li>
+<p>Run Picard <code>IntervalListTools</code> to generate list of regions to scatter over.</p>
+<pre><code class="language-bash">    picard -Xms1g \
+        IntervalListTools \
+        SCATTER_COUNT=~{scatter_count} \
+        SUBDIVISION_MODE=BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW \
+        UNIQUE=~{unique} \
+        SORT=~{sort} \
+        INPUT=~{interval_list} \
+        OUTPUT=out
+</code></pre>
+</li>
+<li>
+<p>Run GATK Spark-enabled <code>HaplotypeCaller</code> (<code>HaplotypeCallerSpark</code>) on each region.</p>
+<pre><code class="language-bash">    gatk \
+       --java-options &quot;-Xms6000m&quot; \
+        HaplotypeCallerSpark \
+        -R ~{fasta} \
+        -I ~{bam} \
+        -L ~{interval_list} \
+        -O ~{prefix}.vcf.gz \
+        ~{if use_soft_clipped_bases then &quot;&quot; else &quot;--dont-use-soft-clipped-bases&quot;} \
+        --standard-min-confidence-threshold-for-calling ~{stand_call_conf} \
+       --spark-master local[4]
+</code></pre>
+</li>
+<li>
+<p>Run Picard <code>MergeVcfs</code>.</p>
+<pre><code class="language-bash">    picard -Xms2000m \
+        MergeVcfs \
+        ~{sep(' ', prefix('--INPUT=', vcfs))} \
+        --OUTPUT ~{output_vcf_name}
+</code></pre>
+</li>
+<li>
+<p>Run GATK <code>VariantFiltration</code>.</p>
+<pre><code class="language-bash">    gatk \
+        VariantFiltration \
+            --R ~{fasta} \
+            --V ~{vcf} \
+            --window ~{window} \
+            --cluster ~{cluster} \
+             ~{sep(' ', prefix('--filter-name ', filter_name))} \
+             ~{sep(' ', prefix('--filter-expression ', squote(filter_expression)))} \
+            -O ~{prefix}.vcf.gz
+</code></pre>
+</li>
+</ol>
+<h3 id="validation"><a class="header" href="#validation">Validation</a></h3>
+<p>After generation of RNA-Seq variants, we will run Illumina's <code>hap.py</code> comparison tool, as recommended by GA4GH, to evaluate the variant calls produced by the newest version of the pipeline compared with those produced by the prior version of the pipeline and compared against the high-quality variant call benchmark set published by GIAB.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="drafts"><a class="header" href="#drafts">Drafts</a></h1>
 <p>The following are <em>candidate</em> RFCs that are being rendered for easy review. They are <em>not</em> accepted St. Jude Cloud RFCs. For more information please see <a href="https://github.com/stjudecloud/rfcs/pulls">the associated pull request</a>.</p>
 <ul>
