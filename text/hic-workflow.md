@@ -124,9 +124,10 @@ Here are the resulting steps in the Hi-C workflow. There might be slight alterat
 
     ```bash
         juicer_tools pre \ 
-            $PAIRS \         # Reads with both mates mapped
-            $HIC \           # hic file with multiple resolutions
-            $GENOME_ID       # Predefined genome matching alignment
+            -f $RESTRICTION_SITES \  # List of restriction sites, if available
+            $PAIRS \                 # Reads with both mates mapped
+            $HIC \                   # hic file with multiple resolutions
+            $GENOME_ID               # Predefined genome matching alignment
     ```
 
 # Further Reading
