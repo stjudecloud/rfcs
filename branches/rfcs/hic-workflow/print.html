@@ -887,9 +887,10 @@ md5sum -c GRCh38_no_alt.fa.md5
 <li>
 <p>Run Juicer <code>pre</code> to generate .hic file.</p>
 <pre><code class="language-bash">    juicer_tools pre \ 
-        $PAIRS \         # Reads with both mates mapped
-        $HIC \           # hic file with multiple resolutions
-        $GENOME_ID       # Predefined genome matching alignment
+        -f $RESTRICTION_SITES \  # List of restriction sites, if available
+        $PAIRS \                 # Reads with both mates mapped
+        $HIC \                   # hic file with multiple resolutions
+        $GENOME_ID               # Predefined genome matching alignment
 </code></pre>
 </li>
 </ol>
