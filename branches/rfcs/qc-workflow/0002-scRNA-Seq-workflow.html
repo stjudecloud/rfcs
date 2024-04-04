@@ -230,7 +230,7 @@
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.8.0
 </code></pre>
 <p>Additionally, you will need to install <code>Cell Ranger</code> from 10x genomics to perform the alignment and feature calling.</p>
-<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz &quot;https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&quot;
+<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
 
 echo '30855cb96a097c9cab6b02bdb520423f  cellranger-7.0.0.tar.gz' &gt; cellranger-7.0.0.tar.gz.md5
 
@@ -247,7 +247,7 @@ export PATH=$(pwd)/cellranger-7.0.0:$PATH
 <p>We will use the 10x provided reference files version 2020-A. You can get the file by running the following commands:</p>
 <pre><code class="language-bash">wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz -O 10x-GRCh38-2020-A.tar.gz
 
-echo &quot;dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz&quot; &gt; 10x-GRCh38-2020-A.tar.gz.md5
+echo "dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz" &gt; 10x-GRCh38-2020-A.tar.gz.md5
 md5sum -c 10x-GRCh38-2020-A.tar.gz.md5
 # &gt; 10x-GRCh38-2020-A.tar.gz: OK
 

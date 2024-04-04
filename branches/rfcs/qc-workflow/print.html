@@ -190,13 +190,13 @@
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
 <p>All RFCs go through a three-stage process from draft to adoption:</p>
 <ol>
-<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
+<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team.
 <ul>
-<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community. </li>
+<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community.</li>
 <li>The amount of time the RFC spends in this state is variable depending on the scope of the proposal.</li>
 </ul>
 </li>
-<li>The RFC opens for discussion from users and stakeholders<sup><a href="introduction.html#footnote1">1</a></sup> within the St. Jude community. 
+<li>The RFC opens for discussion from users and stakeholders<sup><a href="introduction.html#footnote1">1</a></sup> within the St. Jude community.
 <ul>
 <li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
 <li>The RFC will remain in this phase for <strong>1 week</strong>.</li>
@@ -212,21 +212,21 @@
 <p>Each phase of the process brings about further refinement of details and hardening of the proposal.</p>
 <p><sup><a name="footnote1">1</a></sup> St. Jude community stakeholders include the Department of Computational Biology, Center for Applied Bioinformatics, and users of St. Jude Cloud that have requested data from a <code>@stjude.org</code> e-mail address.</p>
 <h3 id="evaluation-and-acceptance"><a class="header" href="#evaluation-and-acceptance">Evaluation and acceptance</a></h3>
-<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. </p>
-<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. </p>
+<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community.</p>
+<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement.</p>
 <h3 id="creating-a-proposal"><a class="header" href="#creating-a-proposal">Creating a proposal</a></h3>
 <ol>
 <li>Create an initial draft of the RFC by creating a pull request on this repo.
 <ul>
 <li>Create a branch on this repo with the form <code>&lt;username&gt;/&lt;featurename&gt;</code>.</li>
-<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace &quot;template&quot; with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
-<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>) </li>
+<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace "template" with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
+<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>)</li>
 <li>Ensure that your pull request has <code>[WIP]</code> prefixing the title as long as it is not ready for review!</li>
 </ul>
 </li>
 <li>Open up the discussion for the community.
 <ul>
-<li>Ensure your pull request's main comment has a &quot;rendered&quot; tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
+<li>Ensure your pull request's main comment has a "rendered" tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
 <li>Remove the <code>[WIP]</code> if necessary.</li>
 <li>Assign yourself as the assignee and add any relevant community members you'd like to review.</li>
 </ul>
@@ -339,13 +339,13 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
-<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<li>Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 <ul>
-<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
-<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
+<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.</li>
+<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
 <li>Last, the various other pipelines in the community don't tend to remove these features:
 <ul>
-<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled &quot;Step 1: Building the STAR index&quot;).</li>
+<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled "Step 1: Building the STAR index").</li>
 <li>ENCODE is not filtering any features, they are just changing some of the contig names in the <a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a> GTF (see the analysis <a href="0001-rnaseq-workflow-v2.0.0.html#ENCODE-GTF-generation">in the appendix</a>).</li>
 <li>The TOPMed pipeline <a href="https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation">does outline some postprocessing</a> they are doing to the <a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a> GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.</li>
 </ul>
@@ -395,20 +395,20 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
 gunzip GRCh38_no_alt.fa.gz
 
-echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
 md5sum -c GRCh38_no_alt.fa.md5
 # &gt; GRCh38_no_alt.fa: OK
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
-echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
 # &gt; gencode.v31.annotation.gtf.gz: OK
 
 gunzip gencode.v31.annotation.gtf.gz
-echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
 </code></pre>
@@ -483,7 +483,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <p>Run <code>picard SortSam</code> on the <code>STAR</code>-aligned BAM file. Note that this is much more memory efficient than using <code>STAR</code>'s built-in sorting (which often takes 100GB+ of RAM).</p>
 <pre><code class="language-bash">picard SortSam I=$STAR_BAM \                  # Input BAM.
                O=$SORTED_BAM \                # Coordinate-sorted BAM.
-               SO=&quot;coordinate&quot; \              # Specify the output should be coordinate-sorted
+               SO="coordinate" \              # Specify the output should be coordinate-sorted
                CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
                COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
@@ -514,8 +514,8 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <pre><code class="language-bash">htseq-count -f bam \                            # Specify input file as BAM.
            -r pos \                             # Specify the BAM is position sorted.
            -s $PROVIDED_OR_INFERRED \           # Strandedness as specified by the lab and confirmed by `ngsderive strandedness` above. Typically `reverse` for St. Jude Cloud data.
-           -m union \                           # For reference, GDC uses &quot;intersection-nonempty&quot;.
-           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses &quot;gene_id&quot; here. Needs input from reviewers.
+           -m union \                           # For reference, GDC uses "intersection-nonempty".
+           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
            --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
            --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
            $STAR_SORTED_BAM \                   # STAR-aligned, coordinate-sorted BAM.
@@ -581,7 +581,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 <ul>
 <li>
 <p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v21.annotation.gtf
 # Feature exon: 1162114 (45.6341%)
 # Feature CDS: 696929 (27.3671%)
 # Feature UTR: 275100 (10.8027%)
@@ -592,7 +592,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 # Feature transcript: 196327 (7.7094%)
 # Total: 2546594
 
-gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v31.annotation.gtf
 # Feature exon: 1363843 (47.3247%)
 # Feature CDS: 755320 (26.2092%)
 # Feature UTR: 308315 (10.6984%)
@@ -606,7 +606,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 </li>
 <li>
 <p>Commands that were used in the comparison of <code>gene_types</code> for <code>gene</code> features between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type rRNA: 549 (2.54508%)
 # Gene type antisense: 5542 (25.6919%)
 # Gene type pseudogene: 29 (0.13444%)
@@ -617,7 +617,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 # Gene type snRNA: 1912 (8.86375%)
 # Total: 21571
 
-gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type ribozyme: 8 (0.0351463%)
 # Gene type scaRNA: 49 (0.215271%)
 # Gene type lncRNA: 16840 (73.983%)
@@ -635,7 +635,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </li>
 <li>
 <p>The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.</p>
-<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print &quot;Level &quot; key &quot;: &quot; levels[key] &quot; (&quot; (levels[key]/total)*100 &quot;%)&quot; }; print &quot;Total  : &quot; total}' gencode.v31.annotation.gtf
+<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print "Level " key ": " levels[key] " (" (levels[key]/total)*100 "%)" }; print "Total  : " total}' gencode.v31.annotation.gtf
 # Level 1: 186461 (6.4701%)
 # Level 2: 2450972 (85.0475%)
 # Level 3: 244453 (8.4824%)
@@ -700,7 +700,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.8.0
 </code></pre>
 <p>Additionally, you will need to install <code>Cell Ranger</code> from 10x genomics to perform the alignment and feature calling.</p>
-<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz &quot;https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&quot;
+<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
 
 echo '30855cb96a097c9cab6b02bdb520423f  cellranger-7.0.0.tar.gz' &gt; cellranger-7.0.0.tar.gz.md5
 
@@ -717,7 +717,7 @@ export PATH=$(pwd)/cellranger-7.0.0:$PATH
 <p>We will use the 10x provided reference files version 2020-A. You can get the file by running the following commands:</p>
 <pre><code class="language-bash">wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz -O 10x-GRCh38-2020-A.tar.gz
 
-echo &quot;dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz&quot; &gt; 10x-GRCh38-2020-A.tar.gz.md5
+echo "dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz" &gt; 10x-GRCh38-2020-A.tar.gz.md5
 md5sum -c 10x-GRCh38-2020-A.tar.gz.md5
 # &gt; 10x-GRCh38-2020-A.tar.gz: OK
 
@@ -821,7 +821,7 @@ St. Jude Cloud so that end-users can leverage this information.</li>
 </ul>
 <h2 id="discussion-2"><a class="header" href="#discussion-2">Discussion</a></h2>
 <h3 id="types-of-qc"><a class="header" href="#types-of-qc">Types of QC</a></h3>
-<p>There are (at least) two different types of QC typically carried out omics-based data. <strong>Experimental</strong> QC attempts to identify the success of the assay(s) performed. Once one is sufficiently satisfied that the data generated by an experiment is &quot;good&quot;, <strong>computational</strong> QC examines the degree to which computational processing of that data was completed successfully.</p>
+<p>There are (at least) two different types of QC typically carried out omics-based data. <strong>Experimental</strong> QC attempts to identify the success of the assay(s) performed. Once one is sufficiently satisfied that the data generated by an experiment is "good", <strong>computational</strong> QC examines the degree to which computational processing of that data was completed successfully.</p>
 <p>By the time data reaches the St. Jude Cloud team from various sources, extensive
 <em>experimental</em> and <em>computational</em> evaluation have already been carried out.
 Each contributing project has its own thresholds for quality in both areas,
@@ -872,7 +872,7 @@ that the file may be truncated).</li>
 <li>This number is especially informative within the context of samples from the
 same cohort. We expect a normal distribution for this metric within the same
 sequencing cohort, special attention is required for any samples that do not
-conform to this distribution. </li>
+conform to this distribution.</li>
 </ul>
 <h3 id="percentage-of-reads-aligned"><a class="header" href="#percentage-of-reads-aligned"><strong>Percentage of Reads Aligned</strong></a></h3>
 <p><em>Produced by <a href="https://broadinstitute.github.io/picard/">picard</a></em></p>
@@ -918,7 +918,7 @@ clustered within a cohort.</li>
 <p><em>Produced by <a href="https://github.com/brentp/mosdepth">mosdepth</a></em></p>
 <p>Percentage of the genome which has at least 30 reads covering each position (on
 average) for the whole genome, the exonic regions, and the coding regions
-(&quot;30x coverage&quot;). 30x coverage at any location is widely considered to be the
+("30x coverage"). 30x coverage at any location is widely considered to be the
 minimum number of reads needed to generate high confidence genotype call. In
 whole genome sequencing, it is desirable to have as much of the genome as
 possible to be covered by 30 or more reads. Expected genome coverage is often
@@ -970,7 +970,7 @@ variance include library preparation abnormalities or contamination issues.</li>
 </div>
 <p>For all target types, the <code>mosdepth</code> will produce various charts for
 the whole genome, exonic, and coding sequence ranges. The most important chart
-to examine is the &quot;cumulative coverage distribution&quot; chart, which shows the
+to examine is the "cumulative coverage distribution" chart, which shows the
 burndown chart of what percentage of the specified region is covered by a
 particular read depth. In this way, you can assess how much of the specified
 region is covered by a particular read depth.</p>
@@ -981,7 +981,7 @@ expect that</p>
 <ul>
 <li>Whole genome data will show a significant cliff for which all places in the
 genome meet a particular coverage metric. There should be a pronounced
-downward curve that signifies the cliff of &quot;normal&quot; sites across the genome
+downward curve that signifies the cliff of "normal" sites across the genome
 being separated from highly-covered sites of the genome.</li>
 <li>Whole exome data will quickly drop off from left to right, as only about 3% of
 the genome is targetted (the exonic regions). For those regions, however, you
@@ -1016,7 +1016,7 @@ the original FASTQ file. For most modern data, this should be <code>Sanger/Illum
 <li><strong><code>ngsderive strandedness</code>.</strong> For RNA-Seq data, derives the strandedness of
 the sequencing protocol. This is useful to understand the effectiveness of the
 assay and also how strong downstream results will be (if you believe your data
-is <code>Reverse-stranded</code>, but your data appears to be somewhere between 
+is <code>Reverse-stranded</code>, but your data appears to be somewhere between
 <code>Reverse-stranded</code> and <code>Unstranded</code>, then you may have issues with your
 analysis).</li>
 <li><strong><code>ngsderive junction-annotation</code>.</strong> For RNA-Seq data, reports the number of
@@ -1079,8 +1079,8 @@ of a problem).</li>
 <code>ngsderive</code>'s <code>readlen</code> command (note that <code>ngsderive</code> will give a result of
 <code>-1</code> if a result cannot be determined, whereas Picard gives you the median
 read length).</li>
-<li>The <strong>GC coverage bias</strong> chart, which we typically ignore in favor of the &quot;Per
-Sequence GC Bias&quot; plot from FastQC.</li>
+<li>The <strong>GC coverage bias</strong> chart, which we typically ignore in favor of the "Per
+Sequence GC Bias" plot from FastQC.</li>
 <li>The <strong>insert size distribution</strong> chart, which is <em>incredibly</em> helpful when
 determining problems in your data. For example, if you have bacteria
 contamination in your data, the bacterial reads will map with low quality
@@ -1094,14 +1094,14 @@ indication of contamination.</li>
 the sample (note that, for RNA-Seq data, if this plot is shown, biological
 duplicates cannot be ruled out!).</li>
 <li>The <strong>base quality distribution</strong> chart, which we do not use and instead use
-FastQC's &quot;Per Sequence Quality Scores&quot; plot.</li>
+FastQC's "Per Sequence Quality Scores" plot.</li>
 <li>The <strong>file validation</strong> chart, all of which should be green.</li>
 </ul>
 <h3 id="samtools"><a class="header" href="#samtools">Samtools</a></h3>
 <p>Samtools also outputs various distributions as a beeswarm plot. In our
 experience, these are not as useful expect in the case of examining a particular
 sample to see where it lies for all metrics at once—otherwise, the summary
-statistics in the &quot;General Statistics&quot; section at the top do just as well.</p>
+statistics in the "General Statistics" section at the top do just as well.</p>
 <h3 id="kraken"><a class="header" href="#kraken">Kraken</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Name</th><th>Tool</th><th>Description</th><th>WGS</th><th>WXS</th><th>RNA-Seq</th></tr></thead><tbody>
 <tr><td>Top Taxa</td><td><a href="https://github.com/DerrickWood/kraken2">kraken</a></td><td>Proportion of reads which are assigned to the indicated species.</td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td><td><img src="https://img.shields.io/badge/yes-brightgreen" alt="yes" /></td></tr>
@@ -1150,7 +1150,7 @@ contamination in whole genome and whole exome sequencing data. In those two
 sequencing modalities, you should check to ensure that all of the
 distributions are tightly following one another—any derivation from the
 expected distribution is a sign of contamination. Note that sometimes tools
-like FastQC plot an &quot;expected&quot; distribution of the GC content; this is usually
+like FastQC plot an "expected" distribution of the GC content; this is usually
 the expectation of WGS data, but not WXS data, which has a different expected
 distribution. For RNA-Seq, this graph is generally not used except to examine
 extreme biases at particular positions.</li>
@@ -1168,9 +1168,9 @@ signs of adapters in the data we receive.</li>
 <li>And finally, the <strong>status checks</strong> view, which gives you an overview of which
 samples passed/warned/failed different checks. Generally, this is a good
 overview of the quality of the data, though we find that many of the charts
-are often marked as &quot;failed&quot; for good data (in particular, the &quot;Per Base
-Sequence Content&quot; [for RNA-Seq], the &quot;Per Sequence GC Content&quot;, and the
-&quot;Sequence Length Distribution&quot; graphs).</li>
+are often marked as "failed" for good data (in particular, the "Per Base
+Sequence Content" [for RNA-Seq], the "Per Sequence GC Content", and the
+"Sequence Length Distribution" graphs).</li>
 </ul>
 <h2 id="specification-2"><a class="header" href="#specification-2">Specification</a></h2>
 <p>These are generic instructions for running each of the tools in our pipeline. We run our pipeline as a <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/qc/quality-check-standard.wdl">WDL workflow</a>. We have supplied examples of the commands used for each package. For the typical memory requirements of each command, please see our <a href="https://github.com/stjudecloud/workflows">WDL repository</a>.</p>

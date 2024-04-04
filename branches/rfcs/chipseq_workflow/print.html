@@ -188,13 +188,13 @@
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
 <p>All RFCs go through a three-stage process from draft to adoption:</p>
 <ol>
-<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
+<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team.
 <ul>
-<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community. </li>
+<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community.</li>
 <li>The amount of time the RFC spends in this state is variable depending on the scope of the proposal.</li>
 </ul>
 </li>
-<li>The RFC opens for discussion from users and stakeholders<sup><a href="introduction.html#footnote1">1</a></sup> within the St. Jude community. 
+<li>The RFC opens for discussion from users and stakeholders<sup><a href="introduction.html#footnote1">1</a></sup> within the St. Jude community.
 <ul>
 <li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
 <li>The RFC will remain in this phase for <strong>1 week</strong>.</li>
@@ -210,21 +210,21 @@
 <p>Each phase of the process brings about further refinement of details and hardening of the proposal.</p>
 <p><sup><a name="footnote1">1</a></sup> St. Jude community stakeholders include the Department of Computational Biology, Center for Applied Bioinformatics, and users of St. Jude Cloud that have requested data from a <code>@stjude.org</code> e-mail address.</p>
 <h3 id="evaluation-and-acceptance"><a class="header" href="#evaluation-and-acceptance">Evaluation and acceptance</a></h3>
-<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. </p>
-<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. </p>
+<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community.</p>
+<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement.</p>
 <h3 id="creating-a-proposal"><a class="header" href="#creating-a-proposal">Creating a proposal</a></h3>
 <ol>
 <li>Create an initial draft of the RFC by creating a pull request on this repo.
 <ul>
 <li>Create a branch on this repo with the form <code>&lt;username&gt;/&lt;featurename&gt;</code>.</li>
-<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace &quot;template&quot; with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
-<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>) </li>
+<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace "template" with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
+<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>)</li>
 <li>Ensure that your pull request has <code>[WIP]</code> prefixing the title as long as it is not ready for review!</li>
 </ul>
 </li>
 <li>Open up the discussion for the community.
 <ul>
-<li>Ensure your pull request's main comment has a &quot;rendered&quot; tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
+<li>Ensure your pull request's main comment has a "rendered" tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
 <li>Remove the <code>[WIP]</code> if necessary.</li>
 <li>Assign yourself as the assignee and add any relevant community members you'd like to review.</li>
 </ul>
@@ -337,13 +337,13 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/main/LICENSE.m
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
-<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<li>Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 <ul>
-<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
-<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
+<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.</li>
+<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
 <li>Last, the various other pipelines in the community don't tend to remove these features:
 <ul>
-<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled &quot;Step 1: Building the STAR index&quot;).</li>
+<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled "Step 1: Building the STAR index").</li>
 <li>ENCODE is not filtering any features, they are just changing some of the contig names in the <a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a> GTF (see the analysis <a href="0001-rnaseq-workflow-v2.0.0.html#ENCODE-GTF-generation">in the appendix</a>).</li>
 <li>The TOPMed pipeline <a href="https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation">does outline some postprocessing</a> they are doing to the <a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a> GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.</li>
 </ul>
@@ -393,20 +393,20 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/main/LICENSE.m
 <pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
 gunzip GRCh38_no_alt.fa.gz
 
-echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
 md5sum -c GRCh38_no_alt.fa.md5
 # &gt; GRCh38_no_alt.fa: OK
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
-echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
 # &gt; gencode.v31.annotation.gtf.gz: OK
 
 gunzip gencode.v31.annotation.gtf.gz
-echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
 </code></pre>
@@ -481,7 +481,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <p>Run <code>picard SortSam</code> on the <code>STAR</code>-aligned BAM file. Note that this is much more memory efficient than using <code>STAR</code>'s built-in sorting (which often takes 100GB+ of RAM).</p>
 <pre><code class="language-bash">picard SortSam I=$STAR_BAM \                  # Input BAM.
                O=$SORTED_BAM \                # Coordinate-sorted BAM.
-               SO=&quot;coordinate&quot; \              # Specify the output should be coordinate-sorted
+               SO="coordinate" \              # Specify the output should be coordinate-sorted
                CREATE_INDEX=false \           # Explicitly do not create an index at this step, in case the default changes.
                CREATE_MD5_FILE=false \        # Explicity do not create an md5 checksum at this step, in case the default changes.
                COMPRESSION_LEVEL=5 \          # Explicitly set the compression level to 5, although, at the time of writing, this is the default.
@@ -512,8 +512,8 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <pre><code class="language-bash">htseq-count -f bam \                            # Specify input file as BAM.
            -r pos \                             # Specify the BAM is position sorted.
            -s $PROVIDED_OR_INFERRED \           # Strandedness as specified by the lab and confirmed by `ngsderive strandedness` above. Typically `reverse` for St. Jude Cloud data.
-           -m union \                           # For reference, GDC uses &quot;intersection-nonempty&quot;.
-           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses &quot;gene_id&quot; here. Needs input from reviewers.
+           -m union \                           # For reference, GDC uses "intersection-nonempty".
+           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
            --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
            --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
            $STAR_SORTED_BAM \                   # STAR-aligned, coordinate-sorted BAM.
@@ -579,7 +579,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 <ul>
 <li>
 <p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v21.annotation.gtf
 # Feature exon: 1162114 (45.6341%)
 # Feature CDS: 696929 (27.3671%)
 # Feature UTR: 275100 (10.8027%)
@@ -590,7 +590,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 # Feature transcript: 196327 (7.7094%)
 # Total: 2546594
 
-gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v31.annotation.gtf
 # Feature exon: 1363843 (47.3247%)
 # Feature CDS: 755320 (26.2092%)
 # Feature UTR: 308315 (10.6984%)
@@ -604,7 +604,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 </li>
 <li>
 <p>Commands that were used in the comparison of <code>gene_types</code> for <code>gene</code> features between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type rRNA: 549 (2.54508%)
 # Gene type antisense: 5542 (25.6919%)
 # Gene type pseudogene: 29 (0.13444%)
@@ -615,7 +615,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 # Gene type snRNA: 1912 (8.86375%)
 # Total: 21571
 
-gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type ribozyme: 8 (0.0351463%)
 # Gene type scaRNA: 49 (0.215271%)
 # Gene type lncRNA: 16840 (73.983%)
@@ -633,7 +633,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </li>
 <li>
 <p>The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.</p>
-<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print &quot;Level &quot; key &quot;: &quot; levels[key] &quot; (&quot; (levels[key]/total)*100 &quot;%)&quot; }; print &quot;Total  : &quot; total}' gencode.v31.annotation.gtf
+<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print "Level " key ": " levels[key] " (" (levels[key]/total)*100 "%)" }; print "Total  : " total}' gencode.v31.annotation.gtf
 # Level 1: 186461 (6.4701%)
 # Level 2: 2450972 (85.0475%)
 # Level 3: 244453 (8.4824%)
@@ -698,7 +698,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <pre><code class="language-bash">cargo install --git https://github.com/stjude/fqlib.git --tag v0.8.0
 </code></pre>
 <p>Additionally, you will need to install <code>Cell Ranger</code> from 10x genomics to perform the alignment and feature calling.</p>
-<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz &quot;https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&quot;
+<pre><code class="language-bash">curl -o cellranger-7.0.0.tar.gz "https://cf.10xgenomics.com/releases/cell-exp/cellranger-7.0.0.tar.gz?Expires=1659064381&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci03LjAuMC50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2NTkwNjQzODF9fX1dfQ__&amp;Signature=SGKFTznrgspKBPQ2oRZ5C9KazslNWsTkxtkGnnaaPtrOR2iihhvkJ5frOlT5ahkABzBlHf~8EjLqcJ6HofbiQ4McbrHsmAnRggfv2QK0WScF40qDE3kGm~Z57VumO5homkdJPEf9r5DlbMzlArE5-UBH91F0rMMribGjwABXJCjUsAuet0klbUg~~SzCxoNMfTvo3Nn7Mxv7ls51LQf72riNit9zne6WsHynIY7YBHaquVftTi-C6bMZw5A3NoekyA7LBTZwc6sFjrsFrf3s3BpYKeRkBtPdkDMljME9JLDo9wXM7Lf1SfTj1vtNVUDoNhMnTFplDNzyBaDEDm7GVg__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
 
 echo '30855cb96a097c9cab6b02bdb520423f  cellranger-7.0.0.tar.gz' &gt; cellranger-7.0.0.tar.gz.md5
 
@@ -715,7 +715,7 @@ export PATH=$(pwd)/cellranger-7.0.0:$PATH
 <p>We will use the 10x provided reference files version 2020-A. You can get the file by running the following commands:</p>
 <pre><code class="language-bash">wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz -O 10x-GRCh38-2020-A.tar.gz
 
-echo &quot;dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz&quot; &gt; 10x-GRCh38-2020-A.tar.gz.md5
+echo "dfd654de39bff23917471e7fcc7a00cd  10x-GRCh38-2020-A.tar.gz" &gt; 10x-GRCh38-2020-A.tar.gz.md5
 md5sum -c 10x-GRCh38-2020-A.tar.gz.md5
 # &gt; 10x-GRCh38-2020-A.tar.gz: OK
 
@@ -847,7 +847,7 @@ if the value for strandedness isn't known at run time, we can use the inferred v
 <pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
 gunzip GRCh38_no_alt.fa.gz
 
-echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
 md5sum -c GRCh38_no_alt.fa.md5
 # &gt; GRCh38_no_alt.fa: OK
 </code></pre>
@@ -861,14 +861,14 @@ md5sum -c GRCh38_no_alt.fa.md5
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
-echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
 # &gt; gencode.v31.annotation.gtf.gz: OK
 
 gunzip gencode.v31.annotation.gtf.gz
-echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
 </code></pre>
@@ -876,12 +876,12 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <li>
 <p>A list of excluded regions are obtained from the Boyle lab. This list is based on ENCODE data and a comprehensive set of anomalous, unstructured, or high-signal regions in next generation sequencing data.</p>
 <pre><code class="language-bash">wget -O hg38.excludelist.bed.gz https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
-echo &quot;83fe6bf8187a64dee8079b80f75ba289  hg38.excludelist.bed.gz&quot; &gt; hg38.excludelist.bed.gz.md5
+echo "83fe6bf8187a64dee8079b80f75ba289  hg38.excludelist.bed.gz" &gt; hg38.excludelist.bed.gz.md5
 md5sum -c hg38.excludelist.bed.gz.md5
 # &gt; hg38.excludelist.bed.gz: OK
 
 gunzip hg38.excludelist.bed.gz
-echo &quot;766848c2a632d1b9dd12fac98ce02bd3  hg38.excludelist.bed&quot; &gt; hg38.excludelist.bed.md5
+echo "766848c2a632d1b9dd12fac98ce02bd3  hg38.excludelist.bed" &gt; hg38.excludelist.bed.md5
 md5sum -c hg38.excludelist.bed.md5
 # &gt; hg38.excludelist.bed: OK
 </code></pre>
@@ -911,7 +911,7 @@ md5sum -c hg38.excludelist.bed.md5
 </li>
 <li>
 <p>Run samtools <code>collate</code> and <code>fastq</code> on each of the BAMs generated in the previous step.</p>
-<pre><code class="language-bash">   if [ &quot;~{paired_end}&quot; == 'true' ]
+<pre><code class="language-bash">   if [ "~{paired_end}" == 'true' ]
    then
       samtools collate \
           INPUT_BAM \
@@ -928,7 +928,7 @@ md5sum -c hg38.excludelist.bed.md5
 </li>
 <li>
 <p>Run <code>fq lint</code> on each of the FastQ pairs generated in the previous step as a quality check. You can see the checks that the <code>fq</code> tool performs <a href="https://github.com/stjude/fqlib/blob/master/README.md#validators">here</a>.</p>
-<pre><code class="language-bash">if [ &quot;~{paired_end}&quot; == 'true' ]
+<pre><code class="language-bash">if [ "~{paired_end}" == 'true' ]
 then
    fq lint $FASTQ_R1 $FASTQ_R2            # Files for read 1 and read 2.
 else
@@ -937,8 +937,8 @@ fi
 </code></pre>
 </li>
 <li>
-<p>Run the <code>SEAseq</code> alignment algorithm. The following is the SEAseq method written out. We will use the implementation at https://github.com/stjude/seaseq/blob/master/workflows/workflows/mapping.wdl. </p>
-<pre><code class="language-bash">        if [ -f &quot;$fastqfile_R2&quot; ]; then    # If paired-end reads
+<p>Run the <code>SEAseq</code> alignment algorithm. The following is the SEAseq method written out. We will use the implementation at https://github.com/stjude/seaseq/blob/master/workflows/workflows/mapping.wdl.</p>
+<pre><code class="language-bash">        if [ -f "$fastqfile_R2" ]; then    # If paired-end reads
          bowtie \
              --chunkmbs=256 \                # Max MB of RAM for best-first search frames
              -p $ncpu \                      # Number of threads to use
@@ -965,11 +965,11 @@ fi
              &gt; $outputfile                   # Output file name
      fi
 
-      if [ &quot;~{paired_end}&quot; == 'true' ]; then
+      if [ "~{paired_end}" == 'true' ]; then
          awk -F\\t 'BEGIN{j=0}{j++}{if(NF&gt;5 &amp;&amp; j%2==0){ \
-             printf &quot;%s_%.0f\t&quot;, $1, j-1 } else if(NF&gt;5 &amp;&amp; j%2==1){ \
-             printf &quot;%s_%.0f\t&quot;, $1, j } else { printf $1 &quot;\t&quot;;j=0 } \
-             for(i=2;i&lt;=NF;i++){ printf &quot;%s\t&quot;, $i}; printf &quot;\n&quot; }' \
+             printf "%s_%.0f\t", $1, j-1 } else if(NF&gt;5 &amp;&amp; j%2==1){ \
+             printf "%s_%.0f\t", $1, j } else { printf $1 "\t";j=0 } \
+             for(i=2;i&lt;=NF;i++){ printf "%s\t", $i}; printf "\n" }' \
              $samfile &gt; $renamed_sam
 
          samtools fixmate -m \
@@ -1040,7 +1040,7 @@ fi
 <pre><code class="language-bash">bamCoverage --bam ${MERGED_BAM} \                 # Input BAM file
             --outFileName ${PREFIX}.bw \          # Output bigwig filename
             --outFileFormat bigwig \              # Set output format to bigwig
-            --numberOfProcessors &quot;max&quot;            # Utilize all available processors
+            --numberOfProcessors "max"            # Utilize all available processors
 </code></pre>
 </li>
 </ol>

@@ -184,7 +184,7 @@
 </ul>
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This RFC lays out the specification for the ATAC-Seq mapping pipeline. ATAC-Seq (Assay for Transposase-Accessible Chromatin using Sequencing) investigates chromatin accessibility regions in the genome, similar to earlier techniques such as DNase-seq, MNase-seq, or FAIRE-seq. This high-throughput sequencing technique offers a powerful method to investigate genome-wide chromatin accessibility and regulatory elements.</p>
-<p>As an epigenetic technique, the goals of a typical ATAC-Seq experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as &quot;the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence&quot; (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>&quot;that do not entail a change in DNA sequence&quot;</em>) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
+<p>As an epigenetic technique, the goals of a typical ATAC-Seq experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as "the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence" (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>"that do not entail a change in DNA sequence"</em>) is vital to understanding how ATAC-Seq (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
 <h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
 <p>To provide the  community access to data from ATAC-Seq experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized alignments for ATAC-Seq data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
 <h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
@@ -207,16 +207,16 @@
 <ul>
 <li>
 <p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
-<pre><code class="language-bash">wget -o &quot;GRCh38_no_alt.fa.gz&quot; ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+<pre><code class="language-bash">wget -o "GRCh38_no_alt.fa.gz" ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 
-echo &quot;a08035b6a6e31780e96a34008ff21bd6  GRCh38_no_alt.fa.gz&quot; &gt; GRCh38_no_alt.fa.gz.md5
+echo "a08035b6a6e31780e96a34008ff21bd6  GRCh38_no_alt.fa.gz" &gt; GRCh38_no_alt.fa.gz.md5
 md5sum -c GRCh38_no_alt.fa.gz.md5
 # &gt; GRCh38_no_alt.fa.gz: OK
 </code></pre>
 </li>
 <li>
 <p>The ENCODE list of excluded regions is acquired for exclusion of these regions from our harmonized data. The background on the list can be read <a href="https://www.nature.com/articles/s41598-019-45839-z">here</a>. The list is used to filter noise from functional genomics experiments. The creators identified regions that are high signal, independent of the cell line or experiment.</p>
-<pre><code class="language-bash">wget -o &quot;GRCh38_no_alt.exclude.bed.gz&quot; https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
+<pre><code class="language-bash">wget -o "GRCh38_no_alt.exclude.bed.gz" https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz
 </code></pre>
 </li>
 </ul>
@@ -242,7 +242,7 @@ md5sum -c GRCh38_no_alt.fa.gz.md5
 <p>Run Picard <code>SamToFastq</code> on each of the BAMs generated in the previous step.</p>
 <pre><code class="language-bash">    samtools collate \
         -u \                 # Use the `-u` flag to skip compression (and decompression)
-        -f \                 # Enable &quot;fast mode&quot;
+        -f \                 # Enable "fast mode"
         -O \                 # Output to STDOUT
         $INPUT_BUM \
         | samtools fastq \
@@ -260,13 +260,13 @@ md5sum -c GRCh38_no_alt.fa.gz.md5
 <li>
 <p>Run <code>BWA-MEM</code> to align reads to the reference genome.</p>
 <pre><code class="language-bash">bwa mem \
-    -t &quot;$n_cores&quot; \      # Number of cores
+    -t "$n_cores" \      # Number of cores
     -R $READ_GROUP \     # Read group string to include in BAM
     $DB_PREFIX \         # Reference DB for BWA
     $fastq \             # FASTQ for read 1
     $fastq2 \            # FASTQ for read 2
     | samtools view \  
-        -@ &quot;$n_cores&quot; \  # Number of cores
+        -@ "$n_cores" \  # Number of cores
         -h \             # Include BAM header in output
         -b \             # Output in BAM format
          - \          

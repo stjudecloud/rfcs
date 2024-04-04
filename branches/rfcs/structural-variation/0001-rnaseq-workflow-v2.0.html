@@ -259,13 +259,13 @@
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
-<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<li>Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 <ul>
-<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
-<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
+<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.</li>
+<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
 <li>Last, the various other pipelines in the community don't tend to remove these features:
 <ul>
-<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled &quot;Step 1: Building the STAR index&quot;).</li>
+<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled "Step 1: Building the STAR index").</li>
 <li>ENCODE is not filtering any features, they are just changing some of the contig names in the <a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a> GTF (see the analysis <a href="#ENCODE-GTF-generation">in the appendix</a>).</li>
 <li>The TOPMed pipeline <a href="https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation">does outline some postprocessing</a> they are doing to the <a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a> GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.</li>
 </ul>
@@ -320,20 +320,20 @@
 <pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
 gunzip GRCh38_no_alt.fa.gz
 
-echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
 md5sum -c GRCh38_no_alt.fa.md5
 # &gt; GRCh38_no_alt.fa: OK
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
-echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
 # &gt; gencode.v31.annotation.gtf.gz: OK
 
 gunzip gencode.v31.annotation.gtf.gz
-echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
 </code></pre>
@@ -426,9 +426,9 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <pre><code class="language-bash">infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
 
 # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
-#   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-forward&quot;.
-#   - If proportion of reverse orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-reverse&quot;.
-#   - If both proportions are between 0.6 and 0.4, assign &quot;non-strand-specific&quot;.
+#   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign "strand-specific-forward".
+#   - If proportion of reverse orientation evidence fraction is &gt;= 0.8, assign "strand-specific-reverse".
+#   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
 #   - Else flag for manual triage.
 </code></pre>
 </li>
@@ -443,7 +443,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
                 -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
                 -outdir $OUTPUT_DIR \              # Output directory.
                 -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
-                -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;strand-specific-reverse&quot; for St. Jude Cloud data.
+                -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
                 -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
 </code></pre>
 </li>
@@ -451,9 +451,9 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <p>Next, <code>htseq-count</code> is run for the final counts file to be delivered:</p>
 <pre><code class="language-bash">htseq-count -f bam \                            # Specify input file as BAM.
            -r pos \                             # Specify the BAM is position sorted.
-           -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;reverse&quot; for St. Jude Cloud data.
-           -m union \                           # For reference, GDC uses &quot;intersection-nonempty&quot;. Needs input from reviewers.
-           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses &quot;gene_id&quot; here. Needs input from reviewers.
+           -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
+           -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
            --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
            --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
            $INPUT_BAM                           # Input BAM file.
@@ -471,7 +471,7 @@ md5sum $INPUT_BAM
 <pre><code class="language-bash">bamCoverage --bam ${bam} \                     # Input BAM file
             --outFileName ${prefix}.bw \       # Output bigwig filename
             --outFileFormat bigwig \           # Set output format to bigwig
-            --numberOfProcessors &quot;max&quot;         # Utilize all available processors
+            --numberOfProcessors "max"         # Utilize all available processors
 </code></pre>
 </li>
 <li>
@@ -543,7 +543,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 <ul>
 <li>
 <p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v21.annotation.gtf
 # Feature exon: 1162114 (45.6341%)
 # Feature CDS: 696929 (27.3671%)
 # Feature UTR: 275100 (10.8027%)
@@ -554,7 +554,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 # Feature transcript: 196327 (7.7094%)
 # Total: 2546594
 
-gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v31.annotation.gtf
 # Feature exon: 1363843 (47.3247%)
 # Feature CDS: 755320 (26.2092%)
 # Feature UTR: 308315 (10.6984%)
@@ -568,7 +568,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 </li>
 <li>
 <p>Commands that were used in the comparison of <code>gene_types</code> for <code>gene</code> features between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type rRNA: 549 (2.54508%)
 # Gene type antisense: 5542 (25.6919%)
 # Gene type pseudogene: 29 (0.13444%)
@@ -579,7 +579,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 # Gene type snRNA: 1912 (8.86375%)
 # Total: 21571
 
-gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type ribozyme: 8 (0.0351463%)
 # Gene type scaRNA: 49 (0.215271%)
 # Gene type lncRNA: 16840 (73.983%)
@@ -597,7 +597,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </li>
 <li>
 <p>The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.</p>
-<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print &quot;Level &quot; key &quot;: &quot; levels[key] &quot; (&quot; (levels[key]/total)*100 &quot;%)&quot; }; print &quot;Total  : &quot; total}' gencode.v31.annotation.gtf
+<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print "Level " key ": " levels[key] " (" (levels[key]/total)*100 "%)" }; print "Total  : " total}' gencode.v31.annotation.gtf
 # Level 1: 186461 (6.4701%)
 # Level 2: 2450972 (85.0475%)
 # Level 3: 244453 (8.4824%)

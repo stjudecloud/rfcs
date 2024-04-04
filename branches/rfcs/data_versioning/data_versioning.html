@@ -183,12 +183,12 @@
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This RFC lays out the Data Versioning process for St. Jude Cloud.</p>
 <h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
-<p>To provide the community with harmonized data from experiments performed at St. Jude Children's Research Hospital, the St. Jude Cloud team has developed datatype-specific harmonization workflows. Over time, it is necessary to incorporate bug fixes and other changes in those workflows and the underlying tools. In order to make these changes with minimal impact, we seek to define &quot;data versions&quot;, within which, we have evidence that the workflow results are compatible and not &quot;substantially&quot; different. This RFC will lay out the methods by which we determine what constitutes a significant difference in the resulting data.</p>
+<p>To provide the community with harmonized data from experiments performed at St. Jude Children's Research Hospital, the St. Jude Cloud team has developed datatype-specific harmonization workflows. Over time, it is necessary to incorporate bug fixes and other changes in those workflows and the underlying tools. In order to make these changes with minimal impact, we seek to define "data versions", within which, we have evidence that the workflow results are compatible and not "substantially" different. This RFC will lay out the methods by which we determine what constitutes a significant difference in the resulting data.</p>
 <h1 id="pre-discussion"><a class="header" href="#pre-discussion">Pre-Discussion</a></h1>
 <p>We have previously had short discussions regarding changes to our data versioning scheme. Currently we attach the pipeline version used to generate the data to the file's metadata. This has left us in a position where we are hesitant to increment pipelines to new versions or update to new versions of underlying tools. We generally agree that there are many pipeline-level changes that do not materially impact the output results. The goal of this RFC is to determine what changes we can be made without creating a new data version. To do so, we also need to generate metrics and data that we can use to justify to users that the results are not different.</p>
 <p>There are a number of approaches that could be taken to do this. We could look at alignment information, in which case, we may want to use results from the QC pipeline to justify. Another option is to examine the results from an analysis perspective. If the variant calls are the same (or reasonably the same), that may be sufficient. These are just two limited examples of options we could use.</p>
 <p>Currently we have the RNA-Seq workflow v2.0.0 in use for St. Jude Cloud. We have subsequently released improvements, including the integration of XenoCP. This is not in use for production work as we include the pipeline version with the data files in St. Jude Cloud. Creation of a data versioning standard will enable us to roll out bug fixes and new features on an appropriate timeline and provide confidence to ourselves and our users that data is consistent, hopefully, without requiring complete reruns of all data for any change.</p>
-<p>We also have issues with the <code>msgen</code> pipeline that is used for WGS and WES. Microsoft has made changes to the pipeline and process throughout the time that we have been using it for production data releases. We have not incremented any versions in that time. So as it stands, we are trusting, without any verification, that any changes introduced are acceptable. </p>
+<p>We also have issues with the <code>msgen</code> pipeline that is used for WGS and WES. Microsoft has made changes to the pipeline and process throughout the time that we have been using it for production data releases. We have not incremented any versions in that time. So as it stands, we are trusting, without any verification, that any changes introduced are acceptable.</p>
 <p>A data versioning process should help us find a reasonable balance that doesn't stop us from making any changes, ever, but also we want to avoid incorporating any and all changes without any assurances, or insight in <code>msgen</code>'s case, that those changes are reasonable and not meaningfully impactful to the data results.</p>
 <h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
 <h2 id="whole-genome-and-whole-exome-sequencing"><a class="header" href="#whole-genome-and-whole-exome-sequencing">Whole-Genome and Whole-Exome Sequencing</a></h2>
@@ -236,7 +236,7 @@
         -T ~{gencode_CDS_bed} \
         -f ~{sample_confident_call_bed}
 </code></pre>
-<p>We will also run without the GIAB high-confidence callset. </p>
+<p>We will also run without the GIAB high-confidence callset.</p>
 <pre><code class="language-bash">    hap.py \
         ~{latest release VCF} \
         ~{new version VCF} \
@@ -253,7 +253,7 @@
 <p>Run Picard <code>MarkDuplicates</code></p>
 <pre><code class="language-bash">    picard -Xmx~{java_heap_size}g MarkDuplicates \
         -I ~{bam} \
-        -O ~{if create_bam then prefix + &quot;.bam&quot; else &quot;/dev/null&quot;} \
+        -O ~{if create_bam then prefix + ".bam" else "/dev/null"} \
         --VALIDATION_STRINGENCY SILENT \
         --CREATE_INDEX ~{create_bam} \
         --CREATE_MD5_FILE ~{create_bam} \
@@ -269,32 +269,32 @@
         -I ~{bam} \
         -O ~{prefix}.bam \
         -OBM true
-   # GATK is unreasonable and uses the plain &quot;.bai&quot; suffix.
+   # GATK is unreasonable and uses the plain ".bai" suffix.
    mv ~{prefix}.bai ~{prefix}.bam.bai
 </code></pre>
 </li>
 <li>
 <p>Run GATK Spark-enabled <code>BaseRecalibrator</code> (<code>BaseRecalibratorSpark</code>).</p>
 <pre><code class="language-bash">     gatk \
-         --java-options &quot;-Xms4000m&quot; \
+         --java-options "-Xms4000m" \
          BaseRecalibratorSpark \
          -R ~{fasta} \
          -I ~{bam} \
-         ~{if use_original_quality_scores then &quot;--use-original-qualities&quot; else &quot;&quot; } \
+         ~{if use_original_quality_scores then "--use-original-qualities" else "" } \
          -O ~{prefix}.txt \
          -known-sites ~{dbSNP_vcf} \
-         -known-sites ~{sep=&quot; --known-sites &quot; known_indels_sites_VCFs} \
+         -known-sites ~{sep=" --known-sites " known_indels_sites_VCFs} \
          --spark-master local[4]
 </code></pre>
 </li>
 <li>
 <p>Run GATK Spark-enabled <code>ApplyBQSR</code> (<code>ApplyBQSRSpark</code>).</p>
 <pre><code class="language-bash">        gatk \
-        --java-options &quot;-Xms3000m&quot; \
+        --java-options "-Xms3000m" \
         ApplyBQSRSpark \
         --spark-master local[4] \
         -I ~{bam} \
-        ~{if use_original_quality_scores then &quot;--use-original-qualities&quot; else &quot;&quot; } \
+        ~{if use_original_quality_scores then "--use-original-qualities" else "" } \
         -O ~{prefix}.bam \
         --bqsr-recal-file ~{recalibration_report}
 </code></pre>
@@ -314,13 +314,13 @@
 <li>
 <p>Run GATK Spark-enabled <code>HaplotypeCaller</code> (<code>HaplotypeCallerSpark</code>) on each region.</p>
 <pre><code class="language-bash">    gatk \
-       --java-options &quot;-Xms6000m&quot; \
+       --java-options "-Xms6000m" \
         HaplotypeCallerSpark \
         -R ~{fasta} \
         -I ~{bam} \
         -L ~{interval_list} \
         -O ~{prefix}.vcf.gz \
-        ~{if use_soft_clipped_bases then &quot;&quot; else &quot;--dont-use-soft-clipped-bases&quot;} \
+        ~{if use_soft_clipped_bases then "" else "--dont-use-soft-clipped-bases"} \
         --standard-min-confidence-threshold-for-calling ~{stand_call_conf} \
        --spark-master local[4]
 </code></pre>
@@ -358,7 +358,7 @@
         -T ~{gencode_CDS_bed} \
         -f ~{sample_confident_call_bed}
 </code></pre>
-<p>We will also run without the GIAB high-confidence callset. </p>
+<p>We will also run without the GIAB high-confidence callset.</p>
 <pre><code class="language-bash">    hap.py \
         ~{latest release VCF} \
         ~{new version VCF} \
@@ -366,7 +366,7 @@
         -r ~{reference_fa} \
         -T ~{gencode_CDS_bed}
 </code></pre>
-<p>We will run both because using a confident call set to restrict the comparison causes variants outside that region (in either the TRUTH or QUERY sample) to be excluded and marked as unknown (<code>UNK</code>). As can be seen below, when comparing the first release of our RNA-Seq workflow (v2.0.0) with the latest stable release (v3.0.1), there are a significant number of additional variants found in the new version. This suggests that our decision to increment the major revision was correct. Ultimately, most of those new variants are filtered out with standard quality filters applied during the variant calling pipeline. When looking at the result with the GIAB confident call set applied, there are a large number of variants (1939 SNPs that passed filtering for HG004 below) included and marked <code>UNK</code>. Upon further investigation, there are only 16 SNPs passing filtering that are not called in v2.0.0. The remaining variants are called in both versions, but labeled as <code>UNK</code> due to being outside the confident call regions (that is, not found in WGS). </p>
+<p>We will run both because using a confident call set to restrict the comparison causes variants outside that region (in either the TRUTH or QUERY sample) to be excluded and marked as unknown (<code>UNK</code>). As can be seen below, when comparing the first release of our RNA-Seq workflow (v2.0.0) with the latest stable release (v3.0.1), there are a significant number of additional variants found in the new version. This suggests that our decision to increment the major revision was correct. Ultimately, most of those new variants are filtered out with standard quality filters applied during the variant calling pipeline. When looking at the result with the GIAB confident call set applied, there are a large number of variants (1939 SNPs that passed filtering for HG004 below) included and marked <code>UNK</code>. Upon further investigation, there are only 16 SNPs passing filtering that are not called in v2.0.0. The remaining variants are called in both versions, but labeled as <code>UNK</code> due to being outside the confident call regions (that is, not found in WGS).</p>
 <h4 id="hg002-v200-vs-v301-with-giab-confidence-set-rna-seq"><a class="header" href="#hg002-v200-vs-v301-with-giab-confidence-set-rna-seq">HG002 v2.0.0 vs. v3.0.1 with GIAB confidence set RNA-Seq</a></h4>
 <div class="table-wrapper"><table><thead><tr><th>Type</th><th>Filter</th><th>TRUTH.TOTAL</th><th>TRUTH.TP</th><th>TRUTH.FN</th><th>QUERY.TOTAL</th><th>QUERY.FP</th><th>QUERY.UNK</th><th>FP.gt</th><th>FP.al</th><th>METRIC.Recall</th><th>METRIC.Precision</th><th>METRIC.Frac_NA</th><th>METRIC.F1_Score</th><th>TRUTH.TOTAL.TiTv_ratio</th><th>QUERY.TOTAL.TiTv_ratio</th><th>TRUTH.TOTAL.het_hom_ratio</th><th>QUERY.TOTAL.het_hom_ratio</th></tr></thead><tbody>
 <tr><td>INDEL</td><td>ALL</td><td>606</td><td>604</td><td>2</td><td>1,026</td><td>235</td><td>186</td><td>1</td><td>15</td><td>0.997…</td><td>0.720…</td><td>0.181…</td><td>0.836…</td><td></td><td></td><td>3.102…</td><td>4.115…</td></tr>

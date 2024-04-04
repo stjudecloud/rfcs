@@ -183,11 +183,11 @@
 </ul>
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This RFC lays out the specification for the Hi-C harmonization pipeline. Hi-C is a high-throughput epigenetic technique to investigate chromatin conformation.</p>
-<p>As an epigenetic technique, the goals of a typical Hi-C experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as &quot;the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence&quot; (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>&quot;that do not entail a change in DNA sequence&quot;</em>) is vital to understanding how Hi-C (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
+<p>As an epigenetic technique, the goals of a typical Hi-C experiment differ from those typical of experiments using genomic or transcriptomic sequencing methods (e.g. Whole-Genome, Whole-Exome, and RNA-Seq) that are more commonly curated by St. Jude Cloud. Epigenetics can be defined as "the study of changes in gene function that are mitotically and/or meiotically heritable and that do not entail a change in DNA sequence" (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2791696">Dupont, 2009</a>). The latter part of this definition (<em>"that do not entail a change in DNA sequence"</em>) is vital to understanding how Hi-C (and other epigentic techniques) treat sequenced data. Often, the reads are merely useful for identifying the location of epigenetic events.</p>
 <h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
 <p>To provide the  community access to data from Hi-C experiments performed at St. Jude Children's Research Hospital, we propose the following data harmonization pipeline. The goal of this pipeline is to provide harmonized files for Hi-C data. For this pipeline, we will make no recommendations on downstream analysis, focusing instead on harmonizing the underlying sequencing data and leaving analysis decisions to the user.</p>
 <h1 id="discussion"><a class="header" href="#discussion">Discussion</a></h1>
-<p>Hi-C investigates the three dimensional structure of the chromosomes. Chromosome Conformation Capture (3C) was the first molecular method to enable investigation of physical chromatin interactions. Other subsequent methods include 4C and 5C. Hi-C combines the 3C technique with next-generation sequencing. </p>
+<p>Hi-C investigates the three dimensional structure of the chromosomes. Chromosome Conformation Capture (3C) was the first molecular method to enable investigation of physical chromatin interactions. Other subsequent methods include 4C and 5C. Hi-C combines the 3C technique with next-generation sequencing.</p>
 <p><img src="../resources/hic-workflow/chromatin-confirmation-capture-wikipedia-60percent.png" alt="Chromatin conformation techniques schematic" /> <a href="https://dnatech.genomecenter.ucdavis.edu/hi-c-library-preparations-and-sequencing/">source</a></p>
 <p>The Hi-C method measures the frequency at which two fragments physically associate. Chromosomes in physical proximity are crosslinked (typically, with formaldehyde). The chromatin are then fragmented into crosslinked pairs. The ends of the fragments are then repaired and ligated together. The tagged fragments are then selected and sequenced. The hybrid fragments are then used to identify DNA interactions.</p>
 <p><img src="../resources/hic-workflow/Hi-C_Workflow_hi-def.png" alt="Hi-C schematic" /> <a href="https://www.activemotif.com/catalog/1317/hi-c-service">source</a></p>
@@ -197,9 +197,30 @@
 <h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
 <ul>
 <li>Picard Tools</li>
+<li>samtools</li>
+<li>bwa</li>
+<li>pairix</li>
+<li>juicer</li>
 </ul>
 <h2 id="reference-files"><a class="header" href="#reference-files">Reference Files</a></h2>
-<p>There are no reference files for the Hi-C harmonization workflow.</p>
+<p>The following reference files are used as the basis of the Hi-C Workflow:</p>
+<ul>
+<li>
+<p>Similarly to all analysis pipelines in St. Jude Cloud, we use the <code>GRCh38_no_alt</code> analysis set for our reference genome. You can get a copy of the file <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz">here</a>. Additionally, you can get the file by running the following commands:</p>
+<pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
+gunzip GRCh38_no_alt.fa.gz
+
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
+md5sum -c GRCh38_no_alt.fa.md5
+# &gt; GRCh38_no_alt.fa: OK
+</code></pre>
+</li>
+<li>
+<p>The following command is used to prepare the BWA index file:</p>
+<pre><code class="language-bash">bwa index GRCh38_no_alt.fa
+</code></pre>
+</li>
+</ul>
 <h2 id="workflow"><a class="header" href="#workflow">Workflow</a></h2>
 <p>Here are the resulting steps in the Hi-C workflow. There might be slight alterations in the actual implementation, which can be found in <a href="https://github.com/stjudecloud/workflows/blob/master/workflows/hic/hic-standard.wdl">the St. Jude Cloud workflows repository</a>.</p>
 <ol>
@@ -212,22 +233,52 @@
 </code></pre>
 </li>
 <li>
-<p>Run Picard <code>RevertSam</code> on the validated BAM file.</p>
-<pre><code class="language-bash">    picard RevertSam \
-            INPUT=$INPUT_BAM \                        # Input BMA to revert
-            OUTPUT=$REVERTED_BAM \                    # Output unaligned BAM name
-            REMOVE_ALIGNMENT_INFORMATION=true \       # Remove alignments
-            REMOVE_DUPLICATE_INFORMATION=true \       # Remove duplicate flags
-            VALIDATION_STRINGENCY=SILENT \            # Ignore some validation warnings
-            SORT_ORDER=queryname                      # Sort by queryname
+<p>Run samtools <code>collate</code> on the validated BAM file.</p>
+<pre><code class="language-bash">    samtools collate \ 
+        -o $COLLATED_BAM \ 
+        $INPUT_BAM
 </code></pre>
 </li>
 <li>
-<p>Run <code>picard ValidateSam</code> on the reverted BAM to ensure that it is well-formed.</p>
-<pre><code class="language-bash">picard ValidateSamFile \
-                    I=$REVERTED_BAM \                  # Input BAM.
-                    IGNORE=INVALID_PLATFORM_VALUE \    # Validations to ignore.
-                    IGNORE=MISSING_PLATFORM_VALUE
+<p>Run Samtools <code>fastq</code> on the collated BAM file.</p>
+<pre><code class="language-bash">    samtools fastq \
+            -1 $READ_ONE_GZ \    # Fastq with read 1s
+            -2 $READ_TWO_GZ \    # Fastq with read 2s
+            $COLLATED_BAM        # Input BMA to convert to fastq
+
+</code></pre>
+</li>
+<li>
+<p>Run picard <code>FastqToSam</code> on fastq files to create unaligned BAM file.</p>
+<pre><code class="language-bash">    picard FastqToSam \      
+        FASTQ=$READ_ONE_GZ \   # Fastq with read 1s
+        FASTQ2=$READ_TWO_GZ \  # Fastq with read 2s
+        OUTPUT=$UNALIGNED_BAM  # Output unaligned BAM file
+</code></pre>
+</li>
+<li>
+<p>Run bwa <code>mem</code> on fastq files to create aligned BAM file.</p>
+<pre><code class="language-bash">    bwa mem \ 
+        $BWA_DB \             # BWA reference database
+        $READ_ONE_GZ \        # Fastq with read 1s
+        $READ_TWO_GZ \        # Fastq with read 2s
+        | samtools view -hb \ # Convert output SAM to BAM
+        &gt; $ALIGNED_BAM
+</code></pre>
+</li>
+<li>
+<p>Run pairix <code>bam2pairs</code> on aligned BAM file.</p>
+<pre><code class="language-bash">    bam2pairs \ 
+        $ALIGNED_BAM \    # BAM file from bwa mem
+        $PAIRS            # Output mapped read pairs
+</code></pre>
+</li>
+<li>
+<p>Run Juicer <code>pre</code> to generate .hic file.</p>
+<pre><code class="language-bash">    juicer_tools pre \ 
+        $PAIRS \         # Reads with both mates mapped
+        $HIC \           # hic file with multiple resolutions
+        $GENOME_ID       # Predefined genome matching alignment
 </code></pre>
 </li>
 </ol>

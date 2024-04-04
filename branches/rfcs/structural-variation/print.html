@@ -190,13 +190,13 @@
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
 <p>All RFCs go through a three-stage process from draft to adoption:</p>
 <ol>
-<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team. 
+<li>An initial draft is constructed by the author and discussed internally with members of the core St. Jude Cloud team.
 <ul>
-<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community. </li>
+<li>Titles of pull requests in this phase are typical prefixed with <code>[WIP]</code> and should not be considered mature enough to accept comments from the community.</li>
 <li>The amount of time the RFC spends in this state is variable depending on the scope of the proposal.</li>
 </ul>
 </li>
-<li>The RFC opens for discussion from users and stakeholders within the St. Jude community. 
+<li>The RFC opens for discussion from users and stakeholders within the St. Jude community.
 <ul>
 <li>The beginning of this phase will be indicated by a comment on the pull request from the author.</li>
 <li>The RFC will remain in this phase for <strong>1 week</strong>.</li>
@@ -211,21 +211,21 @@
 </ol>
 <p>Each phase of the process brings about further refinement of details and hardening of the proposal.</p>
 <h3 id="evaluation-and-acceptance"><a class="header" href="#evaluation-and-acceptance">Evaluation and acceptance</a></h3>
-<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community. </p>
-<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement. </p>
+<p>RFCs must have majority support within the St. Jude Cloud team before being adopted. In practice, most RFCs already have a significant amount of internal support before being drafted, so the rejection of an RFC will be exceedingly rare. The intent of these discussions is mostly geared towards gaining feedback from the community.</p>
+<p>We welcome all ideas and concerns as we seek to understand how the needs of the genomics community evolve over time. Our ultimate goal is to make informed decisions that will benefit the majority of our users. That said, the project's direction is not driven strictly by community consensus and ultimately will be decided by the St. Jude Cloud team based on our best judgement.</p>
 <h3 id="creating-a-proposal"><a class="header" href="#creating-a-proposal">Creating a proposal</a></h3>
 <ol>
 <li>Create an initial draft of the RFC by creating a pull request on this repo.
 <ul>
 <li>Create a branch on this repo with the form <code>&lt;username&gt;/&lt;featurename&gt;</code>.</li>
-<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace &quot;template&quot; with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
-<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>) </li>
+<li>On that branch, copy the <code>0000-template.md</code> file to the <code>text/</code> folder and replace "template" with an appropriate feature name (e.g. <code>text/rnaseq-workflow-v2</code>).</li>
+<li>If necessary, you can create a folder at <code>resources/&lt;filename.md&gt;/</code> to hold any images or supporting materials (e.g. <code>resources/0000-rnaseq-workflow-v2.0/</code>)</li>
 <li>Ensure that your pull request has <code>[WIP]</code> prefixing the title as long as it is not ready for review!</li>
 </ul>
 </li>
 <li>Open up the discussion for the community.
 <ul>
-<li>Ensure your pull request's main comment has a &quot;rendered&quot; tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
+<li>Ensure your pull request's main comment has a "rendered" tag for easy review (see <a href="https://github.com/stjudecloud/rfcs/pull/1">this example</a>).</li>
 <li>Remove the <code>[WIP]</code> if necessary.</li>
 <li>Assign yourself as the assignee and add any relevant community members you'd like to review.</li>
 </ul>
@@ -347,13 +347,13 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <p>Originally, I had posed this question to the group:</p>
 <blockquote>
 <ul>
-<li>Previously, we were filtering out anything not matching &quot;level 1&quot; or &quot;level 2&quot; from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
+<li>Previously, we were filtering out anything not matching "level 1" or "level 2" from the gene model. This was due to best practices outlined during our RNA-Seq Workflow v1.0 discussions. I propose we revert this for the following reasons:
 <ul>
-<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: &quot;The use of the most comprehensive annotations for a given species is strongly recommended&quot;. So it seems the author recommends you use the most comprehensive gene model.</li>
-<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: &quot;Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found&quot;. Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
+<li>The first sentence in section 2.2.2 of the <a href="https://github.com/alexdobin/STAR/blob/2.7.1a/doc/STARmanual.pdf">STAR 2.7.1.a manual</a>: "The use of the most comprehensive annotations for a given species is strongly recommended". So it seems the author recommends you use the most comprehensive gene model.</li>
+<li>Here is what <a href="https://www.gencodegenes.org/pages/faq.html">the GENCODE FAQ</a> has to say about the level 3 annotations: "Ensembl loci where they are different from the Havana annotation or where no Havana annotation can be found". Given that the GENCODE geneset is the union of automated annotations from the <code>Ensembl-genebuild</code> and manual curation of the <code>Ensembl-Havana</code> team, this level should be harmless in the event that levels 1 &amp; 2 don't apply.</li>
 <li>Last, the various other pipelines in the community don't tend to remove these features:
 <ul>
-<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled &quot;Step 1: Building the STAR index&quot;).</li>
+<li>The <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/#rna-seq-alignment-command-line-parameters">GDC documentation</a> does not currently describe any filtering of their <a href="https://www.gencodegenes.org/human/release_22.html">GENCODE v22</a> GTF (see the section labeled "Step 1: Building the STAR index").</li>
 <li>ENCODE is not filtering any features, they are just changing some of the contig names in the <a href="https://www.gencodegenes.org/human/release_24.html">GENCODE v24</a> GTF (see the analysis <a href="0001-rnaseq-workflow-v2.0.html#ENCODE-GTF-generation">in the appendix</a>).</li>
 <li>The TOPMed pipeline <a href="https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md#reference-annotation">does outline some postprocessing</a> they are doing to the <a href="https://www.gencodegenes.org/human/release_26.html">GENCODE v26</a> GTF, but it's mostly just collapsing exons. I inspected the script, which does have some functionality built in to blacklist a list of transcript IDs. However, the documentation does not specify that this is turned on by default.</li>
 </ul>
@@ -408,20 +408,20 @@ This project is <a href="https://github.com/stjudecloud/rfcs/blob/master/LICENSE
 <pre><code class="language-bash">wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz -O GRCh38_no_alt.fa.gz
 gunzip GRCh38_no_alt.fa.gz
 
-echo &quot;a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa&quot; &gt; GRCh38_no_alt.fa.md5
+echo "a6da8681616c05eb542f1d91606a7b2f  GRCh38_no_alt.fa" &gt; GRCh38_no_alt.fa.md5
 md5sum -c GRCh38_no_alt.fa.md5
 # &gt; GRCh38_no_alt.fa: OK
 </code></pre>
 </li>
 <li>
-<p>For the gene model, we use the GENCODE v31 &quot;comprehensive gene annotation&quot; GTF for the &quot;CHR&quot; regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
+<p>For the gene model, we use the GENCODE v31 "comprehensive gene annotation" GTF for the "CHR" regions. You can get a copy of the gene annotation file <a href="https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz">here</a>. For the exact steps to generate the gene model we use, you can run the following commands:</p>
 <pre><code class="language-bash">wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.annotation.gtf.gz
-echo &quot;0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz&quot; &gt; gencode.v31.annotation.gtf.gz.md5
+echo "0aac86e8a6c9e5fa5afe2a286325da81  gencode.v31.annotation.gtf.gz" &gt; gencode.v31.annotation.gtf.gz.md5
 md5sum -c gencode.v31.annotation.gtf.gz.md5
 # &gt; gencode.v31.annotation.gtf.gz: OK
 
 gunzip gencode.v31.annotation.gtf.gz
-echo &quot;4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf&quot; &gt; gencode.v31.annotation.gtf.md5
+echo "4e22351ae216e72aa57cd6d6011960f8  gencode.v31.annotation.gtf" &gt; gencode.v31.annotation.gtf.md5
 md5sum -c gencode.v31.annotation.gtf.md5
 # &gt; gencode.v31.annotation.gtf: OK
 </code></pre>
@@ -514,9 +514,9 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <pre><code class="language-bash">infer_experiment.py -i $INPUT_BAM -r $GENCODE_GTF_V31
 
 # Custom script to triage the following (these might be able to be simplified or improved, it's just my first stab):
-#   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-forward&quot;.
-#   - If proportion of reverse orientation evidence fraction is &gt;= 0.8, assign &quot;strand-specific-reverse&quot;.
-#   - If both proportions are between 0.6 and 0.4, assign &quot;non-strand-specific&quot;.
+#   - If proportion of forward orientation evidence fraction is &gt;= 0.8, assign "strand-specific-forward".
+#   - If proportion of reverse orientation evidence fraction is &gt;= 0.8, assign "strand-specific-reverse".
+#   - If both proportions are between 0.6 and 0.4, assign "non-strand-specific".
 #   - Else flag for manual triage.
 </code></pre>
 </li>
@@ -531,7 +531,7 @@ md5sum -c gencode.v31.annotation.gtf.md5
                 -gtf $GENCODE_GTF_V31 \  # GENCODE v31 gene model file.
                 -outdir $OUTPUT_DIR \              # Output directory.
                 -oc qualimap_counts.txt \          # Counts as calculated by qualimap.
-                -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;strand-specific-reverse&quot; for St. Jude Cloud data.
+                -p $COMPUTED \                     # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "strand-specific-reverse" for St. Jude Cloud data.
                 -pe                                # All RNA-Seq data in St. Jude Cloud is currently paired-end.
 </code></pre>
 </li>
@@ -539,9 +539,9 @@ md5sum -c gencode.v31.annotation.gtf.md5
 <p>Next, <code>htseq-count</code> is run for the final counts file to be delivered:</p>
 <pre><code class="language-bash">htseq-count -f bam \                            # Specify input file as BAM.
            -r pos \                             # Specify the BAM is position sorted.
-           -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by &quot;infer_experiment.py&quot; above. Typically &quot;reverse&quot; for St. Jude Cloud data.
-           -m union \                           # For reference, GDC uses &quot;intersection-nonempty&quot;. Needs input from reviewers.
-           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses &quot;gene_id&quot; here. Needs input from reviewers.
+           -s $COMPUTED \                       # Strandedness as specified by the lab and confirmed by "infer_experiment.py" above. Typically "reverse" for St. Jude Cloud data.
+           -m union \                           # For reference, GDC uses "intersection-nonempty". Needs input from reviewers.
+           -i gene_name \                       # I'd like to use the colloquial gene name here. For reference, GDC uses "gene_id" here. Needs input from reviewers.
            --secondary-alignments ignore \      # Elect to ignore secondary alignments. Needs input from reviewers.
            --supplementary-alignments ignore \  # Elect to ignore supplementary alignments. Needs input from reviewers.
            $INPUT_BAM                           # Input BAM file.
@@ -559,7 +559,7 @@ md5sum $INPUT_BAM
 <pre><code class="language-bash">bamCoverage --bam ${bam} \                     # Input BAM file
             --outFileName ${prefix}.bw \       # Output bigwig filename
             --outFileFormat bigwig \           # Set output format to bigwig
-            --numberOfProcessors &quot;max&quot;         # Utilize all available processors
+            --numberOfProcessors "max"         # Utilize all available processors
 </code></pre>
 </li>
 <li>
@@ -631,7 +631,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 <ul>
 <li>
 <p>Commands that were used in the comparison of feature types between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v21.annotation.gtf
+<pre><code class="language-bash">gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v21.annotation.gtf
 # Feature exon: 1162114 (45.6341%)
 # Feature CDS: 696929 (27.3671%)
 # Feature UTR: 275100 (10.8027%)
@@ -642,7 +642,7 @@ curl -sL https://www.encodeproject.org/files/gencode.v24.primary_assembly.annota
 # Feature transcript: 196327 (7.7094%)
 # Total: 2546594
 
-gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print &quot;Feature &quot; key &quot;: &quot; features[key] &quot; (&quot; (features[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}' gencode.v31.annotation.gtf
+gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { print "Feature " key ": " features[key] " (" (features[key]/total)*100 "%)" }; print "Total: " total}' gencode.v31.annotation.gtf
 # Feature exon: 1363843 (47.3247%)
 # Feature CDS: 755320 (26.2092%)
 # Feature UTR: 308315 (10.6984%)
@@ -656,7 +656,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 </li>
 <li>
 <p>Commands that were used in the comparison of <code>gene_types</code> for <code>gene</code> features between <code>GENCODE v21</code> and <code>GENCODE v31</code>:</p>
-<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+<pre><code class="language-bash">gawk '$3 ~ /gene/' gencode.v21.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type rRNA: 549 (2.54508%)
 # Gene type antisense: 5542 (25.6919%)
 # Gene type pseudogene: 29 (0.13444%)
@@ -667,7 +667,7 @@ gawk '$0 !~ /^#/ { features[$3] += 1; total += 1 } END {for (key in features) { 
 # Gene type snRNA: 1912 (8.86375%)
 # Total: 21571
 
-gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot;([A-Za-z0-9]+)&quot;/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print &quot;Gene type &quot; key &quot;: &quot; types[key] &quot; (&quot; (types[key]/total)*100 &quot;%)&quot; }; print &quot;Total: &quot; total}'
+gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type "([A-Za-z0-9]+)"/, a) { types[a[1]] += 1; total += 1 } END {for (key in types) { print "Gene type " key ": " types[key] " (" (types[key]/total)*100 "%)" }; print "Total: " total}'
 # Gene type ribozyme: 8 (0.0351463%)
 # Gene type scaRNA: 49 (0.215271%)
 # Gene type lncRNA: 16840 (73.983%)
@@ -685,7 +685,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 </li>
 <li>
 <p>The following is a quick command that can be used on a GENCODE GTF to summarize the level counts/percentages in the GTF file. This was used to quantify how much of the GTF would be eliminated when all level 3 features were removed.</p>
-<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print &quot;Level &quot; key &quot;: &quot; levels[key] &quot; (&quot; (levels[key]/total)*100 &quot;%)&quot; }; print &quot;Total  : &quot; total}' gencode.v31.annotation.gtf
+<pre><code class="language-bash">gawk 'match($0, /level ([0-9]+)/, a) { levels[a[1]] += 1; total += 1 } END {for (key in levels) { print "Level " key ": " levels[key] " (" (levels[key]/total)*100 "%)" }; print "Total  : " total}' gencode.v31.annotation.gtf
 # Level 1: 186461 (6.4701%)
 # Level 2: 2450972 (85.0475%)
 # Level 3: 244453 (8.4824%)
@@ -701,20 +701,20 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <li><a href="structural-variation.html#specification">Specification</a></li>
 </ul>
 <h1 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h1>
-<p>This RFC lays out the specification for the Structural Variation (SV) pipeline. This is a new pipeline that will produce SV results for St. Jude Cloud samples. </p>
+<p>This RFC lays out the specification for the Structural Variation (SV) pipeline. This is a new pipeline that will produce SV results for St. Jude Cloud samples.</p>
 <h1 id="motivation-1"><a class="header" href="#motivation-1">Motivation</a></h1>
 <p>St. Jude Cloud currently provides short variant <a href="https://www.stjude.cloud/docs/guides/data/about-our-data/#gvcf-files">files in gVCF format</a> produced through Microsoft Genomics Service using GATK's haplotype caller. Additionally for a subset of datasets, St. Jude Cloud provides <a href="https://www.stjude.cloud/docs/guides/data/about-our-data/#somatic-vcf-files">somatic VCF files</a> where the SNV/Indel variants were produced by the St. Jude somatic variant analysis pipeline using Bambino. Unlike the gVCF files, these variants have been post-processed and manually curated. The variants were then lifted over to HG38.</p>
 <h1 id="discussion-1"><a class="header" href="#discussion-1">Discussion</a></h1>
 <h2 id="current-process"><a class="header" href="#current-process">Current Process</a></h2>
 <p>Currently there are three main algorithms applied to detect SV events: CONSERTING [WGS], CREST [WGS], and CICERO [RNA-Seq]. Note that data from all three sources is not available for all samples available on St. Jude Cloud. For those samples where these algorithms were run, the original runs utilize GRCh37-lite and the St. Jude Cloud samples are aligned to GRCh38. CREST and CICERO currently do not support GRCh38. Each of these three algorithms requires significant post processing and manual quality control. Given these factors, utilizing these for SV calling will require significant development, computational time, and evaluation and quality control. Before continuing with these methods alone, it is prudent to review the current state of affairs as it regards the discovery of SVs in genomic samples.</p>
 <h2 id="comparison-to-other-large-scale-genomic-projects"><a class="header" href="#comparison-to-other-large-scale-genomic-projects">Comparison to other large-scale genomic projects</a></h2>
-<p>The current trend in detection of structural variation in whole genome sequencing is towards the application of multiple algorithms and the synthesis of their resulting callsets to produce a higher quality set of variants. </p>
+<p>The current trend in detection of structural variation in whole genome sequencing is towards the application of multiple algorithms and the synthesis of their resulting callsets to produce a higher quality set of variants.</p>
 <h3 id="genome-data-commons-gdc"><a class="header" href="#genome-data-commons-gdc">Genome Data Commons (GDC)</a></h3>
 <p>The GDC <a href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/">DNA-Seq variant calling pipeline</a> utilizes MuSE, MuTect2, VarScan2, SomaticSniper, and Pindel for detection of somatic mutations. Pindel is the structural variation algorithm capable of detecting deletions, duplications, insertions, inversions, and translocations using split read information (soft-clips). In addition, VarScan2 detects copy number alterations.</p>
 <h3 id="gnomad-sv"><a class="header" href="#gnomad-sv">gnomad-SV</a></h3>
-<p>The <a href="https://gnomad.broadinstitute.org/about">Genome Aggregration Database (gnomAD) - Structural Variation (SV)</a> encompasses over 10,000 genomes from various disease-specific and population studies. The data is aligned against GRCh37. The dataset utilizes four SV calling algorithms: Manta, DELLY, MELT, and cn.MOPS. Manta detects deletions, duplications, insertions, inversions, and translocations using read pair based information, split reads, and assembly. DELLY detects deletions, duplications, inversions, and translocations using read pair information and split reads. MELT detects a specific class of insertions known as mobile element insertions using read pair information. cn.MOPS detects copy number variation. </p>
+<p>The <a href="https://gnomad.broadinstitute.org/about">Genome Aggregration Database (gnomAD) - Structural Variation (SV)</a> encompasses over 10,000 genomes from various disease-specific and population studies. The data is aligned against GRCh37. The dataset utilizes four SV calling algorithms: Manta, DELLY, MELT, and cn.MOPS. Manta detects deletions, duplications, insertions, inversions, and translocations using read pair based information, split reads, and assembly. DELLY detects deletions, duplications, inversions, and translocations using read pair information and split reads. MELT detects a specific class of insertions known as mobile element insertions using read pair information. cn.MOPS detects copy number variation.</p>
 <h3 id="gonl"><a class="header" href="#gonl">GoNL</a></h3>
-<p>The <a href="http://www.nlgenome.nl/">Genome of the Netherlands (GoNL)</a> is a project containing 250 trios comprising parents and offspring. The project utilizes a number of SV calling algorithms including: Pindel, MATE-CLEVER, Mobster, 1-2-3SV, BreakDancer, GenomeSTRiP, CNVnator, and DWAC-seq. MATE-CLEVER detects deletions and insertions. Mobster detects mobile element insertions. 1-2-3SV is capable of detecting deletions, insertions, inversions, and translocations. BreakDancer is used for detecting deletions, insertions, inversions, and translocations. GenomeSTRiP is used to detect deletions and is optimized for calling variants in multiple samples. CNVnator detects deletions and duplications. DWAC-seq detects copy number variation using a dynamic window approach. Pindel is described above. </p>
+<p>The <a href="http://www.nlgenome.nl/">Genome of the Netherlands (GoNL)</a> is a project containing 250 trios comprising parents and offspring. The project utilizes a number of SV calling algorithms including: Pindel, MATE-CLEVER, Mobster, 1-2-3SV, BreakDancer, GenomeSTRiP, CNVnator, and DWAC-seq. MATE-CLEVER detects deletions and insertions. Mobster detects mobile element insertions. 1-2-3SV is capable of detecting deletions, insertions, inversions, and translocations. BreakDancer is used for detecting deletions, insertions, inversions, and translocations. GenomeSTRiP is used to detect deletions and is optimized for calling variants in multiple samples. CNVnator detects deletions and duplications. DWAC-seq detects copy number variation using a dynamic window approach. Pindel is described above.</p>
 <h3 id="1000-genomes"><a class="header" href="#1000-genomes">1000 Genomes</a></h3>
 <p>The <a href="https://www.internationalgenome.org/">1000 Genomes Project</a> is a project containing over 2500 individuals across three phases. Similar to other projects, 1000 Genomes used a number of SV calling algorithms including: BreakDancer, Delly, VariationHunter, CNVnator, readDepth, GenomeSTRiP, Pindel, MELT, and DINUMT. Delly is capable of detecting deletions, duplications, inversions, and translocations. VariationHunter is used for detection of deletions, insertions, and inversions. The readDepth algorithm detects deletions and duplications. DINUMT detects nuclear mitochondrial genome insertion events. The other algorithms are described above.</p>
 <h3 id="gtex"><a class="header" href="#gtex">GTEx</a></h3>
@@ -724,7 +724,7 @@ gawk '$3 ~ /gene/' gencode.v31.annotation.gtf | gawk 'match($0, /gene_type &quot
 <img src="../resources/structural-variation/figure1-sv_type_specificity.png" width="800">
 <p>In addition to variant calling performance, they considered the computational costs of the various algorithms. The evaluation was performed using only reads and reference files for chromosome 8.</p>
 <img src="../resources/structural-variation/figure2-sv_algorithm_runtime_memory.png" width="800">
-<p>Additionally, the authors evaluated the accuracy of overlapping call sets. They combined algorithms' results and looked at the effect on precision for being called by multiple algorithms. Unsurprisingly, the precision increased. CREST is highlighted as an algorithm in the deletion category that showed a &gt; two-fold increase in precision when combined with another algorithm. The authors note that combining algorithms from different method classes led to higher precision but lower recall than combining two algorithms of the same class. </p>
+<p>Additionally, the authors evaluated the accuracy of overlapping call sets. They combined algorithms' results and looked at the effect on precision for being called by multiple algorithms. Unsurprisingly, the precision increased. CREST is highlighted as an algorithm in the deletion category that showed a &gt; two-fold increase in precision when combined with another algorithm. The authors note that combining algorithms from different method classes led to higher precision but lower recall than combining two algorithms of the same class.</p>
 <p>The authors recommend using a specific algorithm suitable for each type and size of structural variation. Table 1 provides a list of SV callers exhibiting good results in both simulated and real data sets.</p>
 <img src="../resources/structural-variation/table1-good-sv-calling.png" width="800">
 <h2 id="internal-evaluation"><a class="header" href="#internal-evaluation">Internal evaluation</a></h2>
