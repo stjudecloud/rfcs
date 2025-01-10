@@ -3,10 +3,13 @@
   "editor.formatOnSave": true,
   "editor.wordWrap": "wordWrapColumn",
   "editor.wordWrapColumn": 80,
-  "editor.wordBasedSuggestions": false,
+  "editor.wordBasedSuggestions": "off",
   "markdown.extension.toc.levels": "1..1",
   "[markdown]": {
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 80
-  }
+  },
+  "cSpell.ignoreWords": [
+    "GIAB"
+  ]
 }

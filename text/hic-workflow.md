@@ -86,7 +86,7 @@ digest_genome.py \
 
 ## Workflow
 
-Here are the resulting steps in the Hi-C workflow. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/hic/hic-standard.wdl).
+Here are the resulting steps in the Hi-C workflow. There might be slight alterations in the actual implementation, which can be found in [the St. Jude Cloud workflows repository](https://github.com/stjudecloud/workflows/blob/master/workflows/hic/hic-standard.wdl). The workflow primarily consists of a WDL reimplementation of [HiC-Pro](https://github.com/nservant/HiC-Pro/tree/master).
 
 1. Run `picard ValidateSam` on the incoming BAM to ensure that it is well-formed enough to strip alignment information.
 
